@@ -130,6 +130,12 @@ program
             }
         }
 
+        // If the user did not specify a layout directory,
+        // use the built-in directory
+        if (!options.layoutDir) {
+            options.layoutDir = [ path.join(__dirname, 'layouts') ]
+        }
+
         if (options.assetDir) {
             if (typeof options.assetDir === 'string') {
                 options.assetDir = [ options.assetDir ];
@@ -705,10 +711,11 @@ async function renderDocToPDF(
     // }
     const page = await browser.newPage();
     const outFN = path.join(
-        __dirname,
+        process.cwd(),
         config.renderDestination,
         renderedPath
     );
+    // console.log(`CWD: ${process.cwd()} DEST: ${config.renderDestination} PATH: ${renderedPath} ==> ${outFN}`);
     await page.goto(
         `file://${outFN}`, {
             waitUntil: 'networkidle0'
@@ -725,8 +732,8 @@ async function renderDocToPDF(
             left: '20mm'
         },
         displayHeaderFooter: true,
-        headerTemplate: await fsp.readFile(tmplHeader, 'utf-8'),
-        footerTemplate: await fsp.readFile(tmplFooter, 'utf-8'),
+        headerTemplate: tmplHeader ? await fsp.readFile(tmplHeader, 'utf-8') : '',
+        footerTemplate: tmplFooter ? await fsp.readFile(tmplFooter, 'utf-8') : '',
         printBackground: true
     };
     console.log(opts);
