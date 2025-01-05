@@ -1,4 +1,15 @@
 
+// Testing for PDF Document Construction Set is different
+// from most applications.  The final result are PDF files
+// which are difficult to validate.
+//
+// Instead - the structure of the tests are to:
+//
+//    1) Run a command with certain options
+//    2) Inspect the HTML file
+//    3) Validation of the PDF is done manually by a
+//       human opening each PDF file.
+
 import { promises as fsp } from 'node:fs';
 
 try {
