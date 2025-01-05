@@ -396,8 +396,17 @@ async function generateConfiguration(options) {
             code: true 
         });
 
+        const uHL = new URL(import.meta.resolve('highlight.js'));
+        const pHL = uHL.pathname;
+        // That gives: .../node_modules/highlight.js/es/index.js
+        // We want the directory two levels above
+        // console.log({
+        //     uHL,
+        //     path: uHL.pathname
+        // });
+
         config.addAssetsDir({ 
-            src: 'node_modules/highlight.js', 
+            src: path.dirname(path.dirname(pHL)),
             dest: 'vendor/highlight.js' 
         });
     }
