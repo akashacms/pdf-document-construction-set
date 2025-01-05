@@ -39,6 +39,8 @@ program
         '-v, --version', 'output the current version')
     .option('--config <configFN>', 'AkashaCMS configuration file. If specified it disables auto-generated config file.')
     .argument('<docPaths...>', 'VPaths for documents to render')
+    .option('--title <title>', 'Document title, overwriting any title in the document metadata.')
+    .option('--layout <layoutTemplate>', 'File name, in a layouts directory, for the layout template. Overwrites any layout in the document metadata.')
     .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     // .option('--paper-orientation [orientation]', '"portrait" or "landscape"')
     .option('--pdf-output <pdfDir>', 'Output directory for PDF generation. Default process.cwd()/PDF')
@@ -572,6 +574,7 @@ async function renderDocuments(config, options, docPaths) {
         const docInfo = await docInfoForPath(
             config, options, docPath
         );
+        // console.log(`renderDocuments ${docPath}`, docInfo);
         let result = await akasha.renderDocument(
             config, docInfo
         );
@@ -587,6 +590,20 @@ async function docInfoForPath(config, options, docPath) {
     const documents = akasha.filecache.documentsCache;
     const doc = await documents.find(docPath);
     if (doc) {
+        if (!doc.metadata) {
+            doc.metadata = {};
+        }
+        // These options overwrite an existing layout
+        // or title, or supply a missing layout
+        if (options.layout) {
+            doc.metadata.layout = options.layout;
+        }
+        if (!doc.metadata.layout) {
+            doc.metadata.layout = 'page.njk';
+        }
+        if (options.title) {
+            doc.metadata.title = options.title;
+        } 
         return doc;
     }
     // else
@@ -608,6 +625,26 @@ async function docInfoForPath(config, options, docPath) {
         vpath: docPath,
         content: content
     });
+
+    if (!context.metadata) {
+        context.metadata = {};
+    }
+    // These options overwrite an existing layout
+    // or title, or supply a missing layout
+    if (options.layout) {
+        context.metadata.layout = options.layout;
+    } else if (!context.metadata.layout) {
+        // Default to page.njk
+        context.metadata.layout = 'page.njk';
+    }
+
+    if (options.title) {
+        context.metadata.title = options.title;
+    } else if (!context.metadata.title) {
+        console.warn(`No title in metadata for ${docPath} and no --title option provided`);
+    }
+
+    // console.log(`docInfoForPath ${docPath} metadata=`, context.metadata);
 
     const docInfo = {
         vpath: docPath,
