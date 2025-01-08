@@ -2,14 +2,14 @@
 
 Generating a PDF of a Markdown or AsciiDoc document is not straightforward. With a WYSIWYG editor like LibreOffice we can just _print to pdf_.  But, because Markdown or AsciiDoc doesn't inherently contain rich formatting styles, a simple _print to pdf_ is very plain looking.
 
-_PDF Document Maker_ allows creating richly formatted documents into PDF.  The features include:
+_PDF Document Maker_ allows creating richly formatted documents in both HTML and PDF format.  The features include:
 
 * Supporting A3, A4, A5, Legal, Letter or Tabloid page formats
 * Customizable header and footer on each page
 * CSS stylesheets
 * Layout and Partial templates for custom formatting, using template engines like Nunjucks, Mustache, or EJS
 * Using PlantUML or Mermaid to support drawings
-* Using KaTeX to support equations
+* ??? Using KaTeX to support equations
 * ??? Music
 * Using HighlightJS for styling code blocks
 * Custom HTML elements to bring in external data sources
@@ -45,17 +45,29 @@ Arguments:
 
 Options:
   -v, --version                     output the current version
-  --config <configFN>               AkashaCMS configuration file. If specified it disables auto-generated config file.
-  --format <format>                 Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"
-  --pdf-output <pdfDir>             Output directory for PDF generation. Default process.cwd()/PDF
+  --config <configFN>               AkashaCMS configuration file. If specified
+                                    it disables auto-generated config file.
+  --title <title>                   Document title, overwriting any title in
+                                    the document metadata.
+  --layout <layoutTemplate>         File name, in a layouts directory, for the
+                                    layout template. Overwrites any layout in
+                                    the document metadata.
+  --format <format>                 Page format, "A3", "A4", "A5", "Legal",
+                                    "Letter" or "Tabloid"
+  --pdf-output <pdfDir>             Output directory for PDF generation.
+                                    Default process.cwd()/PDF
   --html-output <htmlDir>           Output directory for HTML generation
   --template-header <tmplHeader     HTML template for page header
-  --height-header <height>          Height of header block. Valid units are mm, cm, in and px.
+  --height-header <height>          Height of header block. Valid units are
+                                    mm, cm, in and px.
   --template-footer <tmplFooter     HTML template for page footer
-  --height-footer <height>          Height of footer block. Valid units are mm, cm, in and px.
+  --height-footer <height>          Height of footer block. Valid units are
+                                    mm, cm, in and px.
   --style <cssFile>                 File name of CSS style sheet
-  --layout-dir <layoutDir...>       One or more directories for layout templates
-  --partial-dir <partialDir...>     One or more directories for partial templates
+  --layout-dir <layoutDir...>       One or more directories for layout
+                                    templates
+  --partial-dir <partialDir...>     One or more directories for partial
+                                    templates
   --asset-dir <assetsDir...>        One or more directories for assets
   --document-dir <documentsDir...>  One or more directories for documents
   --plantuml-url                    URL for a PlantUML server
@@ -66,13 +78,51 @@ Options:
   --no-md-footnote                  Disable the markdown-it-footnote extension
   --no-md-attrs                     Disable the markdown-it-attrs extension
   --no-md-div                       Disable the markdown-it-div extension
-  --no-md-header-sections           Disable the markdown-it-header-sections extension
-  --no-md-highlightjs               Disable the markdown-it-highlightjs extension
-  --no-md-image-figures             Disable the markdown-it-image-figures extension
-  --no-md-multimd-table             Disable the markdown-it-multimd-table extension
-  --no-md-table-captions            Disable the markdown-it-table-captions extension
+  --no-md-header-sections           Disable the markdown-it-header-sections
+                                    extension
+  --no-md-highlightjs               Disable the markdown-it-highlightjs
+                                    extension
+  --no-md-image-figures             Disable the markdown-it-image-figures
+                                    extension
+  --no-md-multimd-table             Disable the markdown-it-multimd-table
+                                    extension
+  --no-md-table-captions            Disable the markdown-it-table-captions
+                                    extension
   --no-md-plantuml                  Disable the markdown-it-plantuml extension
-  --funcs <funcsFN>                 Name a JS file containing Mahafuncs for custom processing
+  --funcs <funcsFN>                 Name a JS file containing Mahafuncs for
+                                    custom processing
   -h, --help                        display help for command
+
 ```
+
+While that's a lot of options there are reasonable defaults for most.
+
+# Example usage
+
+For example, with a project directory initialized, create a directory named `documents` and put in it a Markdown file.  The search phrase "_standard markdown test file_" will turn up several such as this: https://github.com/mxstbr/markdown-test-file
+
+With a file, `documents/TEST.md`, run this command:
+
+```shell
+$ npx pdf-document-maker  \
+        --document-dir documents \
+        --pdf-output PDF \
+        --html-output out \
+        --title 'Markdown test document' \
+        --format A4 \
+        TEST.md
+```
+
+This command creates two files:
+
+* `out/TEST.html` - is the HTML intermediate file
+* `PDF/TEST.pdf` - is the PDF result
+
+The directory _documents_ is declared as a place the tool looks for documents.  There can be more than one documents directory.
+
+The file name `TEST.md` is relative to the root directory of the documents directories.  In the help text you will see `VPath` used at least once.  The name `TEST.md` is an example of a Virtual Path (a.k.a. VPath) because it is the virtual path within the directory/directories named via the `--document-dir` option.
+
+If more than one directory is named with `--document-dir` then the directories are "stacked" with the later directories higher in the stack.  When a VPath is requested, the stacked directories are searched in order to find the actual file to use.
+
+The directories named with `--partial-dir`, `--asset-dir`, and `--layout-dir`, are treated the same way.  There can be multiple such directories, they are organized in a stack, and are searched from the top of the stack.
 
