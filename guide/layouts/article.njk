@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width" />
+
+{% import "ak_core_macros.njk" as ak_core with context %}
+{% import "ak_base_macros.njk" as ak_base with context %}
+
+<title>{{ title }}</title>
+{{ ak_base.headerMeta() }}
+{{ ak_core.XMLSitemap("/sitemap.xml") }}
+<site-verification></site-verification>
+{{ ak_base.linkRelTags() }}
+{{ ak_base.canonicalURL() }}
+
+{{ ak_core.stylesheets() }}
+{{ ak_core.headerJavaScript() }}
+
+</head>
+<body>
+
+{% include "site-navbar.html" %}
+
+<!-- partial file-name="site-navbar.html"></partial -->
+
+<div class="container" role="main">
+<div class="row">
+{% include "header.html" %}
+<!-- partial file-name="header.html"></partial -->
+</div>
+
+<div class="row">
+  <section id="breadcrumb" class="col-sm-12">
+    <breadcrumb-trail></breadcrumb-trail>
+  </section>
+</div>
+<div class="row">
+  <section id="byline" class="col-sm-12">
+    <publication-date></publication-date>;
+  </section>
+</div>
+
+<div class="row">
+  <article class="col-sm-10">
+    {% if teaser %}<p><strong>{{ teaser }}</strong></p> {% endif %}
+    {{ content }}
+  </article>
+  <section id="right" class="col-sm-2">
+    <!-- Place sidebar content here -->
+  </section>
+</div>
+
+<footer class="row" style="text-align: center; height: 100px;">
+<div class="col-sm-12">
+{% include "footer.html" %}
+<!-- partial file-name="footer.html"></partial></div -->
+</footer>
+</div>
+
+{{ ak_core.footerJavaScript() }}
+
+
+</body>
+</html>
+

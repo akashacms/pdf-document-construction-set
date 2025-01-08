@@ -1,0 +1,27 @@
+{
+  "name": "guide",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "preview": "live-server out"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@compodoc/live-server": "^1.2.3",
+    "npm-run-all": "^4.1.5"
+  },
+  "dependencies": {
+    "@akashacms/plugins-base": "^0.9.0",
+    "@akashacms/plugins-blog-podcast": "github:akashacms/akashacms-blog-podcast#0.9",
+    "@akashacms/plugins-booknav": "github:akashacms/akashacms-booknav#0.9",
+    "@akashacms/plugins-breadcrumbs": "github:akashacms/akashacms-breadcrumbs",
+    "@akashacms/theme-bootstrap": "^0.9.1",
+    "akasharender": "^0.9.0",
+    "bootstrap": "^4.6.x",
+    "jquery": "^3.6.x",
+    "popper.js": "^1.16.x"
+  }
+}
