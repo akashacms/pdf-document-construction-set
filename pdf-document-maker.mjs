@@ -69,6 +69,7 @@ program
     .option('--no-md-multimd-table', 'Disable the markdown-it-multimd-table extension')
     .option('--no-md-table-captions', 'Disable the markdown-it-table-captions extension')
     .option('--no-md-plantuml', 'Disable the markdown-it-plantuml extension')
+    .option('--use-mermaid', 'Enable MermaidJS rendering')
     // .option('--no-md-table-of-contents', 'Disable the markdown-it-table-of-contents extension')
     .option('--funcs <funcsFN>', 'Name a JS file containing Mahafuncs for custom processing')
     .action(async (docPaths, options, command) => {
@@ -469,6 +470,17 @@ async function generateConfiguration(options) {
         config.findRendererName('.html.md')
         .use(MarkdownItTableCaptions);
     }
+
+    if (options.useMermaid) {
+        const uHL = new URL(import.meta.resolve('mermaid'));
+        const pHL = uHL.pathname;
+        console.log(`Mermaid pHL `, pHL)
+        config.addAssetsDir({
+            src: path.dirname(pHL),
+            dest: 'vendor/mermaid'
+        });
+
+    }
     
     // Add directories for assets, plugins,
     //     layout templates, and documents
@@ -517,6 +529,15 @@ async function generateConfiguration(options) {
     // .addStylesheet({ href: "/vendor/highlight.js/styles/atelier-cave-light.css" });
     ;
 
+    if (options.useMermaid) {
+        config.addFooterJavaScript({
+            lang: 'module',
+            script: `
+            import mermaid from '/vendor/mermaid/dist/mermaid.esm.mjs';
+            `
+        })
+    }
+
     if (options.style) {
         config.addStylesheet({
             href: options.style
@@ -539,6 +560,17 @@ async function generateConfiguration(options) {
         recognizeCDATA: true,
         decodeEntities: true
     });
+
+    const builtInFuncs = await import (path.join(__dirname, 'built-in.mjs'));
+    if (builtInFuncs) {
+        if (!builtInFuncs.mahabhutaArray) {
+            throw new Error(`Built-in Mahabhuta funcs must have mahabhutaArray`);
+        }
+
+        config.addMahabhuta(builtInFuncs.mahabhutaArray({ 
+            config
+        }));
+    }
 
     if (options.funcs) {
         const mFuncs = await import(options.funcs);
@@ -583,11 +615,11 @@ async function renderDocuments(config, options, docPaths) {
         const docInfo = await docInfoForPath(
             config, options, docPath
         );
-        // console.log(`renderDocuments ${docPath}`, docInfo);
+        console.log(`renderDocuments ${docPath}` /*, docInfo */);
         let result = await akasha.renderDocument(
             config, docInfo
         );
-        // console.log(result);
+        console.log(result);
         renderedPaths.push(docInfo.renderPath);
     }
 
