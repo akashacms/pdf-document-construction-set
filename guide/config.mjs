@@ -7,7 +7,7 @@ import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
 import { BreadcrumbsPlugin } from '@akashacms/plugins-breadcrumbs';
 import { BooknavPlugin } from '@akashacms/plugins-booknav';
-import { EmbeddablesPlugin } from '@akashacms/plugins-embeddables';
+// import { EmbeddablesPlugin } from '@akashacms/plugins-embeddables';
 import { BlogPodcastPlugin } from '@akashacms/plugins-blog-podcast';
 
 const config = new akasha.Configuration();
