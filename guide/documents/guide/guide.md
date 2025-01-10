@@ -244,17 +244,20 @@ We might not be aware of the need for specific CSS rules to handle printing.  Pr
 
 What you do is up to you.
 
-To specify a stylesheet:
+To specify stylesheets:
 
 ```
---style <cssFile>     File name of CSS style sheet
+--style <cssFile...>        File names of CSS style sheets
+--lesscss <lesscssFile...>  File names of LESS files to render to CSS
 ```
 
-This filename is a VPath within the HTML output directory.  The CSS file can be stored in an asset directory.
+The `--style` parameter is used for regular CSS files.  These can be stored either in an `asset` directory or a `document` directory.  When the document is rendered, the CSS files will be copied unmodified into the HTML output directory.
 
-You may prefer to use the LESSCSS format.  In that case the file should be stored in a document directory and have an extension of either `.less` or `.css.less`.  Such a file will be processed into a file with the `.css` extension in the output directory.
+The `--lesscss` parameter is used for LESS files, which is a format for improved CSS syntax.  These files must be stored in a `document` directory, have an extension of either `.less` or `.css.less`, and are rendered from LESS the format to CSS.
 
-Whether the files are in an assets or documents directory, the `--style` option is still required in order for the stylesheet to be referenced.
+In each case the parameter can be repeated multiple times to handle multiple files.  The pathname must be a complete VPath with a leading slash.
+
+Using the `--style` or `--lesscss` parameter causes a `<link>` tag to be generated in the `<head>` section of the document.
 
 Here are links to articles that are useful for understanding CSS for printing:
 
@@ -285,6 +288,8 @@ Then create an asset directory:
 ```shell
 $ mkdir -p assets/vendor/gutenberg
 ```
+
+It is good practice to use a directory path `/vendor/VENDOR-NAME` to store files sourced from a particular project.
 
 Then copy the Gutenberg CSS into that directory:
 
@@ -317,6 +322,31 @@ The configuration options cover two broad areas:
 * Generating PDF from the HTML - These options control the Puppeteer configuration
 
 TODO go over the options in groups
+
+# Automating PDF Document Making using `package.json`
+
+The `package.json` file can serve as a way to record our build procedure.  In this file the `scripts` section stores commands which can be run.  It's useful to create and test prebaked scripts so you don't have to remember how to do things.
+
+It will help to first install `npm-run-all` because it cleans up the scripts section of `package.json`.
+
+```shell
+$ npm install npm-run-all --save
+```
+
+Then in `package.json` add these items to the `scripts` tag:
+
+```json
+"scripts": {
+  "build:guide": "npm-run-all build:render",
+  "build:render": "npx pdf-document-maker --partial-dir partials --layout-dir layouts --document-dir documents --lesscss guide/style.css.less --pdf-output PDF --html-output out --title 'PDF Document Maker Guide' --format A4 guide/guide.md"
+},
+```
+
+To rebuild the document simply run:
+
+```shell
+$ npm run build:guide
+```
 
 # Project configuration with AkashaCMS configuration files
 
@@ -416,44 +446,86 @@ TODO - Cover installing a local PlantUML server
 
 Mermaid - https://mermaid.js.org/ - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description o the diagram, pasting it into a Markdown document.
 
-TODO: This has not been integrated as yet.
+Unlike with PlantUML we were unable to integrate Mermaid such that a code block with the `mermaid` class would be automatically rendered as an inline SVG.
 
-TODO: How to disable Mermaid
+The most convenient path is to install Mermaid-CLI - https://github.com/mermaid-js/mermaid-cli
+
+In your project directory do this:
+
+```shell
+$ npm install @mermaid-js/mermaid-cli --save
+```
+
+This installs a program you can run as so:
+
+```shell
+$ npx mmdc --help
+Usage: mmdc [options]
+
+Options:
+  -V, --version                                   output the version number
+  -t, --theme [theme]                             Theme of the chart (choices: "default", "forest", "dark", "neutral",
+                                                  default: "default")
+  -w, --width [width]                             Width of the page (default: 800)
+  -H, --height [height]                           Height of the page (default: 600)
+  -i, --input <input>                             Input mermaid file. Files ending in .md will be treated as Markdown
+                                                  and all charts (e.g. ```mermaid (...)``` or :::mermaid (...):::)
+                                                  will be extracted and generated. Use `-` to read from stdin.
+  -o, --output [output]                           Output file. It should be either md, svg, png, pdf or use `-` to
+                                                  output to stdout. Optional. Default: input + ".svg"
+  -e, --outputFormat [format]                     Output format for the generated image. (choices: "svg", "png",
+                                                  "pdf", default: Loaded from the output file extension)
+  -b, --backgroundColor [backgroundColor]         Background color for pngs/svgs (not pdfs). Example: transparent,
+                                                  red, '#F0F0F0'. (default: "white")
+  -c, --configFile [configFile]                   JSON configuration file for mermaid.
+  -C, --cssFile [cssFile]                         CSS file for the page.
+  -I, --svgId [svgId]                             The id attribute for the SVG element to be rendered.
+  -s, --scale [scale]                             Puppeteer scale factor (default: 1)
+  -f, --pdfFit                                    Scale PDF to fit chart
+  -q, --quiet                                     Suppress log output
+  -p --puppeteerConfigFile [puppeteerConfigFile]  JSON configuration file for puppeteer.
+  -h, --help                                      display help for command
+```
+
+
 
 A sample Mermaid diagram is:
 
-```
-```mermaid
----
-title: Simple sample
----
-stateDiagram-v2
-    [*] --> Still
-    Still --> [*]
+<code-embed file-name="./img/simple-sample-1.mmd"/>
 
-    Still --> Moving
-    Moving --> Still
-    Moving --> Crash
-    Crash --> [*]
+This must be saved as a separate file in the file-system.  For example, a subdirectory `img` is a useful place to store images.  In that case, save the text in a file `./img/simple-sample-1.mmd`.
+
+Next, the file is processed to SVG like so:
+
+```shell
+npx mmdc -i documents/guide/img/simple-sample-1.mmd \
+  -o documents/guide/img/simple-sample-1.svg \
+  --outputFormat svg
 ```
 
-That is, you create a Markdown code block, where the first set of backticks is labeled with "mermaid".  In-between you enter the description of the diagram.
+The `-i` option specifies the input file, and `-o` the output file.  Hence, this converts to an output file in the same directory the SVG version of the diagram.
 
 The result looks like so:
 
-```mermaid
----
-title: Simple sample
----
-stateDiagram-v2
-    [*] --> Still
-    Still --> [*]
+![Simple Sample 1](./img/simple-sample-1.svg)
 
-    Still --> Moving
-    Moving --> Still
-    Moving --> Crash
-    Crash --> [*]
+Next is to automate building the images before building the document.  Earlier we went over using the `scripts` tag in `package.json`.  Let's add to that workflow.
+
+First, add a command to build each Mermaid file:
+
+```json
+"build:sample-1": "npx mmdc -i documents/guide/simple-sample-1.mmd -o documents/guide/simple-sample-1.svg --outputFormat svg",
 ```
+
+We take the same command, and add it to the script.  The tag name format is `build:file-name`.
+
+Next is to reference this from the `build:guide` script
+
+```json
+"build:guide": "npm-run-all build:sample-1 build:render",
+```
+
+It is important that the SVG file
 
 # Custom HTML tags and custom HTML processing
 
