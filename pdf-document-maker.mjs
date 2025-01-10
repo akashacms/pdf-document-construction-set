@@ -49,7 +49,8 @@ program
     .option('--height-header <height>', 'Height of header block. Valid units are mm, cm, in and px.')
     .option('--template-footer <tmplFooter', 'HTML template for page footer')
     .option('--height-footer <height>', 'Height of footer block. Valid units are mm, cm, in and px.')
-    .option('--style <cssFile>', 'File name of CSS style sheet')
+    .option('--style <cssFile...>', 'File name of CSS style sheet')
+    .option('--lesscss <lesscssFile...>', 'File name of LESS file to render to CSS')
     .option('--layout-dir <layoutDir...>', 'One or more directories for layout templates')
     .option('--partial-dir <partialDir...>', 'One or more directories for partial templates')
     .option('--asset-dir <assetsDir...>', 'One or more directories for assets')
@@ -69,7 +70,9 @@ program
     .option('--no-md-multimd-table', 'Disable the markdown-it-multimd-table extension')
     .option('--no-md-table-captions', 'Disable the markdown-it-table-captions extension')
     .option('--no-md-plantuml', 'Disable the markdown-it-plantuml extension')
-    .option('--use-mermaid', 'Enable MermaidJS rendering')
+    .option('--no-bootstrap', 'Disable Bootstrap v4 and related modules')
+    // This turned out to not work.
+    // .option('--use-mermaid', 'Enable MermaidJS rendering')
     // .option('--no-md-table-of-contents', 'Disable the markdown-it-table-of-contents extension')
     .option('--funcs <funcsFN>', 'Name a JS file containing Mahafuncs for custom processing')
     .action(async (docPaths, options, command) => {
@@ -215,6 +218,13 @@ program
          || config.documentDirs.length <= 0
         ) {
             throw new Error(`Configuration must include document directories ${util.inspect(config.documentDirs)}`);
+        }
+
+        await akasha.setup(config);
+        await config.copyAssets();
+
+        if (options.lesscss) {
+            await renderLESSCSS(config, options);
         }
 
         // await config.copyAssets();
@@ -471,26 +481,55 @@ async function generateConfiguration(options) {
         .use(MarkdownItTableCaptions);
     }
 
-    if (options.useMermaid) {
-        const uHL = new URL(import.meta.resolve('mermaid'));
-        const pHL = uHL.pathname;
-        console.log(`Mermaid pHL `, pHL)
+    if (options.bootstrap) {
+        const uBT = new URL(import.meta.resolve('bootstrap'));
+        const pBT = uBT.pathname;
+        const toMountBT = path.dirname(path.dirname(pBT));
+        // console.log({ uBT, pBT, toMountBT });
         config.addAssetsDir({
-            src: path.dirname(pHL),
-            dest: 'vendor/mermaid'
+            src: toMountBT,
+            dest: 'vendor/bootstrap/'
         });
-
+        const uJQ = new URL(import.meta.resolve('jquery'));
+        const pJQ = uJQ.pathname;
+        const toMountJQ = path.dirname(pJQ);
+        // console.log({ uJQ, pJQ, toMountJQ });
+        config.addAssetsDir({
+            src: toMountJQ,
+            dest: 'vendor/jquery'
+        });
+        const uPP = new URL(import.meta.resolve('popper.js'));
+        const pPP = uPP.pathname;
+        const toMountPP = path.dirname(path.dirname(pPP));
+        // console.log({ uPP, pPP, toMountPP });
+        config.addAssetsDir({
+            src: toMountPP,
+            dest: 'vendor/popper.js'
+        });
     }
-    
+
+    // This turned out not to work
+    //
+    // if (options.useMermaid) {
+    //     const uHL = new URL(import.meta.resolve('mermaid'));
+    //     const pHL = uHL.pathname;
+    //     // console.log(`Mermaid pHL `, pHL)
+    //     config.addAssetsDir({
+    //         src: path.dirname(pHL),
+    //         dest: 'vendor/mermaid'
+    //     });
+    // }
+
     // Add directories for assets, plugins,
     //     layout templates, and documents
-    
 
+    config.addAssetsDir(path.join(__dirname, 'assets'));
     if (options.assetDir) {
         for (const aDir of options.assetDir) {
             config.addAssetsDir(aDir);
         }
     }
+    config.addLayoutsDir(path.join(__dirname, 'layouts'));
     if (options.layoutDir) {
         for (const lDir of options.layoutDir) {
             config.addLayoutsDir(lDir);
@@ -517,39 +556,51 @@ async function generateConfiguration(options) {
 
     // Add JavaScript, CSS
 
-    config
-    .addFooterJavaScript({ href: "/vendor/jquery/jquery.min.js" })
-    .addFooterJavaScript({ href: "/vendor/popper.js/umd/popper.min.js" })
-    .addFooterJavaScript({ href: "/vendor/bootstrap/js/bootstrap.min.js" })
-    .addStylesheet({ href: "/vendor/bootstrap/css/bootstrap.min.css" })
-    .addStylesheet({ href: "/vendor/highlight.js/styles/stackoverflow-dark.css" })
-    // .addStylesheet({ href: "/vendor/highlight.js/styles/shades-of-purple.css" })
-    // .addStylesheet({ href: "/vendor/highlight.js/styles/github-dark-dimmed.css" });
-    // .addStylesheet({ href: "/vendor/highlight.js/styles/tomorrow-night-blue.css" });
-    // .addStylesheet({ href: "/vendor/highlight.js/styles/atelier-cave-light.css" });
-    ;
-
-    if (options.useMermaid) {
-        config.addFooterJavaScript({
-            lang: 'module',
-            script: `
-            import mermaid from '/vendor/mermaid/dist/mermaid.esm.mjs';
-            `
-        })
+    if (options.bootstrap) {
+        config
+        .addFooterJavaScript({ href: "/vendor/jquery/jquery.min.js" })
+        .addFooterJavaScript({ href: "/vendor/popper.js/umd/popper.min.js" })
+        .addFooterJavaScript({ href: "/vendor/bootstrap/js/bootstrap.min.js" })
+        .addStylesheet({ href: "/vendor/bootstrap/css/bootstrap.min.css" })
+        .addStylesheet({ href: "/vendor/highlight.js/styles/stackoverflow-dark.css" })
+        // .addStylesheet({ href: "/vendor/highlight.js/styles/shades-of-purple.css" })
+        // .addStylesheet({ href: "/vendor/highlight.js/styles/github-dark-dimmed.css" });
+        // .addStylesheet({ href: "/vendor/highlight.js/styles/tomorrow-night-blue.css" });
+        // .addStylesheet({ href: "/vendor/highlight.js/styles/atelier-cave-light.css" });
+        ;
     }
+
+    // This should have worked.  The API is to load the Mermaid distribution
+    // into the page, then it will render any code in `class=mermaid` elements.
+    // But, this did not work out.
+    //
+    // if (options.useMermaid) {
+    //     config.addFooterJavaScript({
+    //         lang: 'module',
+    //         script: `
+    //         import mermaid from '/vendor/mermaid/dist/mermaid.esm.mjs';
+    //         mermaid.initialize({ startOnLoad: true });
+    //         `
+    //     })
+    // }
 
     if (options.style) {
-        config.addStylesheet({
-            href: options.style
-        });
+        if (Array.isArray(options.style)) {
+            for (const css of options.style) {
+                config.addStylesheet({
+                    href: css
+                });
+            }
+        } else if (typeof options.style === 'string') {
+            config.addStylesheet({
+                href: options.style
+            });
+        }
     }
-
-    // TODO there must be an assets directory
-    // where this is stored
 
     if (options.printcss) {
         config.addStylesheet({
-            href: "/print.css"
+            href: "/vendor/printcss/print.css"
         });
     }
 
@@ -603,12 +654,35 @@ async function generateConfiguration(options) {
     return config;
 }
 
+async function renderLESSCSS(config, options) {
+    let akasha = config.akasha;
+    const documents = akasha.filecache.documentsCache;
+    if (Array.isArray(options.lesscss)) {
+        for (const lessfn of options.lesscss) {
+            const lessInfo = await documents.find(lessfn);
+            if (!lessInfo) {
+                throw new Error(`Did not find document for ${lessfn}`);
+            }
+            const renderer = config.findRendererPath(lessfn);
+            const renderTo = renderer.filePath(lessfn);
+            console.log(`renderLESSCSS ${lessfn} renderer ${renderer.name} renders to ${renderTo}`);
+            let result = await akasha.renderDocument(
+                config, lessInfo
+            );
+            config.addStylesheet({
+                href: renderTo
+            });
+            console.log(result);
+        }
+    }
+}
+
 async function renderDocuments(config, options, docPaths) {
 
     let akasha = config.akasha;
-    await akasha.setup(config);
+    // await akasha.setup(config);
     const documents = akasha.filecache.documentsCache;
-    await config.copyAssets();
+    // await config.copyAssets();
 
     const renderedPaths = [];
     for (const docPath of docPaths) {
