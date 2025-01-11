@@ -41,6 +41,7 @@ program
     .argument('<docPaths...>', 'VPaths for documents to render')
     .option('--title <title>', 'Document title, overwriting any title in the document metadata.')
     .option('--layout <layoutTemplate>', 'File name, in a layouts directory, for the layout template. Overwrites any layout in the document metadata.')
+    // .option('--publication-date <publDate')
     .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     // .option('--paper-orientation [orientation]', '"portrait" or "landscape"')
     .option('--pdf-output <pdfDir>', 'Output directory for PDF generation. Default process.cwd()/PDF')
@@ -55,6 +56,7 @@ program
     .option('--partial-dir <partialDir...>', 'One or more directories for partial templates')
     .option('--asset-dir <assetsDir...>', 'One or more directories for assets')
     .option('--document-dir <documentsDir...>', 'One or more directories for documents')
+    // TODO
     .option('--plantuml-url', 'URL for a PlantUML server')
     .option('--no-headless', 'Turn off headless mode')
     // .option('--no-exit', 'Do not exit when rendering finished')
@@ -619,12 +621,24 @@ async function generateConfiguration(options) {
         }
 
         config.addMahabhuta(builtInFuncs.mahabhutaArray({ 
-            config
+            config, akasha
         }));
     }
 
     if (options.funcs) {
-        const mFuncs = await import(options.funcs);
+        let funcsFN;
+        if (path.isAbsolute(options.funcs)) {
+            funcsFN = options.funcs;
+        } else {
+            funcsFN = path.normalize(
+                path.join(
+                    process.cwd(),
+                    options.funcs
+                )
+            );
+        }
+        // console.log(`funcs ${options.funcs} ==> ${funcsFN}`);
+        const mFuncs = await import(funcsFN);
 
         if (!mFuncs.mahabhutaArray) {
             throw new Error(`Mahabhuta funcs module must have mahabhutaArray - ${util.inspect(options.funcs)}`);
@@ -643,7 +657,7 @@ async function generateConfiguration(options) {
         // the module.
     
         config.addMahabhuta(mFuncs.mahabhutaArray({ 
-            config
+            config, akasha
         }));
 
     }
