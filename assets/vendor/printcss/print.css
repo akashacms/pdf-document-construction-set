@@ -97,9 +97,9 @@
 		margin-left: 2em; }
 	blockquote p {
 		margin-top: 0; }
-	img {
+	/* img {
 		border: 0;
-		max-width: 50vw; }
+		max-width: 50vw; } */
 	p, pre, table {
 		orphans: 4;
 		widows: 4; }
