@@ -1,0 +1,35 @@
+<span id="table-of-contents">
+  <ul class="list-no-margin">
+    {%- for header in headers -%}
+    <li>
+        <a href="#{{ header.id }}">
+            {{- header.title -}}
+        </a>
+        {% if header.children -%}
+            {%- set h2list = header.children -%}
+            <ul class="list-no-margin">
+                {%- for h2 in h2list -%}
+                    <li>
+                        <a href="#{{ h2.id }}">
+                            {{- h2.title -}}
+                        </a>
+                        {%- if h2.children -%}
+                            {%- set h3list = h2.children -%}
+                            <ul class="list-no-margin">
+                                {%- for h3 in h3list -%}
+                                    <li>
+                                        <a href="#{{ h3.id }}">
+                                            {{- h3.title -}}
+                                        </a>
+                                    </li>
+                                {%- endfor -%}
+                            </ul>
+                        {% endif -%}
+                    </li>
+                {% endfor -%}
+            </ul>
+        {% endif -%}
+    </li>
+    {%- endfor -%}
+  </ul>
+</span>

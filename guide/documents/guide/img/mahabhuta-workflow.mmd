@@ -1,0 +1,7 @@
+sequenceDiagram
+title Mahabhuta DOM processing workflow
+actor Configuration
+actor Renderer
+
+    Renderer->>Configuration: Retrieve custom DOM processing functions
+    Renderer->>Renderer: Use Mahabhuta for DOM processing

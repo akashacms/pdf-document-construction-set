@@ -7,6 +7,8 @@ _PDF Document Maker_ is a comprehensive tool for producing good quality PDFs fro
 
 Under the covers it uses a full-featured static HTML processing system, AkashaCMS, that's designed for producing websites and E-Books.  The HTML is then converted to PDF using Puppeteer.  These capabilities are bundled into an easy-to-use command-line utility with a long list of options.
 
+<toc-text-here></toc-text-here>
+
 # Installation and Project setup for PDF Document Maker
 
 PDF Document Maker runs on the Node.js platform, and is tested with Node.js v20.  It should work for later releases.
@@ -321,7 +323,363 @@ The configuration options cover two broad areas:
 * Generating HTML from the input files - These options control generation of the AkashaCMS configuration object
 * Generating PDF from the HTML - These options control the Puppeteer configuration
 
-TODO go over the options in groups
+## Output directories
+
+Two output directories are created:
+
+Output | Option | Description
+-------|--------|-----------------
+HTML Output | `--html-output` | This contains the directory structure of HTML, CSS, JavaScript, and images, which will be rendered into the PDF.  The structure is precisely the same as a static website, meaning the files are placed in a directory structure that can be deployed to a regular website.
+PDF Output | `--pdf-output` | This contains the PDF file which is generated.
+
+## Header and Footer text in the PDF
+
+A key feature offered by word processing systems like Libre Office is placing text in the margin at the top and bottom of the page.  This header and footer text usually carries a date, page number, copyright statement, and document title.
+
+`--template-header`
+
+`--height-header`
+
+`--template-footer`
+
+`--height-footer`
+
+## Controlling page layout
+
+As we discussed earlier, the `--layout` option lets us specify a page layout template.
+
+Layout templates are stored in the _Layouts Dirs_, which we specify using the `--layout-dir` option.
+
+## Page styling using CSS stylesheets
+
+We can further customize the document presentation using CSS stylesheets.  The design allows us to use any number of stylesheets, and to use the LESS format for creating stylesheets.
+
+For each kind of stylesheet we can repeat the option more than once:
+
+```shell
+$ npx pdf-document-maker ... \
+    --style assets/style1.css --style assets/style2.css \
+    --lesscss assets/style3.less --style assets/style4.less
+    ...
+```
+
+The filenames are VPaths.  In this example, each of the CSS files are located in the `assets` virtual directory.
+
+For `--style` parameters, the file is expected to be in CSS format, and is simply copied into the HTML output directory.  These files can be either in an _assets_ directory, or _documents_ directory.
+
+For `--lesscss` parameters, the file will be rendered using the LESS processor.  This means the files must have an extension of `.css.less` or `.less`, and be in a _documents_ directory.
+
+Additionally, by default the _PrintCSS_ stylesheet will be used.  This is from an open source project, and is CSS for produces good looking print documents.  This stylesheet can be disabled using the `--no-printcss` option.
+
+Additionally, by default the Bootstrap v4 framework is used.  For the PDF documents most of Bootstrap is not useful.  It has powerful page layout capabilities, and certain components may be useful for creating visual effects.  This framework may be disabled with the `--no-bootstrap` option. 
+
+All stylesheets, whether the default `print.css` file or those specified on the command line, are added to a list.  The page layout template is expected to use either of these methods:
+
+```html
+<!-- NJK macro for generating link tags to CSS files -->
+{{ ak_core.stylesheets() }}
+<!-- a custom HTML tag for the same purpose -->
+<ak-stylesheets></ak-stylesheets>
+```
+
+Both of these convert the list of stylesheet references into `<link>` tags referencing the stylesheets.
+
+## Markdown extensions supported by PDF Document Maker
+
+The Markdown ecosystem includes a wide variety of extensions, adding additional features to the language.  PDF Document Maker uses the Node.js Markdown IT engine, and can in theory use any of the available plugins.  Several are already bundled into the application, with these effects.
+
+#### Auto-generating "anchor" text for header tags
+
+This extension causes an `id="anchor"` attribute to be added to the HTML header tag like so:
+
+```html
+## A Markdown H2 tag
+<!-- becomes -->
+<h2 id="generated anchor">A Markdown H2 tag</h2>
+```
+
+This allows an `<a href="#anchor">Link text</a>` tag to link directly to the header tag.  This would be useful in Tables of Content, where the links would go directly to the section.
+
+This feature can be disabled with `--no-md-anchor`
+
+#### Generating footnote blocks
+
+Allows authors to write footnotes.[^1]  A footnote is referenced with a marker, such as `[^1]`.  The footnote is defined by writing a paragraph like this:
+
+```
+[^1]: This is the body of the footnote.
+```
+
+The extension sets up internal links between the two points.
+
+[^1]: This is the body of the footnote.
+
+This feature can be disabled with `--no-md-footnote`
+
+#### Adding either id= or class= attributes to HTML
+
+To implement styling using CSS requires the ability to set ID or Class values.  Example:
+
+```
+# header {.style-me}
+paragraph {data-toggle=modal}
+```
+
+The stuff between `{` and `}` are where we list the attributes to add to the rendered HTML tags after.  The above will be converted to:
+
+```html
+<h1 class="style-me">header</h1>
+<p data-toggle="modal">paragraph</p>
+```
+
+The extension allows setting other attributes beyond ID and Class.  But, most other attributes are potential security vulnerabilities.  The extension has been configured to only allow `id=` and `class=` attributes.
+
+Use of these attributes should then correspond to entries in CSS stylesheets.
+
+Be aware that the `-anchors` extension and `-attrs` extension both deal with the `id=` value on headers.  With `-anchors` the author is not in control of the choice for the `id=` value, whereas with the `-attrs` extension the author chooses the `id=` value.
+
+This feature can be disabled with `--no-md-attrs`
+
+#### Simplify adding a `<div>` block
+
+Another way to customize the resulting HTML is to add `<div>` tags with certain attributes.  For example a box with a yellow background and solid brown border could serve to draw attention to some content.  The color effects are easy to define in CSS, and the ability to add a `<div>` gives the opportunity to wrap a contain some content within a box.
+
+Example:
+
+```
+::: #warning
+*here be dragons*
+:::
+```
+
+That generates the following:
+
+```html
+<div id="warning">
+<em>here be dragons</em>
+</div>
+```
+
+While this is easy to use, one has to consider that Markdown engines like Markdown-IT allow the author to use HTML tags.  It's therefore easy to add `<div>` tags without requiring a Markdown extension.
+
+This feature can be disabled with `--no-md-div`
+
+#### Adding `<section>` tags corresponding to header tags
+
+One may think of a Header tag followed by some content as a "section" of a document.  This extension implements that idea with HTML tags.
+
+Consider:
+
+```
+# Header 1
+Text.
+### Header 2
+Lorem?
+## Header 3
+Ipsum.
+# Last header
+Markdown rules!
+```
+
+That's four sections, some of which should be nested within outer sections.
+
+It generates the following:
+
+```html
+<section>
+  <h1>Header 1</h1>
+  <p>Text.</p>
+  <section>
+    <h3>Header 2</h3>
+    <p>Lorem?</p>
+  </section>
+  <section>
+    <h2>Header 3</h2>
+    <p>Ipsum.</p>
+  </section>
+</section>
+<section>
+  <h1>Last header</h1>
+  <p>Markdown rules!</p>
+</section>
+```
+
+If the `-attrs` extension is enabled, we might have added `id=` or `class=` attributes to our headers.  If so, these attributes are moved to the `<section>` surrounding the header.
+
+This feature can be disabled with `--no-md-header-section`
+
+#### Adding syntax highlighting to code sections
+
+The HighlightJS package handles syntax coloring for content within code blocks.  There are many examples of this all through this document.
+
+At the HTML level the HighlightJS package looks for this:
+
+```html
+<pre><code class="html">...</code></pre>
+```
+
+The class name is a language code.  The supported languages are listed in their GitHub repository: https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md
+
+In Markdown a code block is text within two lines of three backticks.  The language code is placed immediately after the opening backticks.
+
+This feature can be disabled with `--no-md-highlightjs`
+
+#### Convert image references into `<figure>` tags
+
+This allows rendering an image reference in Markdown as a `<figure>` tag containing an `<img>` tag and optionally a `<figcaption>` tag.  This construct is important in modern HTML.
+
+The `<figure>` element represents self-contained content.  The figure, its caption, and its contents are treated by web browsers as a single unit.
+
+For example:
+
+```
+![This is an alt](fig.png "This is a title")
+```
+
+Renders as:
+
+```html
+<figure>
+    <img src="fig.png" alt="This is an alt">
+    <figcaption>This is a title</figcaption>
+</figure>
+```
+
+One can also put a Markdown link tag around it:
+
+```
+[![This is an alt](fig.png "This is a title")](http://some.where)
+```
+
+Notice that this is structured as so: `[...image tag..](URL)`
+
+It is rewritten to:
+
+```html
+<figure>
+    <a href="http://some.where">
+      <img src="fig.png" alt="This is an alt">
+    </a>
+    <figcaption>This is a title</figcaption>
+</figure>
+```
+
+This feature can be disabled with `--no-md-image-figure`
+
+#### Special image processing
+
+More advanced image processing is available in the extended `<img>` tag implemented by AkashaCMS components.  This is the normal `<img>` tag with a few extra attributes and properties.  These allow us to specify a `<figure>/<figcaption>` structure or to resize images.
+
+Adding the `figure` property triggers a rewrite of the following
+
+```html
+<img id="..ID" figure src="..HREF" caption="..CAPTION"/>
+```
+
+Into this structure:
+
+```html
+<figure>
+    <img id="..ID" src="..HREF">
+    <figcaption>..CAPTION</figcaption>
+</figure>
+```
+
+
+The recognized attributes are:
+
+* `id` becomes the `id` of the `<figure>`
+* `class` becomes the `class` of the `<figure>`
+* `width` becomes the `width` of the `<figure>`
+* `style` becomes the `style` of the `<figure>`
+* `dest` becomes an `<a>` tag surrounding the `<img>` within the `<figure>`
+* `caption` becomes a `<figcaption>` tag within the `<figure>`
+
+Hence,
+
+```html
+<img figure id="fig1" caption="Figure 1."
+   class="some-class" width="400" style="CSS declarations"
+   dest="http://example.com"
+   src="./img/fig1.png"/>
+```
+
+Would become:
+
+```html
+<figure id="fig1" class="some-class" style="CSS">
+  <a href="http://example.org">
+    <img src="./img/fig1.png"/>
+  </a>
+</figure>
+```
+
+This extended `<img>` tag does more than the `-image-figures` extension from the previous section.
+
+An image can also be resized when copied to the HTML directory.  It allows you to store a full-size image in the documents directory, but use a smaller image when deploying to a website, or in a PDF.
+
+The recognized attributes are:
+
+* `src` The file within the documents or assets directories that is copied into the render output
+* `resize-to` The file name used within the render output directory
+* `resize-width` The resulting image width as discussed above.
+
+This tag
+
+```html
+<img id="resizeto150" 
+        src="img/Human-Skeleton.jpg"
+        resize-width="150"
+        resize-to="img/Human-Skeleton-150.jpg">
+```
+
+Becomes the following:
+
+```html
+<img id="resizeto150" src="img/Human-Skeleton-150.jpg">
+```
+
+Additionally, the source file `img/Human-Skeleton.jpg` is copied to the HTML directory as the destination file `img/Human-Skeleton-150.jpg`, and is resized to 150 pixels in width.
+
+#### Multimarkdown table format
+
+Multimarkdown is one of the extended Markdown specifications.  This extension supports its table format.
+
+This feature can be disabled with `--no-md-multimd-table`
+
+#### Add `<caption>` tag to a table
+
+We might want to place "_Table 1. Global Policy Challenges_" either before or after a table, and have it treated as being associated with the table.
+
+```
+Table: A Caption
+
+| A | B |
+|---|---|
+| 1 | 2 |
+| 3 | 4 |
+| 5 | 6 |
+```
+
+Renders as:
+
+Table: A Caption
+
+| A | B |
+|---|---|
+| 1 | 2 |
+| 3 | 4 |
+| 5 | 6 |
+
+The effect is to add a `<caption>` tag within the `<table>`.
+
+This feature can be disabled with `--no-md-table-captions`
+
+#### Diagrams using PlantUML
+
+This is a powerful format for drawing diagrams of importance to software engineers, such as UML diagrams.  The feature is discussed later.
+
+This feature can be disabled with `--no-md-plantuml`
 
 # Automating PDF Document Making using `package.json`
 
@@ -487,8 +845,6 @@ Options:
   -h, --help                                      display help for command
 ```
 
-
-
 A sample Mermaid diagram is:
 
 <code-embed file-name="./img/simple-sample-1.mmd"/>
@@ -507,7 +863,33 @@ The `-i` option specifies the input file, and `-o` the output file.  Hence, this
 
 The result looks like so:
 
-![Simple Sample 1](./img/simple-sample-1.svg)
+<figure>
+  <img width="300px" src="./img/simple-sample-1.svg"/>
+  <figcaption>Simple Sample 1</figcaption>
+</figure>
+
+<!-- These were attempts to rein in the size of that image -->
+
+<!-- img figure src="./img//simple-sample-1.svg"
+  caption="Simple Sample 1"
+  width="700px"/ -->
+
+<!-- ![Simple Sample 1](./img/simple-sample-1.svg) -->
+
+Let's talk a little about rendering SVG images in HTML.  SVG is a vector image format, meaning that an SVG file contains commands for drawing lines and circles and the like.  It also means SVG files do not have a defined width/height, unlike pixel image formats.  Therefore SVG files can scale to any amount with no pixelation.
+
+Initially, as a result, this image filled an entire page in the PDF file.
+
+One way to give an SVG file a size is by editing the SVG to set `width=`, `height=` and other parameters.  But the simplest way is to use HTML directly like so:
+
+```html
+<figure>
+  <img width="300px" src="./img/simple-sample-1.svg"/>
+  <figcaption>Simple Sample 1</figcaption>
+</figure>
+```
+
+This `<img>` is displaying the SVG, and is defined with a `300 pixel` width.  The SVG then renders to that size.
 
 Next is to automate building the images before building the document.  Earlier we went over using the `scripts` tag in `package.json`.  Let's add to that workflow.
 
@@ -525,7 +907,112 @@ Next is to reference this from the `build:guide` script
 "build:guide": "npm-run-all build:sample-1 build:render",
 ```
 
-It is important that the SVG file
+The resulting SVG file can be referenced from Markdown using:
+
+```
+![Simple Sample 1](./img/simple-sample-1.svg)
+```
+
+This is a normal Markdown image tag which will contain the alt-text _Simple Sample 1_.
 
 # Custom HTML tags and custom HTML processing
 
+The AkashaCMS contains the Mahabhuta engine [^defs] which handles custom DOM processing, server-side, using a jQuery-like API.  The workflow diagram later includes these steps:
+
+[^defs]: In Sanskrit, _Akasha_ is the underlying stuff from which the universe is made, and _Mahabhuta_ relates to the five elements.  Hence, the Mahabhuta engine handles HTML element processing, while AkashaCMS helps writers build their website.
+
+<figure>
+  <img class="max-w-100" max-width="100%" src="./img/mahabhuta-workflow.svg"/>
+  <figcaption>DOM Processing workflow</figcaption>
+</figure>
+
+In Mahabhuta, we design individual functions (called Mahafuncs) each of which perform a specific DOM manipulation.
+
+For example, we discussed earlier the custom attributes we can use with `<img>` tags.  Those attributes are processed by a Mahafunc within the AkashaRender package.
+
+Part of an AkashaCMS project configuration is specifying the custom DOM processing functions which will be available.  The _use Mahabhuta for custom DOM processing_ step means to take the HTML resulting from rendering the document into the layout template, and running every Mahafunc against the HTML.
+
+Most of the Mahafuncs have a jQuery-like selector determining whether to run the Mahafunc.  If the selector says to execute the function, its `process` method is called, and it performs whatever manipulations it is programmed for.
+
+Full Mahabhuta documentation is at: https://akashacms.com/mahabhuta/toc.html
+
+In PDF Document Maker, the `--funcs <funcsFN>` parameter allows us to supply a JavaScript file containing a `Mahafuncarray`.
+
+# Generating a table of contents, automating section numbering
+
+That discussion of Mahabhuta functions needs a practical demonstration.  For that purpose, let's go over a method of adding section numbers to header tags, and creating a Table of Contents from the header tags.
+
+In the Markdown-IT ecosystem, some plugins promise to create a Table of Contents.  But they did not work well in testing.  Instead the following technique was developed.
+
+The code for this is in the PDF Document Maker website, in the `guide` directory.  The file, `mahafuncs.mjs`, contains a `MahafuncArray` containing a Mahafunc named `HnNumbering`.
+
+In a Node.js module exporting a MahafuncArray, it must have a function like this:
+
+```js
+const pluginName = 'PDF-Document-Maker-Guide';
+
+export function mahabhutaArray(options) {
+    let ret = new mahabhuta.MahafuncArray(pluginName, options);
+    ret.addMahafunc(new HnNumbering());
+    return ret;
+};
+```
+
+This function is executed from PDF Document Maker.  It creates a MahafuncArray, adds instances of Mahafuncs, returning the array.  The array is then added into the Configuration.
+
+When the Mahabhuta stage runs, it simply steps through each MahafuncArray, executing every Mahafunc array it contains.
+
+```js
+class HnNumbering extends mahabhuta.PageProcessor {
+	async process($, metadata, dirty) /* : Promise<string> */ {
+    // ...
+  }
+}
+```
+
+The `PageProcessor` class is for Mahafuncs which can access anything on the page.  It does not have the `selector` function discussed earlier, and therefore this `process` function will always be executed.
+
+The `$` parameter is a jQuery-like `$` object.  It has most of the jQuery methods, allowing one to search around the page and make manipulations mostly like you'd do with jQuery in a browser.
+
+Because the Mahafuncs are exected after the HTML is rendered, the DOM held by the `$` object is what's about to be written as the final HTML.  This is our chance to customize that HTML.
+
+This particular function loops over all H1, H2, and H3 tags like so:
+
+```js
+$('article').find('h1:not(.header-title), h2, h3').each(function() {
+});
+```
+
+What happens inside this loop is a little hairy, but one key part is to add a section number to the H1/2/3 tag like so:
+
+```js
+const title = `${counter_h1}.${counter_h2}.${counter_h3}. ${$(this).text()}`;
+$(this).text(title);
+```
+
+That loop also constructs a data structure of the H1/2/3 tags, formatting it into a UL/LI list using this partial template:
+
+```js
+const toctext = await this.array.options.akasha.partial(
+    this.array.options.config,
+    'toc.html.njk', {
+    headers
+});
+```
+
+Once the UL/LI list is constructed, the tag `<toc-text-here>` is replaced with that list like so:
+
+```js
+$('toc-text-here').replaceWith(toctext);
+```
+
+The PDF version of this document you're reading has section numbering, and a table of contents, generated by that function.
+
+# PDF Document Maker inner workflow
+
+This diagram may help you understand what's happening.
+
+<figure>
+  <img class="max-w-100" max-width="100%" src="./img/pdf-document-workflow.svg"/>
+  <figcaption>PDF Document Maker workflow</figcaption>
+</figure>
