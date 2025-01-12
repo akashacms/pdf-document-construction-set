@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+<title>PDF Document Maker Guide</title>
+
+
+
+
+
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="pagename" content="PDF Document Maker Guide">
+
+
+
+
+
+
+
+
+
+
+
+<meta name="DC.title" content="PDF Document Maker Guide">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- OpenGraph Meta Tags -->
+
+<meta name="og:title" content="PDF Document Maker Guide">
+
+<meta name="og:url" content="https://akashacms.github.io/pdf-document-construction-set/guide/guide.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="https://akashacms.github.io/pdf-document-construction-set/guide/guide.html">
+
+
+<link rel="sitemap" type="application/xml" href="../sitemap.xml" title="Sitemap">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap-theme.min.css"><link rel="stylesheet" type="text/css" href="../style.css">
+
+
+
+</head>
+<body>
+
+<nav class="navbar fixed-top navbar-expand-md navbar-light bg-light">
+    <a class="navbar-brand" href="#">PDF Document Maker</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Guide</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../blog/index.html">News</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- partial file-name="site-navbar.html"></partial -->
+
+<div class="container" role="main">
+<div class="row">
+
+<!-- partial file-name="header.html"></partial -->
+</div>
+
+<div class="row">
+  <section id="breadcrumb" class="col-sm-12">
+    <div id="breadcrumbTrail">
+    
+        &#xbb; <a class="p-category" href="../index.html">PDF Document Maker</a>
+    
+        &#xbb; <a class="p-category" href="index.html">PDF Document Maker Guide</a>
+    
+        &#xbb; <a class="p-category" href="guide.html">PDF Document Maker Guide</a>
+    
+</div>
+
+  </section>
+</div>
+<!-- 
+<div class="row">
+  <section id="byline" class="col-sm-12">
+    <publication-date></publication-date>;
+  </section>
+</div>
+-->
+
+<div class="row">
+  <article class="col-sm-10">
+    
+    <p><em>PDF Document Maker</em> is a comprehensive tool for producing good quality PDFs from Markdown or AsciiDoc files.</p>
+<p>Under the covers it uses a full-featured static HTML processing system, AkashaCMS, that&apos;s designed for producing websites and E-Books.  The HTML is then converted to PDF using Puppeteer.  These capabilities are bundled into an easy-to-use command-line utility with a long list of options.</p>
+<p><toc-text-here></toc-text-here></p>
+<h1>Installation and Project setup for PDF Document Maker</h1>
+<p>PDF Document Maker runs on the Node.js platform, and is tested with Node.js v20.  It should work for later releases.</p>
+<p>A project directory consists of a <em>package.json</em> file which is used for listing dependencies and build processes.  Instead of being used for building Node.js packages, we will use it to record project dependencies and for build scripts.</p>
+<pre><code class="language-shell">&#x24; node --version  # Make sure v20 or later
+&#x24; npm init -y     # Set up a default package.json
+&#x24; npm install pdf-document-maker --save
+</code></pre>
+<p>Once installed you can get help:</p>
+<pre><code class="language-shell">&#x24; npx pdf-document-maker --help
+TODO capture current help output
+</code></pre>
+<p>The application has a lot of options.  But, most of them have reasonable defaults, and typically you&apos;ll use only a few.</p>
+<h1>Quick start for using PDF Document Maker</h1>
+<p>Before going deep into using PDF Document Maker, let&apos;s do a quick and easy example.  We will format a test file into a PDF.</p>
+<p>The search phrase &quot;<em>standard markdown test file</em>&quot; turns up several test Markdown files.  This repository has a very good one:   <a href="https://github.com/mxstbr/markdown-test-file">https://github.com/mxstbr/markdown-test-file</a></p>
+<p>Start by creating a directory, adding a <code>package.json</code>, and installing <code>pdf-document-maker</code> as shown above.</p>
+<p>The GitHub repository for this tool already has this set up in <a href="https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple">https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple</a></p>
+<p>In that directory, create a directory named <code>documents</code>:</p>
+<pre><code class="language-shell">&#x24; mkdir documents
+&#x24; cd documents
+&#x24; wget https://...   # Download TEST.md
+&#x24; cd ..
+</code></pre>
+<p>With a file, <code>documents/TEST.md</code>, run this command:</p>
+<pre><code class="language-shell">&#x24; npx pdf-document-maker  \
+        --document-dir documents \
+        --pdf-output PDF \
+        --html-output out \
+        --title &apos;Markdown test document&apos; \
+        --format A4 \
+        TEST.md
+</code></pre>
+<p>This command creates two files:</p>
+<ul>
+<li><code>out/TEST.html</code> - is the HTML intermediate file</li>
+<li><code>PDF/TEST.pdf</code> - is the PDF result</li>
+</ul>
+<h2>What did that command do?</h2>
+<p>A lot happened under the covers:</p>
+<ul>
+<li>A configuration object was built for rendering documents into an HTML output directory.</li>
+<li>The input file was processed and written to the output, as were any assets (CSS etc).
+<ul>
+<li>This created <code>out/TEST.html</code></li>
+</ul>
+</li>
+<li>Puppeteer was invoked to print the HTML to PDF.
+<ul>
+<li>This created <code>PDF/TEST.pdf</code></li>
+</ul>
+</li>
+</ul>
+<p>The directory <em>documents</em> is declared as a place the tool looks for documents.  There can be more than one documents directory.  The underlying system, AkashaCMS, supports four sets of input directories, <em>assets</em>, <em>partials</em>, <em>layouts</em>, and <em>documents</em>.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>assets</em></td>
+<td><code>--asset-dir</code></td>
+<td>Holds unprocessed files like CSS or images</td>
+</tr>
+<tr>
+<td><em>partials</em></td>
+<td><code>--partial-dir</code></td>
+<td>Holds templates for content snippets</td>
+</tr>
+<tr>
+<td><em>layouts</em></td>
+<td><code>--layout-dir</code></td>
+<td>Holds page layout templates</td>
+</tr>
+<tr>
+<td><em>documents</em></td>
+<td><code>--document-dir</code></td>
+<td>Holds document files</td>
+</tr>
+</tbody>
+</table>
+<p>For of the directory types there may be multiple actual directories.  The directories are <em>stacked</em> with the later directories being higher in the stack.  This forms four virtual filesystems and we refer to files using the relative pathname from the root.</p>
+<p>In this example there is one documents directory.  The file <code>documents/TEST.md</code> has a VPath (Virtual Path) of <code>TEST.md</code> which is the path we use on the command line.</p>
+<p>There is a default layout directory within PDF Document Maker holding a single layout template, <code>default.njk</code>.  If no layout template is specified, that one is used.</p>
+<h1>File name conventions</h1>
+<p>We already discussed how the virtual directory stack works, and that a VPath are path names relative o the root directory(ies).</p>
+<p><em>Documents</em> directories file names have file extensions naming the file type, as is usual practice.  The extension is used to select the rendering package required to process that file.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Extension</th>
+<th>Output Ext</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AsciiDoc</td>
+<td><code>.adoc</code> or <code>.html.adoc</code></td>
+<td><code>.html</code></td>
+<td>Supports AsciiDoctor documents</td>
+</tr>
+<tr>
+<td>Markdown</td>
+<td><code>.md</code> or <code>.html.md</code></td>
+<td><code>.html</code></td>
+<td>Supports Markdown documents</td>
+</tr>
+<tr>
+<td>LESS</td>
+<td><code>.less</code> or <code>.css.less</code></td>
+<td><code>.css</code></td>
+<td>Supports compiling LESS files to CSS</td>
+</tr>
+<tr>
+<td>EJS</td>
+<td><code>.ejs</code> or <code>.html.ejs</code></td>
+<td><code>.html</code></td>
+<td>EJS</td>
+</tr>
+<tr>
+<td>Handlebars</td>
+<td><code>.handlebars</code> or <code>.html.handlebars</code></td>
+<td><code>.html</code></td>
+<td>Handlebars</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td><code>.json</code> or <code>.html.json</code></td>
+<td><code>.html</code></td>
+<td>Supports rendering a JSON document through a template to produce HTML</td>
+</tr>
+<tr>
+<td>Liquid</td>
+<td><code>.liquid</code> or <code>.html.liquid</code></td>
+<td><code>.html</code></td>
+<td>LiquidJS</td>
+</tr>
+<tr>
+<td>Nunjucks</td>
+<td><code>.njk</code> or <code>.html.njk</code></td>
+<td><code>.html</code></td>
+<td>Nunjucks</td>
+</tr>
+</tbody>
+</table>
+<p>In documents directories, files with these extensions are processed by the named rendering engine, then placed in the same VPath (with the new extension) in the HTML output directory.</p>
+<p>In partials or layouts directories, files have either extension, and are used while rendering files in the documents directories.  These files are not copied to the HTML output directory.</p>
+<p>In assets directories, files are simply copied to the HTML output directory.</p>
+<h1>Page layouts</h1>
+<p>One way PDF Document Maker differs from other Markdown-PDF tools is by supporting the use of a layout template.  Layout templates are responsible for establishing the entire page structure.</p>
+<p>The HTML resulting from rendering the Markdown or AsciiDoc is available to the layout template as a variable named <em>content</em>.</p>
+<p>Consider the default layout template, <code>default.njk</code>:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot; /&gt;
+&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;/&gt;
+
+{% import &quot;ak_core_macros.njk&quot; as ak_core with context %}
+{% import &quot;ak_base_macros.njk&quot; as ak_base with context %}
+
+&lt;title&gt;{{ title }}&lt;/title&gt;
+{{ ak_core.stylesheets() }}
+{{ ak_core.headerJavaScript() }}
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;container-fluid&quot; role=&quot;main&quot;&gt;
+&lt;div class=&quot;row&quot;&gt;
+  &lt;!-- include our document&apos;s content --&gt;
+  &lt;article class=&quot;col-md-9&quot;&gt;
+      {{ content }}
+  &lt;/article&gt;
+&lt;/div&gt;
+{{ ak_core.footerJavaScript() }}
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>This template is derived from ones used for regular websites.  It is in Nunjucks format.</p>
+<p>It imports Nunjucks macros from the AkashaCMS <em>built-in</em> and <em>base</em> plugins.  The PDF Document Maker tool is built using AkashaCMS components, which cover a broad range of website or EBook building needs.</p>
+<p>In this case we see that lists of CSS stylesheets and JavaScript files can be included in the top of the document (<code>&lt;head&gt;</code>) or the bottom of the document.  That&apos;s handled by calling a couple functions in the <em>built-in</em> plugin.</p>
+<p>Bootstrap classes are used to aid page layout, but can be used for other purposes.</p>
+<p>As said earlier, the content from the previous rendering stage is available as the variable <em>content</em>. The page title is also available as a variable.</p>
+<h2>Partial templates</h2>
+<p>Partials are typically a small template meant to help format commonly used HTML structures.</p>
+<p>For example, each document might have a metadata field (we&apos;ll discuss this later) named <code>publicationDate</code> which you might want to present somewhere.  In the AkashaCMS Base plugin, the partial <code>ak_publdate.html.njk</code> is available for this purpose (in NJK format):</p>
+<pre><code class="language-html">{% if publicationDate %}
+    Date: {{ publicationDate | escape }}
+{% endif %}
+</code></pre>
+<p>This can be invoked by the custom tag</p>
+<pre><code class="language-html">&lt;partial file-name=&quot;ak_publdate.html.njk&quot; data-publication-date=&quot;Date String&quot;/&gt;
+</code></pre>
+<p>There are other methods such as the <code>&lt;publication-date&gt;</code> tag, or the <code>akpublicationdate</code> extension installed in Nunjucks, both of which invoke this same partial template.</p>
+<h1>Document format, and document metadata</h1>
+<p>We&apos;ve already discussed three items that are contained in document metadata.</p>
+<p>Like many systems, the document format supports YAML frontmatter which turns into the document metadata.</p>
+<p>It looks roughly like this:</p>
+<pre><code class="language-yaml">---
+title: Gettysburg Address
+layout: page.html.ejs
+publicationDate: January 7, 2025
+otherTag: otherValue
+tag42: &quot;The Meaning of Life&quot;
+---
+This is the content area.
+</code></pre>
+<p>The area reading <em>this is the content area</em> is the content body for the document.  The part between the lines of three dashes (<code>---</code>) is the frontmatter, and must be in YAML format.</p>
+<p>When a document is read, it is first parsed into <em>body</em> (or sometimes <em>docContent</em>) and <em>metadata</em> (or sometimes <em>docMetadata</em>).</p>
+<p>The metadata object is available, as discussed earlier, to templates as &quot;<em>variables</em>&quot;.  The NJK template snippet, <code>{{ publicationDate | escape }}</code>, means to access the metadata variable <code>publicationDate</code> and then apply the <code>escape</code> filter.</p>
+<h2>Default metadata values in PDF Document Maker</h2>
+<p>As a convenience, PDF Document Maker supports command-line options for two metadata values:</p>
+<ul>
+<li><code>--title</code> supplies the value for <code>title</code>, and overrides any existing value</li>
+<li><code>--layout</code> supplies the value for <code>layout</code>, and overrides any existing value</li>
+</ul>
+<h2>The meaning for certain metadata values</h2>
+<p>Generally the content metadata is simply data with no other defined purpose.  It is up to the templates used for processing your documents define the purpose of each metadata value.</p>
+<p>Some fields do have defined purposes:</p>
+<ul>
+<li><code>title</code> serves as the page title, and might be used in the <code>&lt;title&gt;</code> tag as well as in a prominent <code>&lt;h1&gt;</code> tag at the top of the page.</li>
+<li><code>layout</code> names the layout template to use with this document.</li>
+<li><code>publicationDate</code> is a date string (it will be parsed by the Date class) on which the document was <em>published</em>.</li>
+</ul>
+<h1>CSS styles for print</h1>
+<p>Most of us use CSS for theming web pages shown in a web browser.  We&apos;ll create a CSS stylesheet, include it in our web page, and not at all care about the <code>@media</code> tag in CSS.</p>
+<p>Using <code>@media</code> we can target some of our CSS declarations for <code>screen</code> display:</p>
+<pre><code class="language-css">@media screen and (min-width: 900px) {
+    /* ... */
+}
+</code></pre>
+<p>This targets regular display screens at least 900px wide.</p>
+<p>We might not be aware of the need for specific CSS rules to handle printing.  Printed output has different requirements than screen display.  To produce a good quality PDF/print document we must take this into account.  Doing so starts with this:</p>
+<pre><code class="language-css">@media print {
+    /* All your print styles go here */
+}
+</code></pre>
+<p>What you do is up to you.</p>
+<p>To specify stylesheets:</p>
+<pre><code>--style &lt;cssFile...&gt;        File names of CSS style sheets
+--lesscss &lt;lesscssFile...&gt;  File names of LESS files to render to CSS
+</code></pre>
+<p>The <code>--style</code> parameter is used for regular CSS files.  These can be stored either in an <code>asset</code> directory or a <code>document</code> directory.  When the document is rendered, the CSS files will be copied unmodified into the HTML output directory.</p>
+<p>The <code>--lesscss</code> parameter is used for LESS files, which is a format for improved CSS syntax.  These files must be stored in a <code>document</code> directory, have an extension of either <code>.less</code> or <code>.css.less</code>, and are rendered from LESS the format to CSS.</p>
+<p>In each case the parameter can be repeated multiple times to handle multiple files.  The pathname must be a complete VPath with a leading slash.</p>
+<p>Using the <code>--style</code> or <code>--lesscss</code> parameter causes a <code>&lt;link&gt;</code> tag to be generated in the <code>&lt;head&gt;</code> section of the document.</p>
+<p>Here are links to articles that are useful for understanding CSS for printing:</p>
+<ul>
+<li><a href="https://www.sitepoint.com/css-printer-friendly-pages/">https://www.sitepoint.com/css-printer-friendly-pages/</a></li>
+<li><a href="https://didoesdigital.com/blog/print-styles/">https://didoesdigital.com/blog/print-styles/</a></li>
+<li><a href="https://www.makeuseof.com/format-web-page-for-printer/">https://www.makeuseof.com/format-web-page-for-printer/</a></li>
+<li><a href="https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/">https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/</a></li>
+</ul>
+<p>Support for <a href="https://printedcss.com/">https://printedcss.com/</a> is bundled in PDF Document Maker.  It is automatically included in the stylesheet declarations.</p>
+<p>If you prefer to disable this, use the <code>--no-printcss</code> option.</p>
+<p>Some other frameworks for CSS for printing:</p>
+<ul>
+<li><a href="https://github.com/BafS/Gutenberg">https://github.com/BafS/Gutenberg</a></li>
+<li><a href="https://github.com/vladocar/Hartija---CSS-Print-Framework?tab=readme-ov-file">https://github.com/vladocar/Hartija---CSS-Print-Framework?tab=readme-ov-file</a></li>
+<li><a href="https://github.com/cognitom/paper-css">https://github.com/cognitom/paper-css</a></li>
+<li><a href="https://www.getpapercss.com/">https://www.getpapercss.com/</a></li>
+</ul>
+<p>For example to use Gutenberg, start by adding it to your project dependencies:</p>
+<pre><code class="language-shell">&#x24; npm install gutenberg-css --save
+</code></pre>
+<p>Then create an asset directory:</p>
+<pre><code class="language-shell">&#x24; mkdir -p assets/vendor/gutenberg
+</code></pre>
+<p>It is good practice to use a directory path <code>/vendor/VENDOR-NAME</code> to store files sourced from a particular project.</p>
+<p>Then copy the Gutenberg CSS into that directory:</p>
+<pre><code class="language-shell">&#x24; cp -r node_modules/gutenberg-css/dist/ assets/vendor/gutenberg/
+</code></pre>
+<p>And finally, when running PDF Document Maker we add <code>--style vendor/gutenberg/dist/gutenberg.css</code></p>
+<pre><code class="language-shell">&#x24; npx pdf-document-maker  \
+        --document-dir documents \
+        --pdf-output PDF \
+        --html-output out \
+        --title &apos;Markdown test document&apos; \
+        --style vendor/gutenberg/dist/gutenberg.css \
+        --format A4 \
+        TEST.md
+</code></pre>
+<h1>Project configuration with the PDF Document Maker CLI</h1>
+<p>We discussed earlier that a PDF Document Maker project directory contains the Node.js <code>package.json</code> file where one dependency is <code>pdf-document-maker</code>.  The directory must also contain the sort of files mentioned earlier.</p>
+<p>Most of the project configuration is handled with command-line options.  The <code>--help</code> option will show you the full list of options.</p>
+<p>The configuration options cover two broad areas:</p>
+<ul>
+<li>Generating HTML from the input files - These options control generation of the AkashaCMS configuration object</li>
+<li>Generating PDF from the HTML - These options control the Puppeteer configuration</li>
+</ul>
+<h2>Output directories</h2>
+<p>Two output directories are created:</p>
+<table>
+<thead>
+<tr>
+<th>Output</th>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTML Output</td>
+<td><code>--html-output</code></td>
+<td>This contains the directory structure of HTML, CSS, JavaScript, and images, which will be rendered into the PDF.  The structure is precisely the same as a static website, meaning the files are placed in a directory structure that can be deployed to a regular website.</td>
+</tr>
+<tr>
+<td>PDF Output</td>
+<td><code>--pdf-output</code></td>
+<td>This contains the PDF file which is generated.</td>
+</tr>
+</tbody>
+</table>
+<h2>Header and Footer text in the PDF</h2>
+<p>A key feature offered by word processing systems like Libre Office is placing text in the margin at the top and bottom of the page.  This header and footer text usually carries a date, page number, copyright statement, and document title.</p>
+<p><code>--template-header</code></p>
+<p><code>--height-header</code></p>
+<p><code>--template-footer</code></p>
+<p><code>--height-footer</code></p>
+<h2>Controlling page layout</h2>
+<p>As we discussed earlier, the <code>--layout</code> option lets us specify a page layout template.</p>
+<p>Layout templates are stored in the <em>Layouts Dirs</em>, which we specify using the <code>--layout-dir</code> option.</p>
+<h2>Page styling using CSS stylesheets</h2>
+<p>We can further customize the document presentation using CSS stylesheets.  The design allows us to use any number of stylesheets, and to use the LESS format for creating stylesheets.</p>
+<p>For each kind of stylesheet we can repeat the option more than once:</p>
+<pre><code class="language-shell">&#x24; npx pdf-document-maker ... \
+    --style assets/style1.css --style assets/style2.css \
+    --lesscss assets/style3.less --style assets/style4.less
+    ...
+</code></pre>
+<p>The filenames are VPaths.  In this example, each of the CSS files are located in the <code>assets</code> virtual directory.</p>
+<p>For <code>--style</code> parameters, the file is expected to be in CSS format, and is simply copied into the HTML output directory.  These files can be either in an <em>assets</em> directory, or <em>documents</em> directory.</p>
+<p>For <code>--lesscss</code> parameters, the file will be rendered using the LESS processor.  This means the files must have an extension of <code>.css.less</code> or <code>.less</code>, and be in a <em>documents</em> directory.</p>
+<p>Additionally, by default the <em>PrintCSS</em> stylesheet will be used.  This is from an open source project, and is CSS for produces good looking print documents.  This stylesheet can be disabled using the <code>--no-printcss</code> option.</p>
+<p>Additionally, by default the Bootstrap v4 framework is used.  For the PDF documents most of Bootstrap is not useful.  It has powerful page layout capabilities, and certain components may be useful for creating visual effects.  This framework may be disabled with the <code>--no-bootstrap</code> option.</p>
+<p>All stylesheets, whether the default <code>print.css</code> file or those specified on the command line, are added to a list.  The page layout template is expected to use either of these methods:</p>
+<pre><code class="language-html">&lt;!-- NJK macro for generating link tags to CSS files --&gt;
+{{ ak_core.stylesheets() }}
+&lt;!-- a custom HTML tag for the same purpose --&gt;
+&lt;ak-stylesheets&gt;&lt;/ak-stylesheets&gt;
+</code></pre>
+<p>Both of these convert the list of stylesheet references into <code>&lt;link&gt;</code> tags referencing the stylesheets.</p>
+<h2>Markdown extensions supported by PDF Document Maker</h2>
+<p>The Markdown ecosystem includes a wide variety of extensions, adding additional features to the language.  PDF Document Maker uses the Node.js Markdown IT engine, and can in theory use any of the available plugins.  Several are already bundled into the application, with these effects.</p>
+<h4>Auto-generating &quot;anchor&quot; text for header tags</h4>
+<p>This extension causes an <code>id=&quot;anchor&quot;</code> attribute to be added to the HTML header tag like so:</p>
+<pre><code class="language-html">## A Markdown H2 tag
+&lt;!-- becomes --&gt;
+&lt;h2 id=&quot;generated anchor&quot;&gt;A Markdown H2 tag&lt;/h2&gt;
+</code></pre>
+<p>This allows an <code>&lt;a href=&quot;#anchor&quot;&gt;Link text&lt;/a&gt;</code> tag to link directly to the header tag.  This would be useful in Tables of Content, where the links would go directly to the section.</p>
+<p>This feature can be disabled with <code>--no-md-anchor</code></p>
+<h4>Generating footnote blocks</h4>
+<p>Allows authors to write footnotes.[^1]  A footnote is referenced with a marker, such as <code>[^1]</code>.  The footnote is defined by writing a paragraph like this:</p>
+<pre><code>[^1]: This is the body of the footnote.
+</code></pre>
+<p>The extension sets up internal links between the two points.</p>
+<p>[^1]: This is the body of the footnote.</p>
+<p>This feature can be disabled with <code>--no-md-footnote</code></p>
+<h4>Adding either id= or class= attributes to HTML</h4>
+<p>To implement styling using CSS requires the ability to set ID or Class values.  Example:</p>
+<pre><code># header {.style-me}
+paragraph {data-toggle=modal}
+</code></pre>
+<p>The stuff between <code>{</code> and <code>}</code> are where we list the attributes to add to the rendered HTML tags after.  The above will be converted to:</p>
+<pre><code class="language-html">&lt;h1 class=&quot;style-me&quot;&gt;header&lt;/h1&gt;
+&lt;p data-toggle=&quot;modal&quot;&gt;paragraph&lt;/p&gt;
+</code></pre>
+<p>The extension allows setting other attributes beyond ID and Class.  But, most other attributes are potential security vulnerabilities.  The extension has been configured to only allow <code>id=</code> and <code>class=</code> attributes.</p>
+<p>Use of these attributes should then correspond to entries in CSS stylesheets.</p>
+<p>Be aware that the <code>-anchors</code> extension and <code>-attrs</code> extension both deal with the <code>id=</code> value on headers.  With <code>-anchors</code> the author is not in control of the choice for the <code>id=</code> value, whereas with the <code>-attrs</code> extension the author chooses the <code>id=</code> value.</p>
+<p>This feature can be disabled with <code>--no-md-attrs</code></p>
+<h4>Simplify adding a <code>&lt;div&gt;</code> block</h4>
+<p>Another way to customize the resulting HTML is to add <code>&lt;div&gt;</code> tags with certain attributes.  For example a box with a yellow background and solid brown border could serve to draw attention to some content.  The color effects are easy to define in CSS, and the ability to add a <code>&lt;div&gt;</code> gives the opportunity to wrap a contain some content within a box.</p>
+<p>Example:</p>
+<pre><code>::: #warning
+*here be dragons*
+:::
+</code></pre>
+<p>That generates the following:</p>
+<pre><code class="language-html">&lt;div id=&quot;warning&quot;&gt;
+&lt;em&gt;here be dragons&lt;/em&gt;
+&lt;/div&gt;
+</code></pre>
+<p>While this is easy to use, one has to consider that Markdown engines like Markdown-IT allow the author to use HTML tags.  It&apos;s therefore easy to add <code>&lt;div&gt;</code> tags without requiring a Markdown extension.</p>
+<p>This feature can be disabled with <code>--no-md-div</code></p>
+<h4>Adding <code>&lt;section&gt;</code> tags corresponding to header tags</h4>
+<p>One may think of a Header tag followed by some content as a &quot;section&quot; of a document.  This extension implements that idea with HTML tags.</p>
+<p>Consider:</p>
+<pre><code># Header 1
+Text.
+### Header 2
+Lorem?
+## Header 3
+Ipsum.
+# Last header
+Markdown rules!
+</code></pre>
+<p>That&apos;s four sections, some of which should be nested within outer sections.</p>
+<p>It generates the following:</p>
+<pre><code class="language-html">&lt;section&gt;
+  &lt;h1&gt;Header 1&lt;/h1&gt;
+  &lt;p&gt;Text.&lt;/p&gt;
+  &lt;section&gt;
+    &lt;h3&gt;Header 2&lt;/h3&gt;
+    &lt;p&gt;Lorem?&lt;/p&gt;
+  &lt;/section&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Header 3&lt;/h2&gt;
+    &lt;p&gt;Ipsum.&lt;/p&gt;
+  &lt;/section&gt;
+&lt;/section&gt;
+&lt;section&gt;
+  &lt;h1&gt;Last header&lt;/h1&gt;
+  &lt;p&gt;Markdown rules!&lt;/p&gt;
+&lt;/section&gt;
+</code></pre>
+<p>If the <code>-attrs</code> extension is enabled, we might have added <code>id=</code> or <code>class=</code> attributes to our headers.  If so, these attributes are moved to the <code>&lt;section&gt;</code> surrounding the header.</p>
+<p>This feature can be disabled with <code>--no-md-header-section</code></p>
+<h4>Adding syntax highlighting to code sections</h4>
+<p>The HighlightJS package handles syntax coloring for content within code blocks.  There are many examples of this all through this document.</p>
+<p>At the HTML level the HighlightJS package looks for this:</p>
+<pre><code class="language-html">&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;...&lt;/code&gt;&lt;/pre&gt;
+</code></pre>
+<p>The class name is a language code.  The supported languages are listed in their GitHub repository: <a href="https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md">https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md</a></p>
+<p>In Markdown a code block is text within two lines of three backticks.  The language code is placed immediately after the opening backticks.</p>
+<p>This feature can be disabled with <code>--no-md-highlightjs</code></p>
+<h4>Convert image references into <code>&lt;figure&gt;</code> tags</h4>
+<p>This allows rendering an image reference in Markdown as a <code>&lt;figure&gt;</code> tag containing an <code>&lt;img&gt;</code> tag and optionally a <code>&lt;figcaption&gt;</code> tag.  This construct is important in modern HTML.</p>
+<p>The <code>&lt;figure&gt;</code> element represents self-contained content.  The figure, its caption, and its contents are treated by web browsers as a single unit.</p>
+<p>For example:</p>
+<pre><code>![This is an alt](fig.png &quot;This is a title&quot;)
+</code></pre>
+<p>Renders as:</p>
+<pre><code class="language-html">&lt;figure&gt;
+    &lt;img src=&quot;fig.png&quot; alt=&quot;This is an alt&quot;&gt;
+    &lt;figcaption&gt;This is a title&lt;/figcaption&gt;
+&lt;/figure&gt;
+</code></pre>
+<p>One can also put a Markdown link tag around it:</p>
+<pre><code>[![This is an alt](fig.png &quot;This is a title&quot;)](http://some.where)
+</code></pre>
+<p>Notice that this is structured as so: <code>[...image tag..](URL)</code></p>
+<p>It is rewritten to:</p>
+<pre><code class="language-html">&lt;figure&gt;
+    &lt;a href=&quot;http://some.where&quot;&gt;
+      &lt;img src=&quot;fig.png&quot; alt=&quot;This is an alt&quot;&gt;
+    &lt;/a&gt;
+    &lt;figcaption&gt;This is a title&lt;/figcaption&gt;
+&lt;/figure&gt;
+</code></pre>
+<p>This feature can be disabled with <code>--no-md-image-figure</code></p>
+<h4>Special image processing</h4>
+<p>More advanced image processing is available in the extended <code>&lt;img&gt;</code> tag implemented by AkashaCMS components.  This is the normal <code>&lt;img&gt;</code> tag with a few extra attributes and properties.  These allow us to specify a <code>&lt;figure&gt;/&lt;figcaption&gt;</code> structure or to resize images.</p>
+<p>Adding the <code>figure</code> property triggers a rewrite of the following</p>
+<pre><code class="language-html">&lt;img id=&quot;..ID&quot; figure src=&quot;..HREF&quot; caption=&quot;..CAPTION&quot;/&gt;
+</code></pre>
+<p>Into this structure:</p>
+<pre><code class="language-html">&lt;figure&gt;
+    &lt;img id=&quot;..ID&quot; src=&quot;..HREF&quot;&gt;
+    &lt;figcaption&gt;..CAPTION&lt;/figcaption&gt;
+&lt;/figure&gt;
+</code></pre>
+<p>The recognized attributes are:</p>
+<ul>
+<li><code>id</code> becomes the <code>id</code> of the <code>&lt;figure&gt;</code></li>
+<li><code>class</code> becomes the <code>class</code> of the <code>&lt;figure&gt;</code></li>
+<li><code>width</code> becomes the <code>width</code> of the <code>&lt;figure&gt;</code></li>
+<li><code>style</code> becomes the <code>style</code> of the <code>&lt;figure&gt;</code></li>
+<li><code>dest</code> becomes an <code>&lt;a&gt;</code> tag surrounding the <code>&lt;img&gt;</code> within the <code>&lt;figure&gt;</code></li>
+<li><code>caption</code> becomes a <code>&lt;figcaption&gt;</code> tag within the <code>&lt;figure&gt;</code></li>
+</ul>
+<p>Hence,</p>
+<pre><code class="language-html">&lt;img figure id=&quot;fig1&quot; caption=&quot;Figure 1.&quot;
+   class=&quot;some-class&quot; width=&quot;400&quot; style=&quot;CSS declarations&quot;
+   dest=&quot;http://example.com&quot;
+   src=&quot;./img/fig1.png&quot;/&gt;
+</code></pre>
+<p>Would become:</p>
+<pre><code class="language-html">&lt;figure id=&quot;fig1&quot; class=&quot;some-class&quot; style=&quot;CSS&quot;&gt;
+  &lt;a href=&quot;http://example.org&quot;&gt;
+    &lt;img src=&quot;./img/fig1.png&quot;/&gt;
+  &lt;/a&gt;
+&lt;/figure&gt;
+</code></pre>
+<p>This extended <code>&lt;img&gt;</code> tag does more than the <code>-image-figures</code> extension from the previous section.</p>
+<p>An image can also be resized when copied to the HTML directory.  It allows you to store a full-size image in the documents directory, but use a smaller image when deploying to a website, or in a PDF.</p>
+<p>The recognized attributes are:</p>
+<ul>
+<li><code>src</code> The file within the documents or assets directories that is copied into the render output</li>
+<li><code>resize-to</code> The file name used within the render output directory</li>
+<li><code>resize-width</code> The resulting image width as discussed above.</li>
+</ul>
+<p>This tag</p>
+<pre><code class="language-html">&lt;img id=&quot;resizeto150&quot; 
+        src=&quot;img/Human-Skeleton.jpg&quot;
+        resize-width=&quot;150&quot;
+        resize-to=&quot;img/Human-Skeleton-150.jpg&quot;&gt;
+</code></pre>
+<p>Becomes the following:</p>
+<pre><code class="language-html">&lt;img id=&quot;resizeto150&quot; src=&quot;img/Human-Skeleton-150.jpg&quot;&gt;
+</code></pre>
+<p>Additionally, the source file <code>img/Human-Skeleton.jpg</code> is copied to the HTML directory as the destination file <code>img/Human-Skeleton-150.jpg</code>, and is resized to 150 pixels in width.</p>
+<h4>Multimarkdown table format</h4>
+<p>Multimarkdown is one of the extended Markdown specifications.  This extension supports its table format.</p>
+<p>This feature can be disabled with <code>--no-md-multimd-table</code></p>
+<h4>Add <code>&lt;caption&gt;</code> tag to a table</h4>
+<p>We might want to place &quot;<em>Table 1. Global Policy Challenges</em>&quot; either before or after a table, and have it treated as being associated with the table.</p>
+<pre><code>Table: A Caption
+
+| A | B |
+|---|---|
+| 1 | 2 |
+| 3 | 4 |
+| 5 | 6 |
+</code></pre>
+<p>Renders as:</p>
+<p>Table: A Caption</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<p>The effect is to add a <code>&lt;caption&gt;</code> tag within the <code>&lt;table&gt;</code>.</p>
+<p>This feature can be disabled with <code>--no-md-table-captions</code></p>
+<h4>Diagrams using PlantUML</h4>
+<p>This is a powerful format for drawing diagrams of importance to software engineers, such as UML diagrams.  The feature is discussed later.</p>
+<p>This feature can be disabled with <code>--no-md-plantuml</code></p>
+<h1>Automating PDF Document Making using <code>package.json</code></h1>
+<p>The <code>package.json</code> file can serve as a way to record our build procedure.  In this file the <code>scripts</code> section stores commands which can be run.  It&apos;s useful to create and test prebaked scripts so you don&apos;t have to remember how to do things.</p>
+<p>It will help to first install <code>npm-run-all</code> because it cleans up the scripts section of <code>package.json</code>.</p>
+<pre><code class="language-shell">&#x24; npm install npm-run-all --save
+</code></pre>
+<p>Then in <code>package.json</code> add these items to the <code>scripts</code> tag:</p>
+<pre><code class="language-json">&quot;scripts&quot;: {
+  &quot;build:guide&quot;: &quot;npm-run-all build:render&quot;,
+  &quot;build:render&quot;: &quot;npx pdf-document-maker --partial-dir partials --layout-dir layouts --document-dir documents --lesscss guide/style.css.less --pdf-output PDF --html-output out --title &apos;PDF Document Maker Guide&apos; --format A4 guide/guide.md&quot;
+},
+</code></pre>
+<p>To rebuild the document simply run:</p>
+<pre><code class="language-shell">&#x24; npm run build:guide
+</code></pre>
+<h1>Project configuration with AkashaCMS configuration files</h1>
+<p>Under the covers, PDF Document Maker creates an AkashaCMS configuration file.  This file instructs AkashaCMS components on where to find input files, and customizations for generating HTML and other files.</p>
+<p>One learns about this configuration file at <a href="https://akashacms.com">https://akashacms.com</a>  There is an example file in the repository.</p>
+<p>For most projects using the command-line to auto-generate a configuration object is sufficient.  But, some projects may want more control than we can expose with command-line options.</p>
+<p>Once you have a config file, add <code>--config configFN</code> to the options.</p>
+<h1>Drawing diagrams with <code>draw.io</code>, PlantUML or Mermaid</h1>
+<p>There are many tools for creating images of all kinds.  Images feed our need to have a visual view counterpoint to the text in our documents.</p>
+<p>There are three tools we can focus on that are of use to typical software engineers.</p>
+<h2>Using <code>draw.io</code> diagrams in PDF Document Maker</h2>
+<p>The first, <code>draw.io</code>, is a diagramming tool with built-in clip art useful for software engineering, hardware deployment, and other technical diagrams.  It is very easy to use, and with it one can quickly create complex diagrams.</p>
+<p>To learn about the application, visit <a href="https://www.drawio.com/">https://www.drawio.com/</a></p>
+<p>To use it online, visit <a href="https://draw.io">https://draw.io</a></p>
+<p>There is an open-source desktop application, where the GitHub repository is at: <a href="https://github.com/jgraph/drawio-desktop">https://github.com/jgraph/drawio-desktop</a>  However, on <code>drawio.com</code> there is a download link going back to the GitHub repository.  And, the desktop application may be available via package management systems.  On Linux, it is available via Flathub.</p>
+<p>Once you&apos;ve drawn an image, the best way to proceed is to save the drawing as PNG.</p>
+<p><img src="./img/draw-io-export.png" alt="Exporting an image from "></p>
+<p>On this screen you choose the export options.</p>
+<p><img src="./img/draw-io-export-png.png" alt="Choosing export options"></p>
+<p>The &quot;<em>include a copy of my diagram</em>&quot; ensures that the PNG can be edited by <code>draw.io</code> in the future.  That is, the resulting PNG has information about the drawing such that <code>draw.io</code> can recreate the editing experience.</p>
+<p>The diagram is easy to include in Markdown using the normal image tag.</p>
+<pre><code>![Example diagram](./img/example-drawio-diagram.png)
+</code></pre>
+<p>Which results in the following:</p>
+<p><img src="./img/example-drawio-diagram.png" alt="Example diagram"></p>
+<p>If in the future you need to edit the diagram, simply load the PNG file back into <code>draw.io</code>.  When done editing the file make sure to save it using the same procedure.</p>
+<h2>Using PlantUML diagrams in PDF Document Maker</h2>
+<p>PlantUML - <a href="https://plantuml.com/">https://plantuml.com/</a> - is a versatile tool for creating a number of diagrams useful in software engineering and related fields.  As the name suggests it focuses mostly on UML diagrams.</p>
+<p>With PlantUML you create a textual description of the diagram to create.  The description is placed inline with the Markdown file.  When the document is rendered to HTML, the description is converted to an SVG representation of the description.</p>
+<p>The conversion can be disabled by using the <code>--no-md-plantuml</code> option.</p>
+<p>A sample diagram looks like this:</p>
+<pre><code>@startuml
+
+start
+
+if (Graphviz installed?) then (yes)
+  :process all\ndiagrams;
+else (no)
+  :process only
+  __sequence__ and __activity__ diagrams;
+endif
+
+stop
+
+@enduml
+</code></pre>
+<p>Imply insert that text in the Markdown file.  The default delimiters are <code>@startuml</code> and <code>@enduml</code>, with everything in-between interpreted as the PlantUML diagram.</p>
+<p>@startuml</p>
+<p>start</p>
+<p>if (Graphviz installed?) then (yes)
+:process all\ndiagrams;
+else (no)
+:process only
+<strong>sequence</strong> and <strong>activity</strong> diagrams;
+endif</p>
+<p>stop</p>
+<p>@enduml</p>
+<p>TODO - Cover installing a local PlantUML server</p>
+<h2>Using MermaidJS diagrams in PDF Document Maker</h2>
+<p>Mermaid - <a href="https://mermaid.js.org/">https://mermaid.js.org/</a> - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description o the diagram, pasting it into a Markdown document.</p>
+<p>Unlike with PlantUML we were unable to integrate Mermaid such that a code block with the <code>mermaid</code> class would be automatically rendered as an inline SVG.</p>
+<p>The most convenient path is to install Mermaid-CLI - <a href="https://github.com/mermaid-js/mermaid-cli">https://github.com/mermaid-js/mermaid-cli</a></p>
+<p>In your project directory do this:</p>
+<pre><code class="language-shell">&#x24; npm install @mermaid-js/mermaid-cli --save
+</code></pre>
+<p>This installs a program you can run as so:</p>
+<pre><code class="language-shell">&#x24; npx mmdc --help
+Usage: mmdc [options]
+
+Options:
+  -V, --version                                   output the version number
+  -t, --theme [theme]                             Theme of the chart (choices: &quot;default&quot;, &quot;forest&quot;, &quot;dark&quot;, &quot;neutral&quot;,
+                                                  default: &quot;default&quot;)
+  -w, --width [width]                             Width of the page (default: 800)
+  -H, --height [height]                           Height of the page (default: 600)
+  -i, --input &lt;input&gt;                             Input mermaid file. Files ending in .md will be treated as Markdown
+                                                  and all charts (e.g. ```mermaid (...)``` or :::mermaid (...):::)
+                                                  will be extracted and generated. Use `-` to read from stdin.
+  -o, --output [output]                           Output file. It should be either md, svg, png, pdf or use `-` to
+                                                  output to stdout. Optional. Default: input + &quot;.svg&quot;
+  -e, --outputFormat [format]                     Output format for the generated image. (choices: &quot;svg&quot;, &quot;png&quot;,
+                                                  &quot;pdf&quot;, default: Loaded from the output file extension)
+  -b, --backgroundColor [backgroundColor]         Background color for pngs/svgs (not pdfs). Example: transparent,
+                                                  red, &apos;#F0F0F0&apos;. (default: &quot;white&quot;)
+  -c, --configFile [configFile]                   JSON configuration file for mermaid.
+  -C, --cssFile [cssFile]                         CSS file for the page.
+  -I, --svgId [svgId]                             The id attribute for the SVG element to be rendered.
+  -s, --scale [scale]                             Puppeteer scale factor (default: 1)
+  -f, --pdfFit                                    Scale PDF to fit chart
+  -q, --quiet                                     Suppress log output
+  -p --puppeteerConfigFile [puppeteerConfigFile]  JSON configuration file for puppeteer.
+  -h, --help                                      display help for command
+</code></pre>
+<p>A sample Mermaid diagram is:</p>
+<pre><code class="hljs">
+stateDiagram-v2
+<span class="hljs-built_in">title</span>: Simple sample
+
+    [*] --&gt; Still
+    S<span class="hljs-function"><span class="hljs-title">till</span> --&gt;</span> [*]
+
+    S<span class="hljs-function"><span class="hljs-title">till</span> --&gt;</span> Moving
+    M<span class="hljs-function"><span class="hljs-title">oving</span> --&gt;</span> Still
+    M<span class="hljs-function"><span class="hljs-title">oving</span> --&gt;</span> Crash
+    C<span class="hljs-function"><span class="hljs-title">rash</span> --&gt;</span> [*]</code></pre>
+<p>This must be saved as a separate file in the file-system.  For example, a subdirectory <code>img</code> is a useful place to store images.  In that case, save the text in a file <code>./img/simple-sample-1.mmd</code>.</p>
+<p>Next, the file is processed to SVG like so:</p>
+<pre><code class="language-shell">npx mmdc -i documents/guide/img/simple-sample-1.mmd \
+  -o documents/guide/img/simple-sample-1.svg \
+  --outputFormat svg
+</code></pre>
+<p>The <code>-i</code> option specifies the input file, and <code>-o</code> the output file.  Hence, this converts to an output file in the same directory the SVG version of the diagram.</p>
+<p>The result looks like so:</p>
+<figure>
+  <img width="300px" src="./img/simple-sample-1.svg">
+  <figcaption>Simple Sample 1</figcaption>
+</figure>
+<!-- These were attempts to rein in the size of that image -->
+<!-- img figure src="./img//simple-sample-1.svg"
+  caption="Simple Sample 1"
+  width="700px"/ -->
+<!-- ![Simple Sample 1](./img/simple-sample-1.svg) -->
+<p>Let&apos;s talk a little about rendering SVG images in HTML.  SVG is a vector image format, meaning that an SVG file contains commands for drawing lines and circles and the like.  It also means SVG files do not have a defined width/height, unlike pixel image formats.  Therefore SVG files can scale to any amount with no pixelation.</p>
+<p>Initially, as a result, this image filled an entire page in the PDF file.</p>
+<p>One way to give an SVG file a size is by editing the SVG to set <code>width=</code>, <code>height=</code> and other parameters.  But the simplest way is to use HTML directly like so:</p>
+<pre><code class="language-html">&lt;figure&gt;
+  &lt;img width=&quot;300px&quot; src=&quot;./img/simple-sample-1.svg&quot;/&gt;
+  &lt;figcaption&gt;Simple Sample 1&lt;/figcaption&gt;
+&lt;/figure&gt;
+</code></pre>
+<p>This <code>&lt;img&gt;</code> is displaying the SVG, and is defined with a <code>300 pixel</code> width.  The SVG then renders to that size.</p>
+<p>Next is to automate building the images before building the document.  Earlier we went over using the <code>scripts</code> tag in <code>package.json</code>.  Let&apos;s add to that workflow.</p>
+<p>First, add a command to build each Mermaid file:</p>
+<pre><code class="language-json">&quot;build:sample-1&quot;: &quot;npx mmdc -i documents/guide/simple-sample-1.mmd -o documents/guide/simple-sample-1.svg --outputFormat svg&quot;,
+</code></pre>
+<p>We take the same command, and add it to the script.  The tag name format is <code>build:file-name</code>.</p>
+<p>Next is to reference this from the <code>build:guide</code> script</p>
+<pre><code class="language-json">&quot;build:guide&quot;: &quot;npm-run-all build:sample-1 build:render&quot;,
+</code></pre>
+<p>The resulting SVG file can be referenced from Markdown using:</p>
+<pre><code>![Simple Sample 1](./img/simple-sample-1.svg)
+</code></pre>
+<p>This is a normal Markdown image tag which will contain the alt-text <em>Simple Sample 1</em>.</p>
+<h1>Custom HTML tags and custom HTML processing</h1>
+<p>The AkashaCMS contains the Mahabhuta engine [^defs] which handles custom DOM processing, server-side, using a jQuery-like API.  The workflow diagram later includes these steps:</p>
+<p>[^defs]: In Sanskrit, <em>Akasha</em> is the underlying stuff from which the universe is made, and <em>Mahabhuta</em> relates to the five elements.  Hence, the Mahabhuta engine handles HTML element processing, while AkashaCMS helps writers build their website.</p>
+<figure>
+  <img class="max-w-100" max-width="100%" src="./img/mahabhuta-workflow.svg">
+  <figcaption>DOM Processing workflow</figcaption>
+</figure>
+<p>In Mahabhuta, we design individual functions (called Mahafuncs) each of which perform a specific DOM manipulation.</p>
+<p>For example, we discussed earlier the custom attributes we can use with <code>&lt;img&gt;</code> tags.  Those attributes are processed by a Mahafunc within the AkashaRender package.</p>
+<p>Part of an AkashaCMS project configuration is specifying the custom DOM processing functions which will be available.  The <em>use Mahabhuta for custom DOM processing</em> step means to take the HTML resulting from rendering the document into the layout template, and running every Mahafunc against the HTML.</p>
+<p>Most of the Mahafuncs have a jQuery-like selector determining whether to run the Mahafunc.  If the selector says to execute the function, its <code>process</code> method is called, and it performs whatever manipulations it is programmed for.</p>
+<p>Full Mahabhuta documentation is at: <a href="https://akashacms.com/mahabhuta/toc.html">https://akashacms.com/mahabhuta/toc.html</a></p>
+<p>In PDF Document Maker, the <code>--funcs &lt;funcsFN&gt;</code> parameter allows us to supply a JavaScript file containing a <code>Mahafuncarray</code>.</p>
+<h1>Generating a table of contents, automating section numbering</h1>
+<p>That discussion of Mahabhuta functions needs a practical demonstration.  For that purpose, let&apos;s go over a method of adding section numbers to header tags, and creating a Table of Contents from the header tags.</p>
+<p>In the Markdown-IT ecosystem, some plugins promise to create a Table of Contents.  But they did not work well in testing.  Instead the following technique was developed.</p>
+<p>The code for this is in the PDF Document Maker website, in the <code>guide</code> directory.  The file, <code>mahafuncs.mjs</code>, contains a <code>MahafuncArray</code> containing a Mahafunc named <code>HnNumbering</code>.</p>
+<p>In a Node.js module exporting a MahafuncArray, it must have a function like this:</p>
+<pre><code class="language-js">const pluginName = &apos;PDF-Document-Maker-Guide&apos;;
+
+export function mahabhutaArray(options) {
+    let ret = new mahabhuta.MahafuncArray(pluginName, options);
+    ret.addMahafunc(new HnNumbering());
+    return ret;
+};
+</code></pre>
+<p>This function is executed from PDF Document Maker.  It creates a MahafuncArray, adds instances of Mahafuncs, returning the array.  The array is then added into the Configuration.</p>
+<p>When the Mahabhuta stage runs, it simply steps through each MahafuncArray, executing every Mahafunc array it contains.</p>
+<pre><code class="language-js">class HnNumbering extends mahabhuta.PageProcessor {
+	async process(&#x24;, metadata, dirty) /* : Promise&lt;string&gt; */ {
+    // ...
+  }
+}
+</code></pre>
+<p>The <code>PageProcessor</code> class is for Mahafuncs which can access anything on the page.  It does not have the <code>selector</code> function discussed earlier, and therefore this <code>process</code> function will always be executed.</p>
+<p>The <code>&#x24;</code> parameter is a jQuery-like <code>&#x24;</code> object.  It has most of the jQuery methods, allowing one to search around the page and make manipulations mostly like you&apos;d do with jQuery in a browser.</p>
+<p>Because the Mahafuncs are exected after the HTML is rendered, the DOM held by the <code>&#x24;</code> object is what&apos;s about to be written as the final HTML.  This is our chance to customize that HTML.</p>
+<p>This particular function loops over all H1, H2, and H3 tags like so:</p>
+<pre><code class="language-js">&#x24;(&apos;article&apos;).find(&apos;h1:not(.header-title), h2, h3&apos;).each(function() {
+});
+</code></pre>
+<p>What happens inside this loop is a little hairy, but one key part is to add a section number to the H1/2/3 tag like so:</p>
+<pre><code class="language-js">const title = `&#x24;{counter_h1}.&#x24;{counter_h2}.&#x24;{counter_h3}. &#x24;{&#x24;(this).text()}`;
+&#x24;(this).text(title);
+</code></pre>
+<p>That loop also constructs a data structure of the H1/2/3 tags, formatting it into a UL/LI list using this partial template:</p>
+<pre><code class="language-js">const toctext = await this.array.options.akasha.partial(
+    this.array.options.config,
+    &apos;toc.html.njk&apos;, {
+    headers
+});
+</code></pre>
+<p>Once the UL/LI list is constructed, the tag <code>&lt;toc-text-here&gt;</code> is replaced with that list like so:</p>
+<pre><code class="language-js">&#x24;(&apos;toc-text-here&apos;).replaceWith(toctext);
+</code></pre>
+<p>The PDF version of this document you&apos;re reading has section numbering, and a table of contents, generated by that function.</p>
+<h1>PDF Document Maker inner workflow</h1>
+<p>This diagram may help you understand what&apos;s happening.</p>
+<figure>
+  <img class="max-w-100" max-width="100%" src="./img/pdf-document-workflow.svg">
+  <figcaption>PDF Document Maker workflow</figcaption>
+</figure>
+
+  </article>
+  <section id="right" class="col-sm-2">
+    <!-- Place sidebar content here -->
+  </section>
+</div>
+
+<footer class="row" style="text-align: center; height: 100px;">
+<div class="col-sm-12">
+
+<!-- partial file-name="footer.html"></partial></div -->
+</div></footer>
+</div>
+
+
+<script src="../vendor/jquery/jquery.min.js"></script><script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
+

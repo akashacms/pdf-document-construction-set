@@ -1,0 +1,34 @@
+sequenceDiagram
+title PDF Document Maker workflow
+actor Configuration
+actor Renderer
+actor HTML Directory
+actor Puppeteer
+actor PDF Directory
+
+Configuration->>Configuration: Assets, Partials, Layouts, Documents
+Configuration->>Configuration: Markdown extensions
+Configuration->>Configuration: Custom DOM processing functions
+Configuration->>Configuration: Mapping assets, documents, to HTML directory
+Configuration->>Configuration: Declare stylesheets, JavaScript
+
+Renderer->>Configuration: Retrieve assets list
+Renderer->>HTML Directory: Copy each asset to output directory
+
+Renderer->>Configuration: Retrieve documents list
+
+loop Rendering for each document
+    Renderer->>Renderer: Render document, using Markdown, and Markdown extensions
+    Renderer->>Configuration: Look for layout template
+    Renderer->>Renderer: Render content with layout template, and partial templates
+    Renderer->>Configuration: Retrieve custom DOM processing functions
+    Renderer->>Renderer: Use Mahabhuta for DOM processing
+    Renderer->>HTML Directory: Copy result to output directory
+end
+
+Renderer->>Puppeteer: Launch browser
+Renderer->>Puppeteer: Load HTML output file into browser
+Puppeteer<<->>HTML Directory: Loads HTML and all CSS or JS files into page
+Puppeteer->>Renderer: Notifies that page is loaded
+Renderer->>Puppeteer: Commands Print-to-PDF
+Puppeteer->>PDF Directory: Renders page to PDF, writes to PDF output
