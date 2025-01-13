@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width" />
+
+{% import "ak_core_macros.njk" as ak_core with context %}
+{% import "ak_base_macros.njk" as ak_base with context %}
+
+<title>{{ title }}</title>
+{{ ak_core.stylesheets() }}
+{{ ak_core.headerJavaScript() }}
+
+</head>
+<body>
+
+<div class="container" role="main">
+
+<div class="row">
+  <article class="col-sm-12">
+    <h1 class="header-title">{{ title }}</h1>
+    {% if teaser %}<p><strong>{{ teaser }}</strong></p> {% endif %}
+    {{ content }}
+  </article>
+</div>
+
+{{ ak_core.footerJavaScript() }}
+
+
+</body>
+</html>
+
