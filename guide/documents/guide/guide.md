@@ -25,7 +25,50 @@ Once installed you can get help:
 
 ```shell
 $ npx pdf-document-maker --help
-TODO capture current help output
+Usage: pdf-document-maker [options] <docPaths...>
+
+CLI to build PDF files from Markdown/AsciiDoc documents
+
+Arguments:
+  docPaths                          VPaths for documents to render
+
+Options:
+  -v, --version                     output the current version
+  --config <configFN>               AkashaCMS configuration file.
+                                    If specified it disables auto-generated config file.
+  --title <title>                   Document title, overwriting any title in the document metadata.
+  --layout <layoutTemplate>         File name, in a layouts directory, for the layout template.
+                                    Overwrites any layout in the document metadata.
+  --format <format>                 Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"
+  --pdf-output <pdfDir>             Output directory for PDF generation. Default process.cwd()/PDF
+  --html-output <htmlDir>           Output directory for HTML generation
+  --template-header <tmplHeader     HTML template for page header
+  --height-header <height>          Height of header block. Valid units are mm, cm, in and px.
+  --template-footer <tmplFooter     HTML template for page footer
+  --height-footer <height>          Height of footer block. Valid units are mm, cm, in and px.
+  --style <cssFile...>              File name of CSS style sheet
+  --lesscss <lesscssFile...>        File name of LESS file to render to CSS
+  --layout-dir <layoutDir...>       One or more directories for layout templates
+  --partial-dir <partialDir...>     One or more directories for partial templates
+  --asset-dir <assetsDir...>        One or more directories for assets
+  --document-dir <documentsDir...>  One or more directories for documents
+  --plantuml-url                    URL for a PlantUML server
+  --no-headless                     Turn off headless mode
+  --no-pdf                          Do not generate PDFs
+  --no-printcss                     Disable the print.css stylesheet
+  --no-md-anchor                    Disable the markdown-it-anchor extension
+  --no-md-footnote                  Disable the markdown-it-footnote extension
+  --no-md-attrs                     Disable the markdown-it-attrs extension
+  --no-md-div                       Disable the markdown-it-div extension
+  --no-md-header-sections           Disable the markdown-it-header-sections extension
+  --no-md-highlightjs               Disable the markdown-it-highlightjs extension
+  --no-md-image-figures             Disable the markdown-it-image-figures extension
+  --no-md-multimd-table             Disable the markdown-it-multimd-table extension
+  --no-md-table-captions            Disable the markdown-it-table-captions extension
+  --no-md-plantuml                  Disable the markdown-it-plantuml extension
+  --no-bootstrap                    Disable Bootstrap v4 and related modules
+  --funcs <funcsFN>                 Name a JS file containing Mahafuncs for custom processing
+  -h, --help                        display help for command
 ```
 
 The application has a lot of options.  But, most of them have reasonable defaults, and typically you'll use only a few.
@@ -34,11 +77,11 @@ The application has a lot of options.  But, most of them have reasonable default
 
 Before going deep into using PDF Document Maker, let's do a quick and easy example.  We will format a test file into a PDF.
 
-The search phrase "_standard markdown test file_" turns up several test Markdown files.  This repository has a very good one:   https://github.com/mxstbr/markdown-test-file
+The search phrase "_standard markdown test file_" turns up several test Markdown files.  This repository has a very good one:   [`https://github.com/mxstbr/markdown-test-file`](https://github.com/mxstbr/markdown-test-file)
 
 Start by creating a directory, adding a `package.json`, and installing `pdf-document-maker` as shown above.
 
-The GitHub repository for this tool already has this set up in https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple
+The GitHub repository for this tool already has this set up in [`https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple`](https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple)
 
 In that directory, create a directory named `documents`:
 
@@ -263,21 +306,21 @@ Using the `--style` or `--lesscss` parameter causes a `<link>` tag to be generat
 
 Here are links to articles that are useful for understanding CSS for printing:
 
-* https://www.sitepoint.com/css-printer-friendly-pages/
-* https://didoesdigital.com/blog/print-styles/
-* https://www.makeuseof.com/format-web-page-for-printer/
-* https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/
+* [`https://www.sitepoint.com/css-printer-friendly-pages/`](https://www.sitepoint.com/css-printer-friendly-pages/)
+* [`https://didoesdigital.com/blog/print-styles/`](https://didoesdigital.com/blog/print-styles/)
+* [`https://www.makeuseof.com/format-web-page-for-printer/`](https://www.makeuseof.com/format-web-page-for-printer/)
+* [`https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/`](https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/)
 
-Support for https://printedcss.com/ is bundled in PDF Document Maker.  It is automatically included in the stylesheet declarations.
+Support for [`https://printedcss.com/`](https://printedcss.com/) is bundled in PDF Document Maker.  It is automatically included in the stylesheet declarations.
 
 If you prefer to disable this, use the `--no-printcss` option.
 
 Some other frameworks for CSS for printing:
 
-* https://github.com/BafS/Gutenberg
-* https://github.com/vladocar/Hartija---CSS-Print-Framework?tab=readme-ov-file
-* https://github.com/cognitom/paper-css
-* https://www.getpapercss.com/
+* [`https://github.com/BafS/Gutenberg`](https://github.com/BafS/Gutenberg)
+* [`https://github.com/vladocar/Hartija---CSS-Print-Framework?tab=readme-ov-file`](https://github.com/vladocar/Hartija---CSS-Print-Framework?tab=readme-ov-file)
+* [`https://github.com/cognitom/paper-css`](https://github.com/cognitom/paper-css)
+* [`https://www.getpapercss.com/`](https://www.getpapercss.com/)
 
 For example to use Gutenberg, start by adding it to your project dependencies:
 
@@ -369,11 +412,11 @@ For `--style` parameters, the file is expected to be in CSS format, and is simpl
 
 For `--lesscss` parameters, the file will be rendered using the LESS processor.  This means the files must have an extension of `.css.less` or `.less`, and be in a _documents_ directory.
 
-Additionally, by default the _PrintCSS_ stylesheet will be used.  This is from an open source project, and is CSS for produces good looking print documents.  This stylesheet can be disabled using the `--no-printcss` option.
+Additionally, by default the _PrintCSS_ stylesheet will be used.  This is from an open source project, and is CSS for produces good looking print documents.  This style-sheet can be disabled using the `--no-printcss` option.
 
 Additionally, by default the Bootstrap v4 framework is used.  For the PDF documents most of Bootstrap is not useful.  It has powerful page layout capabilities, and certain components may be useful for creating visual effects.  This framework may be disabled with the `--no-bootstrap` option. 
 
-All stylesheets, whether the default `print.css` file or those specified on the command line, are added to a list.  The page layout template is expected to use either of these methods:
+All style-sheets, whether the default `print.css` file or those specified on the command line, are added to a list.  The page layout template is expected to use either of these methods:
 
 ```html
 <!-- NJK macro for generating link tags to CSS files -->
@@ -382,7 +425,7 @@ All stylesheets, whether the default `print.css` file or those specified on the 
 <ak-stylesheets></ak-stylesheets>
 ```
 
-Both of these convert the list of stylesheet references into `<link>` tags referencing the stylesheets.
+Both of these convert the list of style-sheet references into `<link>` tags referencing the style-sheets.
 
 ## Markdown extensions supported by PDF Document Maker
 
@@ -518,7 +561,7 @@ At the HTML level the HighlightJS package looks for this:
 <pre><code class="html">...</code></pre>
 ```
 
-The class name is a language code.  The supported languages are listed in their GitHub repository: https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md
+The class name is a language code.  The supported languages are listed in their GitHub repository: [`https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md`](https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md)
 
 In Markdown a code block is text within two lines of three backticks.  The language code is placed immediately after the opening backticks.
 
@@ -710,7 +753,7 @@ $ npm run build:guide
 
 Under the covers, PDF Document Maker creates an AkashaCMS configuration file.  This file instructs AkashaCMS components on where to find input files, and customizations for generating HTML and other files.
 
-One learns about this configuration file at https://akashacms.com  There is an example file in the repository.
+One learns about this configuration file at [`https://akashacms.com`](https://akashacms.com)  There is an example file in the repository.
 
 For most projects using the command-line to auto-generate a configuration object is sufficient.  But, some projects may want more control than we can expose with command-line options.
 
@@ -726,9 +769,9 @@ There are three tools we can focus on that are of use to typical software engine
 
 The first, `draw.io`, is a diagramming tool with built-in clip art useful for software engineering, hardware deployment, and other technical diagrams.  It is very easy to use, and with it one can quickly create complex diagrams.
 
-To learn about the application, visit https://www.drawio.com/
+To learn about the application, visit [`https://www.drawio.com/`](https://www.drawio.com/)
 
-To use it online, visit https://draw.io
+To use it online, visit [`https://draw.io`](https://draw.io)
 
 There is an open-source desktop application, where the GitHub repository is at: https://github.com/jgraph/drawio-desktop  However, on `drawio.com` there is a download link going back to the GitHub repository.  And, the desktop application may be available via package management systems.  On Linux, it is available via Flathub.
 
@@ -756,7 +799,7 @@ If in the future you need to edit the diagram, simply load the PNG file back int
 
 ## Using PlantUML diagrams in PDF Document Maker
 
-PlantUML - https://plantuml.com/ - is a versatile tool for creating a number of diagrams useful in software engineering and related fields.  As the name suggests it focuses mostly on UML diagrams.
+PlantUML - [`https://plantuml.com/`](https://plantuml.com/) - is a versatile tool for creating a number of diagrams useful in software engineering and related fields.  As the name suggests it focuses mostly on UML diagrams.
 
 With PlantUML you create a textual description of the diagram to create.  The description is placed inline with the Markdown file.  When the document is rendered to HTML, the description is converted to an SVG representation of the description.
 
@@ -802,11 +845,11 @@ TODO - Cover installing a local PlantUML server
 
 ## Using MermaidJS diagrams in PDF Document Maker
 
-Mermaid - https://mermaid.js.org/ - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description o the diagram, pasting it into a Markdown document.
+Mermaid - [`https://mermaid.js.org/`](https://mermaid.js.org/) - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description o the diagram, pasting it into a Markdown document.
 
 Unlike with PlantUML we were unable to integrate Mermaid such that a code block with the `mermaid` class would be automatically rendered as an inline SVG.
 
-The most convenient path is to install Mermaid-CLI - https://github.com/mermaid-js/mermaid-cli
+The most convenient path is to install Mermaid-CLI - [`https://github.com/mermaid-js/mermaid-cli`](https://github.com/mermaid-js/mermaid-cli)
 
 In your project directory do this:
 
@@ -934,7 +977,7 @@ Part of an AkashaCMS project configuration is specifying the custom DOM processi
 
 Most of the Mahafuncs have a jQuery-like selector determining whether to run the Mahafunc.  If the selector says to execute the function, its `process` method is called, and it performs whatever manipulations it is programmed for.
 
-Full Mahabhuta documentation is at: https://akashacms.com/mahabhuta/toc.html
+Full Mahabhuta documentation is at: [`https://akashacms.com/mahabhuta/toc.html`](https://akashacms.com/mahabhuta/toc.html)
 
 In PDF Document Maker, the `--funcs <funcsFN>` parameter allows us to supply a JavaScript file containing a `Mahafuncarray`.
 
