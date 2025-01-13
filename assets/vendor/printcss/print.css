@@ -91,7 +91,7 @@
 		page-break-after: avoid; }
 	canvas, img, svg {
 		margin: 1em auto; }
-	address, blockquote, details, dl, figure, ol, p, pre, ruby, table, ul {
+	address, blockquote, details, dl, figure, /* ol, */ p, pre, ruby, table /*, ul */ {
 		margin: 1em 0; }
 	dd, ul, ol {
 		margin-left: 2em; }
@@ -165,7 +165,7 @@
 	/* --------------------- */
 	/* Advanced Url Handling */
 	/* --------------------- */
-	a:after > img {
+	/* a:after > img {
 		content: ""; }
 	a[href^="#"]:after, a[href^="javascript:"]:after {
 		content: ""; }
@@ -202,7 +202,7 @@
 	a[href$=".key"]:after, a[href$=".ppt"]:after, a[href$=".pptx"]:after, a[href$=".odp"]:after {
 		content: " (Presentation)"; }
 	a[href$=".woff"]:after, a[href$=".woff2"]:after, a[href$=".eot"]:after, a[href$=".otf"]:after, a[href$=".ttf"]:after {
-		content: " (Typeface)"; }
+		content: " (Typeface)"; } */
 	/* ------------------- */
 	/* Cover Page Variable */
 	/* ------------------- */
