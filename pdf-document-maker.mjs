@@ -34,7 +34,7 @@ const program = new Command();
 
 program
     // .name('build-documents')
-    .description('CLI to build PDF files from Markdown/AkashaCMS documents')
+    .description('CLI to build PDF files from Markdown/AsciiDoc documents')
     .version(packageConfig.version,
         '-v, --version', 'output the current version')
     .option('--config <configFN>', 'AkashaCMS configuration file. If specified it disables auto-generated config file.')
