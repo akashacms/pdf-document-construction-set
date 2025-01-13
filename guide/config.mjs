@@ -10,6 +10,9 @@ import { BooknavPlugin } from '@akashacms/plugins-booknav';
 // import { EmbeddablesPlugin } from '@akashacms/plugins-embeddables';
 import { BlogPodcastPlugin } from '@akashacms/plugins-blog-podcast';
 
+import { default as MarkdownItAttrs } from 'markdown-it-attrs';
+import { default as MarkdownItDiv } from 'markdown-it-div';
+
 const config = new akasha.Configuration();
 
 const __dirname = import.meta.dirname;
@@ -42,6 +45,12 @@ config
     // .use(EmbeddablesPlugin)
     .use(BlogPodcastPlugin);
     
+config.findRendererName('.html.md')
+    .use(MarkdownItAttrs, {
+        allowedAttributes: [ 'id', 'class', 'caption', 'data' ]
+    })
+    .use(MarkdownItDiv);
+
 config
     .addFooterJavaScript({
         href: "/vendor/jquery/jquery.min.js"
