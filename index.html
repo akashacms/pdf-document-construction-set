@@ -124,7 +124,7 @@
 <body>
 
 <nav class="navbar fixed-top navbar-expand-md navbar-light bg-light">
-    <a class="navbar-brand" href="#">PDF Document Maker</a>
+    <a class="navbar-brand" href="index.html">PDF Document Maker</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -150,38 +150,34 @@
 
 <div class="row">
   <!-- include our document's content -->
-  <article class="col-md-9">
+  <article class="col-md-12">
     <div class="article-body">
-      <div class="card">
-<div class="card-body">
+      <div id="main-page-hero" class="jumbotron">
 <p><em>PDF Document Maker</em> is a comprehensive tool for producing good quality documentation, in PDF format, from Markdown or AsciiDoc files.</p>
-</div>
+<p>Easily edited Markdown or AsciiDoc files, combined with a curated set of Markdown extensions, diagramming tools like PlantUML or Mermaid, and CSS style-sheets, allow one to generate top-quality PDF documents.</p>
 </div>
 <div class="card-group">
-<div class="card">
-<div class="card-body">
-<h4 class="card-title">Easily produce good quality PDFs</h4>
-<p class="card-text">Easily edited Markdown or AsciiDoc files, combined with a curated set of Markdown extensions, diagraaming tools like PlantUML or Mermaid, and CSS stylesheets, allow one to generate top-quality PDF documents.</p>
-</div>
-</div>
 <div class="card">
 <div class="card-body">
 <h4 class="card-title">Why Markdown/AsciiDoc versus Libre Office or other word processor?</h4>
 <p class="card-text">Libre Office and other word processor applications are the traditional way to produce PDF documents.  They tend to do an excellent job, especially when one learns the art of template wizardry.</p>
 <p class="card-text">Both Markdown and AsciiDoc use simple text files, along with markup for various effects.  The markup available in both is limited, but cover a large portion of what is needed to produce documents.</p>
-<p class="card-text">The 80% rule has made Markdown a popular choice for technical projects using source code control systems like Git.  As simple text files, Markdown and AsciiDoc are both easy to store in Git, or other systems, alongside our code.</p>
+<p class="card-text">As simple text files, Markdown and AsciiDoc are both easy to store in Git, or other systems, alongside our code.</p>
+<p class="card-text">The 80% rule has made Markdown a popular choice for technical projects using programmers text editors, like Visual Studio Code, and source code control systems like Git.</p>
 </div>
 </div>
-</div>
-<div class="card-group">
 <div class="card">
 <div class="card-body">
 <h4 class="card-title">Bridging the gap from easy-to-edit to great-PDF-production</h4>
-<p class="card-text">PDF Document Maker makes it possible to transition from an 80% solution to a 95% (or more) solution.  It starts with Markdown and AsciiDoc files, for an easy editing experience.</p>
-<p class="card-text">A curated set of Markdown extensions improve the fidelity of the generated HTML.</p>
-<p class="card-text">Excellent diagramming support using PlantUML or Mermaid is easy.</p>
-<p class="card-text">With CSS it is possible to create top-notch customized visual effects.</p>
-<p class="card-text">The Mahabhuta server-side DOM processing engine lets us create custom HTML tags or custom DOM manipulation. This creates an endless realm of possibilities.  For example, it is easy to extract information from an OpenAPI specification, JSON schema, formatting data from either into tables describing API endpoints, data types, and more.</p>
+<p class="card-text">PDF Document Maker makes it possible to transition from an 80% solution to a 95% (or more) solution.</p>
+<p class="card-text">A curated set of Markdown extensions increase what we can do while staying to the easy-to-edit paradigm.</p>
+<ul>
+<li class="card-text">Excellent diagramming support using PlantUML or Mermaid integrates nicely.</li>
+<li class="card-text">CSS lets us create top-notch customized visual effects just by adding class or ID specifiers.</li>
+<li class="card-text">The Mahabhuta server-side DOM processing engine lets us create custom HTML tags or custom DOM manipulation. This creates an endless realm of possibilities.</li>
+<li class="card-text">Custom templates let us tailor the presentation however we desire.</li>
+</ul>
+<p class="card-text">For example, with the above it is easy to extract information from an external data source like OpenAPI specifications or JSON schemas.  That data can be formatted using templates and CSS into tables describing API endpoints, data types, and more.</p>
 </div>
 </div>
 <div class="card">
@@ -198,7 +194,7 @@
 <ul class="list-group list-group-flush">
 <li class="list-group-item">Markdown or AsciiDoc documents - ease of editing, ease of version tracking</li>
 <li class="list-group-item">Many Markdown extensions</li>
-<li class="list-group-item">Integrated support for `draw.io`, PlantUML, or Mermaid diagramming</li>
+<li class="list-group-item">Integrated support for draw<i>.</i>io, PlantUML, or Mermaid diagramming</li>
 <li class="list-group-item">Flexible formatting using any of several template engines, for both page layout and partials</li>
 <li class="list-group-item">CSS for print devices</li>
 <li class="list-group-item">Syntax highlighting in code blocks for many programming languages (HighlightJS)</li>
@@ -211,8 +207,6 @@
 
     </div>
   </article>
-  <section id="right" class="col-md-3">
-  </section>
 </div>
 
 

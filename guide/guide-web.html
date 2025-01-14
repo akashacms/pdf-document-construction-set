@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+<title>Building websites with AkashaCMS and PDF Document Maker</title>
+
+
+
+
+
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="pagename" content="Building websites with AkashaCMS and PDF Document Maker">
+
+
+
+
+
+
+
+
+
+
+
+<meta name="DC.title" content="Building websites with AkashaCMS and PDF Document Maker">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- OpenGraph Meta Tags -->
+
+<meta name="og:title" content="Building websites with AkashaCMS and PDF Document Maker">
+
+<meta name="og:url" content="https://akashacms.github.io/pdf-document-construction-set/guide/guide-web.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="https://akashacms.github.io/pdf-document-construction-set/guide/guide-web.html">
+
+
+<link rel="sitemap" type="application/xml" href="../sitemap.xml" title="Sitemap">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap-theme.min.css"><link rel="stylesheet" type="text/css" href="../style.css">
+
+
+
+</head>
+<body>
+
+<nav class="navbar fixed-top navbar-expand-md navbar-light bg-light">
+    <a class="navbar-brand" href="../index.html">PDF Document Maker</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Guide</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../blog/index.html">News</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- partial file-name="site-navbar.html"></partial -->
+
+<div class="container" role="main">
+<div class="row">
+
+<!-- partial file-name="header.html"></partial -->
+</div>
+
+<div class="row">
+  <section id="breadcrumb" class="col-sm-12">
+    <div id="breadcrumbTrail">
+    
+        &#xbb; <a class="p-category" href="../index.html">PDF Document Maker</a>
+    
+        &#xbb; <a class="p-category" href="index.html">PDF Document Maker Guide</a>
+    
+        &#xbb; <a class="p-category" href="guide-web.html">Building websites with AkashaCMS and PDF Document Maker</a>
+    
+</div>
+
+  </section>
+</div>
+<!-- 
+<div class="row">
+  <section id="byline" class="col-sm-12">
+    <publication-date></publication-date>;
+  </section>
+</div>
+-->
+
+<div class="row">
+  <article class="col-sm-10">
+    
+    <p><em>PDF Document Maker</em> is an integrated application, built from <em>AkashaCMS</em> components, for producing good-quality PDF documents from Markdown or AsciiDoc files.</p>
+<p>In the <a href="guide.html">PDF Document Maker Guide</a>, we learned how to build a PDF document with this tool.</p>
+<p>The same content can be reused between a PDF document and a website.  The project website (<a href="https://akashacms.github.io/pdf-document-construction-set/index.html">https://akashacms.github.io/pdf-document-construction-set/index.html</a>) is an example of an AkashaCMS website containing the PDF Document Maker Guide as both <a href="https://akashacms.github.io/pdf-document-construction-set/guide/guide.html">HTML</a> and <a href="https://akashacms.github.io/pdf-document-construction-set/guide/guide.pdf">PDF</a>.  In both cases, this content is built from the same file.</p>
+<p>This page is meant to show how to build a website documenting an open source software project (<em>PDF Document Maker</em>), and to reuse part of that website to build a downloadable standalone PDF documenting how to use the application.</p>
+<p>The same pattern could be used by other open source software projects.</p>
+<h2>Quick overview of AkashaCMS website project configuration</h2>
+<p>The name <em>AkashaCMS</em> is an umbrella term over a group of software components.  <em>AkashaRender</em> is the core, and is primarily tasked with rendering content into websites.  <em>Mahabhuta</em> is the engine for DOM manipulation.  The <em>plugins</em> extend the capabilities, and the <em>Bootstrap theme</em> component helps with making the website prettier.</p>
+<p>The AkashaCMS website has lots of documentation of AkashaCMS project configuration.</p>
+<ul>
+<li><a href="https://akashacms.com/quick-start/index.html">https://akashacms.com/quick-start/index.html</a> - is the Getting Started guide</li>
+<li><a href="https://akashacms.com/akasharender/toc.html">https://akashacms.com/akasharender/toc.html</a> - Detailed documentation on AkashaRender</li>
+<li><a href="https://akashacms.com/plugins/index.html">https://akashacms.com/plugins/index.html</a> - List of, and documentation for, the AkashaCMS plugins</li>
+</ul>
+<p>Rather than replicate all that material, this document will show by example how this works.</p>
+<h3>The <code>package.json</code> is used for <em>AkashaCMS</em> or <em>PDF Document Maker</em> project administration</h3>
+<p>An <em>AkashaCMS</em>, or <em>PDF Document Maker</em>, project directory contains a <code>package.json</code> file containing the administrative information about the project, a Configuration file describing the structure of the project, and content files from which the website or document is produced.</p>
+<p>The <code>package.json</code> file comes from the Node.js ecosystem.  The prototypical use for this file is informing the npm package registry (<code>npmjs.com</code>) the characteristics of a Node.js package.</p>
+<p>An AkashaCMS project, or a PDF Document Maker project, uses this file in a slightly different way.  Neither a website project, nor a PDF document project, is suitable for distribution through the npm registry.  Instead, we use this file to record the dependencies required to build the website or document, as well as the build and deployment processes.</p>
+<p>In <a href="https://github.com/akashacms/pdf-document-construction-set/blob/main/guide/package.json">https://github.com/akashacms/pdf-document-construction-set/blob/main/guide/package.json</a> we see an example.</p>
+<p>The <em>scripts</em> section contains scripts for building the website, and the PDF document, as well as deploying the website to GitHub Pages.</p>
+<pre><code class="language-json">&quot;scripts&quot;: {
+    &quot;preview&quot;: &quot;live-server out&quot;,
+    &quot;build:site&quot;: &quot;npx akasharender render --copy-assets config.mjs&quot;,
+    &quot;build:guide&quot;: &quot;npm-run-all build:sample-1 build:sample-2 build:workflow build:mahabhuta build:render pdf2out&quot;,
+    &quot;build:sample-1&quot;: &quot;npx mmdc -i documents/guide/img/simple-sample-1.mmd -o documents/guide/img/simple-sample-1.svg --outputFormat svg&quot;,
+    &quot;build:sample-2&quot;: &quot;npx mmdc -i documents/guide/img/simple-sample-2.mmd -o documents/guide/img/simple-sample-2.svg --outputFormat svg&quot;,
+    &quot;build:workflow&quot;: &quot;npx mmdc -i documents/guide/img/pdf-document-workflow.mmd -o documents/guide/img/pdf-document-workflow.svg --outputFormat svg&quot;,
+    &quot;build:mahabhuta&quot;: &quot;npx mmdc -i documents/guide/img/mahabhuta-workflow.mmd -o documents/guide/img/mahabhuta-workflow.svg --outputFormat svg&quot;,
+    &quot;build:render&quot;: &quot;node ../pdf-document-maker.mjs --partial-dir partials --layout-dir layouts --document-dir documents --lesscss style.css.less --pdf-output PDF --html-output out --title &apos;PDF Document Maker Guide&apos; --format A4 --funcs ./mahafuncs.mjs guide/guide.md&quot;,
+    &quot;pdf2out&quot;: &quot;cp PDF/guide.pdf out/guide/guide.pdf&quot;,
+    &quot;gh-pages&quot;: &quot;npx akasharender gh-pages-publish config.mjs&quot;
+},
+</code></pre>
+<p>The <code>preview</code> script lets us view the formatted content before deploying to a live server.</p>
+<p>The <code>build:site</code> script renders the full website content into the HTML output directory.  The <code>--copy-assets</code> parameter says to copy files from the <code>assets</code> directories.  The file, <code>config.mjs</code>, is the configuration file, which is discussed in the next section.</p>
+<p>The other <code>build:</code> scripts deal with rendering and formatting the PDF document.  A side note is that the commands in this group which use <code>mmdc</code> (the Mermaid CLI) render Mermaid documents into their matching SVG file.  The website also needs to display these SVG files, but in <code>build:script</code> these other files are not rendered, and therefore the PDF needs to have been rendered before running <code>build:script</code>.</p>
+<p>The <code>gh-pages</code> script handles deploying the website to the GitHub repository using the GitHub Pages feature.</p>
+<p>The time required to execute these on a mid-2016 x86 laptop, 16 GB of memory, on Ubuntu Linux, is:</p>
+<pre><code class="language-shell">&#x24; time npm run build:guide
+...
+real	0m20.722s
+user	0m14.697s
+sys	0m4.321s
+
+&#x24; time npm run build:site
+...
+real	0m3.535s
+user	0m3.491s
+sys	0m0.497s
+</code></pre>
+<p>It is quite easy to do this on a developers laptop or in a GitHub Actions script.  One consideration for the latter is that under the covers of <em>PDF Document Maker</em> is Puppeteer, which relies on the Chromium web browser running in headless mode.  The memory requirements for that may exceed (this hasn&apos;t been tested) the capacity of GitHub Actions.</p>
+<h3>Configuration file</h3>
+<p>Many of the scripts just mentioned reference the configuration file, <a href="https://github.com/akashacms/pdf-document-construction-set/blob/main/guide/config.mjs">https://github.com/akashacms/pdf-document-construction-set/blob/main/guide/config.mjs</a></p>
+<p>An AkashaCMS configuration file is a JavaScript file where the goal is to instantiate and initialize a Configuration object.  This file is then used at every step of rendering content files to create the website or PDF document.</p>
+<p>The configuration file includes:</p>
+<p><strong>Lists of directories for input files, as well as the HTML Rendering output directory:</strong></p>
+<pre><code class="language-js">config
+    .addAssetsDir(&apos;assets&apos;)
+    .addAssetsDir({
+        src: &apos;node_modules/bootstrap/dist&apos;,
+        dest: &apos;vendor/bootstrap&apos;
+    })
+   .addAssetsDir({
+        src: &apos;node_modules/jquery/dist&apos;,
+        dest: &apos;vendor/jquery&apos;
+    })
+    .addLayoutsDir(&apos;layouts&apos;)
+    .addDocumentsDir(&apos;documents&apos;)
+    .addPartialsDir(&apos;partials&apos;)
+    .setRenderDestination(&apos;out&apos;);
+</code></pre>
+<p>All but the last of these are directories holding input files.  They fall into four groups:</p>
+<ul>
+<li><code>assets</code> are files which are simply copied to the HTML output directory</li>
+<li><code>layouts</code> are the page layout templates</li>
+<li><code>partials</code> are the templates used for snippets</li>
+<li><code>documents</code> are the content files</li>
+</ul>
+<p>The last, <code>setRenderDestination</code>, is the HTML output directory.  All files are either copied into or rendered into this directory tree.  It results in a directory tree which may be directly deployed to a normal web server.</p>
+<p>In this case the <code>gh-pages</code> command uploads it to GitHub such that it is automatically published via GitHub Pages.</p>
+<p><strong>The plugins to be used, along with any configuration settings:</strong></p>
+<pre><code class="language-js">import { ThemeBootstrapPlugin } from &apos;@akashacms/theme-bootstrap&apos;;
+import { BasePlugin } from &apos;@akashacms/plugins-base&apos;;
+import { BreadcrumbsPlugin } from &apos;@akashacms/plugins-breadcrumbs&apos;;
+import { BooknavPlugin } from &apos;@akashacms/plugins-booknav&apos;;
+import { BlogPodcastPlugin } from &apos;@akashacms/plugins-blog-podcast&apos;;
+
+config
+    .use(ThemeBootstrapPlugin)
+    .use(BasePlugin, {
+        generateSitemapFlag: true
+    })
+    .use(BreadcrumbsPlugin)
+    .use(BooknavPlugin)
+    .use(BlogPodcastPlugin);
+</code></pre>
+<p>AkashaCMS plugins extend the capabilities in different ways.  For example the <em>BreadcrumbsPlugin</em> builds a navigation trail like this:</p>
+<pre><code>&#xbb; PDF Document Maker &#xbb; PDF Document Maker Guide &#xbb; Building websites with AkashaCMS and PDF Document Maker
+</code></pre>
+<p><strong>Possible configuration for the Markdown-IT engine, including adding Markdown extensions:</strong></p>
+<pre><code class="language-js">
+import { default as MarkdownItAttrs } from &apos;markdown-it-attrs&apos;;
+import { default as MarkdownItDiv } from &apos;markdown-it-div&apos;;
+config.findRendererName(&apos;.html.md&apos;)
+    .use(MarkdownItAttrs, {
+        allowedAttributes: [ &apos;id&apos;, &apos;class&apos;, &apos;caption&apos;, &apos;data&apos; ]
+    })
+    .use(MarkdownItDiv);
+</code></pre>
+<p>This, <code>findRendererName(&apos;.html.md&apos;)</code>, accesses the component for rendering Markdown to HTML.  It then adds two Markdown extensions.</p>
+<p><strong>Listing stylesheet and JavaScript files to be used on all webpages:</strong></p>
+<pre><code class="language-js">config
+    .addFooterJavaScript({
+        href: &quot;/vendor/jquery/jquery.min.js&quot;
+    })
+    .addFooterJavaScript({
+        href: &quot;/vendor/bootstrap/js/bootstrap.min.js&quot;
+    })
+    .addStylesheet({
+        href: &quot;/vendor/bootstrap/css/bootstrap.min.css&quot;
+    })
+    .addStylesheet({
+        href: &quot;/vendor/bootstrap/css/bootstrap-theme.min.css&quot;
+    })
+    .addStylesheet({
+        href: &quot;/style.css&quot;
+    });
+</code></pre>
+<p>These file references are stored in a list, and a custom HTML element turns this list into a series of <code>&lt;link&gt;</code> or <code>&lt;script&gt;</code> tags.</p>
+<p><strong>If there is one or more blogs, configuring the characteristics of each:</strong></p>
+<pre><code class="language-js">config.plugin(&apos;@akashacms/plugins-blog-podcast&apos;)
+    .addBlogPodcast(config, &quot;news&quot;, {
+        rss: {
+            title: &quot;PDF Document Maker News&quot;,
+            description: &quot;News announcements for the PDF Document Maker project&quot;,
+            site_url: &quot;http://akashacms.github.io/pdf-document-construction-set/blog/index.html&quot;,
+            managingEditor: &apos;David Herron&apos;,
+            webMaster: &apos;David Herron&apos;,
+            copyright: &apos;2025 David Herron&apos;,
+            language: &apos;en&apos;,
+            categories: [
+                &quot;Node.js&quot;, &quot;Content Management System&quot;, &quot;HTML5&quot;, &quot;Static website generator&quot;
+            ]
+        },
+        rssurl: &quot;/blog/rss.xml&quot;,
+        matchers: {
+            layouts: [ &quot;blog.njk&quot; ],
+            rootPath: &apos;blog/&apos;
+        }
+    });
+</code></pre>
+<p>This says the <em>news</em> blog is made of files within the VPath space starting with &quot;<em>blog/</em>&quot;, and who are formatted using the <code>blog.njk</code> layout template.  The blog produces an RSS feed at <code>/blog/rss.xml</code>, and the rest are parameters held inside the RSS feed.</p>
+<h2>Tour of important files in the <em>PDF Document Maker</em> website</h2>
+<p>The repository &#xbb; PDF Document Maker &#xbb; PDF Document Maker Guide &#xbb; PDF Document Maker Guidehttps://github.com/akashacms/pdf-document-construction-set contains:</p>
+<ul>
+<li>The source for the <em>PDF Document Maker</em> application which is distributed through the npm repository</li>
+<li>A test suite for this package</li>
+<li>An examples directory to demonstrate its usage</li>
+<li>A guide directory containing the project documentation, both the website (including the page you&apos;re reading right now) and the PDF version of the users guide.</li>
+</ul>
+<p>The files corresponding to the <em>PDF Document Maker</em> application package are:</p>
+<pre><code class="language-shell">&#x24; tree assets/ built-in.mjs layouts/ pdf-document-maker.mjs package.json README.md 
+assets/
+&#x2514;&#x2500;&#x2500; vendor
+    &#x2514;&#x2500;&#x2500; printcss
+        &#x2514;&#x2500;&#x2500; print.css
+built-in.mjs
+layouts/
+&#x2514;&#x2500;&#x2500; page.njk
+pdf-document-maker.mjs
+package.json
+README.md
+
+4 directories, 6 files
+</code></pre>
+<p>The files corresponding to the documentation website, and users guide PDF, are:</p>
+<pre><code class="language-shell">&#x24; cd guide
+&#x24; tree assets partials layouts documents
+assets
+partials
+&#x251c;&#x2500;&#x2500; footer.html
+&#x251c;&#x2500;&#x2500; header.html
+&#x251c;&#x2500;&#x2500; site-navbar.html
+&#x2514;&#x2500;&#x2500; toc.html.njk
+layouts
+&#x251c;&#x2500;&#x2500; article.njk
+&#x251c;&#x2500;&#x2500; blog.njk
+&#x251c;&#x2500;&#x2500; home-page.njk
+&#x2514;&#x2500;&#x2500; index-blog.njk
+documents
+&#x251c;&#x2500;&#x2500; blog
+&#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; 2025
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; 01
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; announce.md
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x2514;&#x2500;&#x2500; index.html.md
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x2514;&#x2500;&#x2500; index.html.md
+&#x2502;&#xa0;&#xa0; &#x2514;&#x2500;&#x2500; index.html.md
+&#x251c;&#x2500;&#x2500; guide
+&#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; guide.md
+&#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; guide-web.md
+&#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; img
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; draw-io-export.png
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; draw-io-export-png.png
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; example-drawio-diagram.png
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; mahabhuta-workflow.mmd
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; mahabhuta-workflow.svg
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; pdf-document-workflow.mmd
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; pdf-document-workflow.svg
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; simple-sample-1.mmd
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; simple-sample-1.svg
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x251c;&#x2500;&#x2500; simple-sample-2.mmd
+&#x2502;&#xa0;&#xa0; &#x2502;&#xa0;&#xa0; &#x2514;&#x2500;&#x2500; simple-sample-2.svg
+&#x2502;&#xa0;&#xa0; &#x2514;&#x2500;&#x2500; index.md
+&#x251c;&#x2500;&#x2500; index.md
+&#x2514;&#x2500;&#x2500; style.css.less
+
+8 directories, 28 files
+</code></pre>
+<h2>Process for building the <em>PDF Document Maker</em> website</h2>
+<p>To build the website:</p>
+<pre><code class="language-shell">&#x24; cd guide
+&#x24; npm run build:site
+&#x24; npm run gh-pages
+</code></pre>
+<p>The <code>build:site</code> script simply uses AkashaRender to render the site to the output directory:</p>
+<pre><code class="language-json">&quot;build:site&quot;: &quot;npx akasharender render --copy-assets config.mjs&quot;,
+</code></pre>
+<p>It&apos;s expected you&apos;ll use <code>npm run preview</code> to preview the website locally, so you can edit the content, handle content layout issues, etc, before deploying it to the web server.</p>
+<h3>Adding announcements (blog posts)</h3>
+<p>It is very easy to add new content to an AkashaCMS website.  You simply create a file in a <code>documents</code> directory.  The next time you run the <code>render</code> command it will be automatically rendered into the output directory.</p>
+<p>In the tree shown above, the announcements blog is stored in <code>documents/blog</code>.  It is structured with a date-oriented directory tree so one can easily determine when a blog post was made.  The directory tree in an AkashaCMS blog is entirely arbitrary, and the Blog-Podcast plugin does not force any file structure.</p>
+<p>The <code>index.html.md</code> files in that directory hierarchy form an index of postings in the child directories to that directory.  Hence, <code>blog/2025/index.html</code> will contain a different index from <code>blog/2025/01/index.html</code>.</p>
+<h2>Process for building PDF of <em>PDF Document Maker Guide</em></h2>
+<p>To build the user guide PDF:</p>
+<pre><code class="language-shell">&#x24; cd guide
+&#x24; npm run build:guide
+</code></pre>
+<p>This script is defined as so:</p>
+<pre><code class="language-json">&quot;build:guide&quot;: &quot;npm-run-all build:sample-1 build:sample-2 build:workflow build:mahabhuta build:render pdf2out&quot;,
+</code></pre>
+<p>The <code>npm-run-all</code> program is a great way to simplify using <code>package.json</code> to define a build process.  This runs the individual scripts to build Mermaid documents, then to run PDF Document Maker to build the PDF, and finally copy the PDF to the HTML output directory.</p>
+<p>Once the PDF is built, it&apos;s up to you how this it is distributed.  For this project, copying the PDF into the HTML output directory ensures we can distribute the PDF via the website.</p>
+<p>Notice that the scripts for building the PDF refer to the same content files as are used to build the website.  The <code>documents</code> directory contains <code>guide/guide.md</code> which produces <code>guide/guide.html</code> on the website, and which produces the <code>guide.pdf</code> PDF document.</p>
+<p>It&apos;s the exact same file.</p>
+
+  </article>
+  <section id="right" class="col-sm-2">
+    <!-- Place sidebar content here -->
+  </section>
+</div>
+
+<footer class="row" style="text-align: center; height: 100px;">
+<div class="col-sm-12">
+
+<!-- partial file-name="footer.html"></partial></div -->
+</div></footer>
+</div>
+
+
+<script src="../vendor/jquery/jquery.min.js"></script><script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
+
