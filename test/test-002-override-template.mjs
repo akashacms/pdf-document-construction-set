@@ -1,7 +1,7 @@
 
-// Basic functioning
-// No overrides
-// Output to a specific directory
+// Using a layouts directory
+// Override layout in document metadata with page.njk
+
 
 import { fileContains } from './common.mjs';
 
