@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "gutenberg-css": "^0.7.0",
     "zx": "^8.3.0"
   }
 }
