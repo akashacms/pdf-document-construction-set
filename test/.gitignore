@@ -1,6 +1,8 @@
 cache
 node_modules
 out
+out-*
 PDF
+PDF-*
 tmp
 package-lock.json
