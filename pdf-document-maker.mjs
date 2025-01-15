@@ -38,7 +38,7 @@ program
     .version(packageConfig.version,
         '-v, --version', 'output the current version')
     .option('--config <configFN>', 'AkashaCMS configuration file. If specified it disables auto-generated config file.')
-    .argument('<docPaths...>', 'VPaths for documents to render')
+    .argument('<docPaths>', 'VPath for document to render')
     .option('--title <title>', 'Document title, overwriting any title in the document metadata.')
     .option('--layout <layoutTemplate>', 'File name, in a layouts directory, for the layout template. Overwrites any layout in the document metadata.')
     // .option('--publication-date <publDate')
@@ -77,7 +77,7 @@ program
     // .option('--use-mermaid', 'Enable MermaidJS rendering')
     // .option('--no-md-table-of-contents', 'Disable the markdown-it-table-of-contents extension')
     .option('--funcs <funcsFN>', 'Name a JS file containing Mahafuncs for custom processing')
-    .action(async (docPaths, options, command) => {
+    .action(async (docPath, options, command) => {
 
         // TODO --watch  -- or nodemon
         // TODO -- URL for PlantUML server
@@ -203,7 +203,7 @@ program
         // ALL PROCESSING/VALIDATING OF OPTIONS ENDED
 
         console.log({
-            docPaths,
+            docPath,
             options
         });
 
@@ -232,7 +232,7 @@ program
         // await config.copyAssets();
 
         const renderedPaths = await renderDocuments(
-            config, options, docPaths
+            config, options, [ docPath ]
         );
         console.log(renderedPaths);
 
