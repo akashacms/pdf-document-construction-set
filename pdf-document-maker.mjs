@@ -387,6 +387,10 @@ async function generateConfiguration(options) {
     // Configure MarkdownIT
     // Add MarkdownIT plugins
 
+    if (typeof options.htmlOutput === 'string') {
+        config.setRenderDestination(options.htmlOutput);
+    }
+
     config.findRendererName('.html.md')
     .configuration({
         html:         true,
@@ -525,26 +529,34 @@ async function generateConfiguration(options) {
     // Add directories for assets, plugins,
     //     layout templates, and documents
 
-    config.addAssetsDir(path.join(__dirname, 'assets'));
     if (options.assetDir) {
         for (const aDir of options.assetDir) {
-            config.addAssetsDir(aDir);
+            config.addAssetsDir(path.isAbsolute(aDir)
+                    ? aDir
+                    : path.join(process.cwd(), aDir));
         }
     }
-    config.addLayoutsDir(path.join(__dirname, 'layouts'));
+    config.addAssetsDir(path.join(__dirname, 'assets'));
     if (options.layoutDir) {
         for (const lDir of options.layoutDir) {
-            config.addLayoutsDir(lDir);
+            config.addLayoutsDir(path.isAbsolute(lDir)
+                    ? lDir
+                    : path.join(process.cwd(), lDir));
         }
     }
     if (options.partialDir) {
         for (const pDir of options.partialDir) {
-            config.addPartialsDir(pDir);
+            config.addPartialsDir(path.isAbsolute(pDir)
+                    ? pDir
+                    : path.join(process.cwd(), pDir));
         }
     }
+    config.addLayoutsDir(path.join(__dirname, 'layouts'));
     if (options.documentDir) {
         for (const dDir of options.documentDir) {
-            config.addDocumentsDir(dDir);
+            config.addDocumentsDir(path.isAbsolute(dDir)
+                    ? dDir
+                    : path.join(process.cwd(), dDir));
         }
     }
 
@@ -665,6 +677,12 @@ async function generateConfiguration(options) {
     // Prepare the configuration
     config.prepare();
 
+    console.log({
+        assets: config.assetDirs,
+        layouts: config.layoutDirs,
+        partials: config.partialDirs,
+        documents: config.documentDirs
+    })
     return config;
 }
 
