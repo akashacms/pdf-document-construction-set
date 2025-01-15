@@ -1,6 +1,6 @@
 # PDF Document Maker - Tooling to generate high fidelity PDF documents from Markdown or AsciiDoc
 
-Generating a PDF of a Markdown or AsciiDoc document is not straightforward. With a WYSIWYG editor like LibreOffice we can just _print to pdf_.  But, because Markdown or AsciiDoc doesn't inherently contain rich formatting styles, a simple _print to pdf_ is very plain looking.
+It's easy to generate a plain PDF document from Markdown.  There are many tools for this purpose.  But, generating a PDF with fidelity close to what we'd get from a WYSIWYG word processor like Libre Office requires significant ability to customize the Markdown-HTML conversion result.
 
 _PDF Document Maker_ allows creating richly formatted documents in both HTML and PDF format.  The features include:
 
@@ -9,8 +9,7 @@ _PDF Document Maker_ allows creating richly formatted documents in both HTML and
 * CSS stylesheets
 * Layout and Partial templates for custom formatting, using template engines like Nunjucks, Mustache, or EJS
 * Using PlantUML or Mermaid to support drawings
-* ??? Using KaTeX to support equations
-* ??? Music
+* ??? Using KaTeX to support equations (NOT IMPLEMENTED YET)
 * Using HighlightJS for styling code blocks
 * Custom HTML elements to bring in external data sources
 * Custom HTML/DOM processing
@@ -23,6 +22,10 @@ _PDF Document Maker_ allows creating richly formatted documents in both HTML and
 # Project setup and Installation
 
 PDF Document Maker runs on the Node.js platform, and is tested with Node.js v20.  It should work for later releases.
+
+Full documentation is available at: https://akashacms.github.io/pdf-document-construction-set/
+
+The website includes a comprehensive usage guide that's available both in PDF (built using this tool) and online.  The website also demonstrates the possibility of the SAME content document being used both on a website and in a PDF.
 
 A project directory consists of a _package.json_ file which is used for listing dependencies and build processes.
 
@@ -118,7 +121,7 @@ This command creates two files:
 * `out/TEST.html` - is the HTML intermediate file
 * `PDF/TEST.pdf` - is the PDF result
 
-The directory _documents_ is declared as a place the tool looks for documents.  There can be more than one documents directory.
+The directory _documents_ is a place the tool looks for documents.  There can be more than one documents directory.
 
 The file name `TEST.md` is relative to the root directory of the documents directories.  In the help text you will see `VPath` used at least once.  The name `TEST.md` is an example of a Virtual Path (a.k.a. VPath) because it is the virtual path within the directory/directories named via the `--document-dir` option.
 
