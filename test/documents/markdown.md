@@ -15,11 +15,11 @@ console.log(a + ' world');
 echo "hello, ${WORLD}"
 ~~~
 
-```````longfence
+```````
 Q: What do you call a tall person who sells stolen goods?
 ```````
 
-~~~~~~~~~~ ManyTildes
+~~~~~~~~~~ 
 A longfence!
 ~~~~~~~~~~
 
