@@ -78,8 +78,7 @@ config.plugin('@akashacms/plugins-blog-podcast')
         rss: {
             title: "PDF Document Maker News",
             description: "News announcements for the PDF Document Maker project",
-            site_url: "http://bakashacms.github.io/pdf-document-construction-set/blog/index.html",
-            // image_url: "http://akashacms.com/logo.gif",
+            site_url: "http://akashacms.github.io/pdf-document-construction-set/blog/index.html",
             managingEditor: 'David Herron',
             webMaster: 'David Herron',
             copyright: '2025 David Herron',
