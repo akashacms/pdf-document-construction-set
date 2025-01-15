@@ -3,12 +3,21 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "preview": "live-server out"
+    "preview": "live-server out",
+    "build:site": "npx akasharender render --copy-assets config.mjs",
+    "build:guide": "npm-run-all build:sample-1 build:sample-2 build:workflow build:mahabhuta build:render pdf2out",
+    "build:sample-1": "npx mmdc -i documents/guide/img/simple-sample-1.mmd -o documents/guide/img/simple-sample-1.svg --outputFormat svg",
+    "build:sample-2": "npx mmdc -i documents/guide/img/simple-sample-2.mmd -o documents/guide/img/simple-sample-2.svg --outputFormat svg",
+    "build:workflow": "npx mmdc -i documents/guide/img/pdf-document-workflow.mmd -o documents/guide/img/pdf-document-workflow.svg --outputFormat svg",
+    "build:mahabhuta": "npx mmdc -i documents/guide/img/mahabhuta-workflow.mmd -o documents/guide/img/mahabhuta-workflow.svg --outputFormat svg",
+    "build:render": "node ../pdf-document-maker.mjs --partial-dir partials --layout-dir layouts-pdf --document-dir documents --lesscss style.css.less --pdf-output PDF --html-output out --title 'PDF Document Maker Guide' --format A4 --funcs ./mahafuncs.mjs guide/guide.md",
+    "pdf2out": "cp PDF/guide.pdf out/guide/guide.pdf",
+    "gh-pages": "npx akasharender gh-pages-publish config.mjs"
   },
   "keywords": [],
-  "author": "",
+  "author": "David Herron <david@davidherron.com>",
   "license": "ISC",
-  "description": "",
+  "description": "Documentation website for the PDF Document Maker application",
   "devDependencies": {
     "@compodoc/live-server": "^1.2.3",
     "npm-run-all": "^4.1.5"
@@ -19,7 +28,8 @@
     "@akashacms/plugins-booknav": "github:akashacms/akashacms-booknav#0.9",
     "@akashacms/plugins-breadcrumbs": "github:akashacms/akashacms-breadcrumbs",
     "@akashacms/theme-bootstrap": "^0.9.1",
-    "akasharender": "^0.9.0",
+    "@mermaid-js/mermaid-cli": "^11.4.2",
+    "akasharender": "github:akashacms/akasharender#0.9",
     "bootstrap": "^4.6.x",
     "jquery": "^3.6.x",
     "popper.js": "^1.16.x"
