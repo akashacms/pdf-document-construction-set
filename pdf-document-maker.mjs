@@ -924,6 +924,9 @@ async function renderDocToPDF(
             waitUntil: 'networkidle0'
         });
 
+    // per Puppeteer documentation
+    page.emulateMediaType('screen');
+
     // Generate PDF at default resolution
     const opts = {
         format,

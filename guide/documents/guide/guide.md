@@ -378,20 +378,62 @@ Two output directories are created:
 
 Output | Option | Description
 -------|--------|-----------------
-HTML Output | `--html-output` | This contains the directory structure of HTML, CSS, JavaScript, and images, which will be rendered into the PDF.  The structure is precisely the same as a static website, meaning the files are placed in a directory structure that can be deployed to a regular website.
-PDF Output | `--pdf-output` | This contains the PDF file which is generated.
+HTML Output | `--html-output` | This directory contains the directory structure of HTML, CSS, JavaScript, and images, which will be rendered into the PDF.  The structure is precisely the same as a static website, meaning the files are placed in a directory structure that can be deployed to a regular website.
+PDF Output | `--pdf-output` | This directory contains the PDF file which is generated.
 
 ## Header and Footer text in the PDF
 
 A key feature offered by word processing systems like Libre Office is placing text in the margin at the top and bottom of the page.  This header and footer text usually carries a date, page number, copyright statement, and document title.
 
-`--template-header`
+PDF Document Maker supports four options to control headers and footers:
 
-`--height-header`
+* `--template-header` - A file name for a file containing an HTML snippet describing the text to use in the header
+* `--height-header` - The height of the header area
+* `--template-footer` - A file name for a file containing an HTML snippet describing the test to use in the footer
+* `--height-footer` - The height of the footer area
 
-`--template-footer`
+The template files are HTML snippets where values are injected into HTML elements with specific class names.  The class names are [from the Puppeteer documentation](https://pptr.dev/api/puppeteer.pdfoptions#headertemplate):
 
-`--height-footer`
+* `date` formatted print date
+* `title` document title
+* `url` document location
+* `pageNumber` current page number
+* `totalPages` total pages in the document
+
+For example, to putput the text _Page 2 of 42_, use this template:
+
+```html
+Page <span class="pageNumber"></span> of <span class="totalPages"></span>
+```
+
+For the `<span>` with `class="pageNumber"`, the current page number is injected into the content of that HTML element.
+
+An additional thing to know is that the context where the header and footer is rendered has zero CSS settings.  It does not inherit the CSS of the main part of the page, and you must initialize any CSS settings required to ensure your header and footer shows up.
+
+An example complete footer template is:
+
+```html
+<div class="text-left"
+  style="margin: 0 auto 0 20mm; text-align: left; font-size: 12px;">
+    PDF Document Maker Organization
+</div>
+<div class="text-right"
+  style="margin: 0 20mm 0 auto; text-align: right; font-size: 12px;">
+    Page <span class="pageNumber"></span>
+      of <span class="totalPages"></span>
+  </div>
+```
+
+The `text-left` span has style which glues it to the left hand side of the row, sets the row to 20mm high, and sets the font-size to 12px.  The `text-right` span is the same, but glues itself to the right-hand side of the row.
+
+Example parameters are:
+
+```
+--template-header header-template.html \
+--height-header 20mm \
+--template-footer footer-template.html \
+--height-footer 20mm 
+```
 
 ## Controlling page layout
 
