@@ -764,7 +764,152 @@ Table: A Caption
 
 The effect is to add a `<caption>` tag within the `<table>`.
 
+To control the style of the caption, we can add a CSS declaration targeting table captions as so:
+
+```css
+table caption {
+    caption-side: top;
+    font-weight: bold;
+    font-style: italic;
+    font-size: larger;
+}
+```
+
+To demonstrate, we'll create two tables.  The first will have the class `.table-caption-above`, and the second the class `{.table-caption-below}`.  The corresponding CSS is:
+
+```css
+table.table-caption-above caption {
+    caption-side: top;
+}
+table.table-caption-below caption {
+    caption-side: bottom;
+}
+```
+
+Next, to construct our table while adding a class attribute:
+
+```
+Table: A Caption Above
+
+| A | B |
+|---|---|
+| 1 | 2 |
+| 3 | 4 |
+| 5 | 6 |
+
+{.table-caption-above}
+```
+
+Adding an attribute, like a class, to a table requires that last line is separated from the bottom of the table by one blank line.
+
+The result looks like this:
+
+::: .card-group
+
+::: .card
+::: .card-body
+
+Table: Caption Above
+
+| A | B |
+|---|---|
+| 1 | 2 |
+| 3 | 4 |
+| 5 | 6 |
+
+{.table-caption-above}
+
+:::
+:::
+
+
+::: .card
+::: .card-body
+
+Table: Caption Below
+
+| A | B |
+|---|---|
+| 1 | 2 |
+| 3 | 4 |
+| 5 | 6 |
+
+{.table-caption-below}
+
+:::
+:::
+
+:::
+
+The important CSS attribute is `caption-side`, because it control where the caption is shown.
+
 This feature can be disabled with `--no-md-table-captions`
+
+#### Bootstrap card groups in Markdown
+
+How did we get those two tables to appear side-by-side?
+
+This page includes the Bootstrap framework.  What we did was to create a Card Group containing two Cards.
+
+To generate the required `<div>` we used the `::: .div-class` syntax described earlier.  To implement the card group required:
+
+```
+
+::: .card-group
+
+::: .card
+::: .card-body
+
+CONTENT FOR FIRST CARD GROUP
+
+:::
+:::
+
+
+::: .card
+::: .card-body
+
+CONTENT FOR SECOND CARD GROUP
+
+:::
+:::
+
+:::
+```
+
+This translates to:
+
+```html
+<div class="card-group">
+  <div class="card">
+    <div class="card-body">
+      CONTENT FOR FIRST CARD GROUP
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      CONTENT FOR SECOND CARD GROUP
+    </div>
+  </div>
+</div>
+```
+
+Or, this:
+
+<div class="card-group">
+  <div class="card">
+    <div class="card-body">
+      CONTENT FOR FIRST CARD GROUP
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      CONTENT FOR SECOND CARD GROUP
+    </div>
+  </div>
+</div>
+
+Hence, one browses the Bootstrap documentation, or the documentation for your preferred CSS framework, and look at the HTML+CSS structures are required to achieve the desired effect.  One then uses `:::` to create the `<div>` portion, and `{#id .class-name}` to implement the ID or Class attributes.
 
 #### Diagrams using PlantUML
 

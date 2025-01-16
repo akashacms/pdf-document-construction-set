@@ -12,6 +12,10 @@ import { BlogPodcastPlugin } from '@akashacms/plugins-blog-podcast';
 
 import { default as MarkdownItAttrs } from 'markdown-it-attrs';
 import { default as MarkdownItDiv } from 'markdown-it-div';
+import { default as MarkdownItSections } from 'markdown-it-header-sections';
+import { default as MarkdownItImageFigures } from 'markdown-it-image-figures';
+import { default as MarkdownItMultiMDTable } from 'markdown-it-multimd-table';
+import { default as MarkdownItTableCaptions } from 'markdown-it-table-captions';
 
 const config = new akasha.Configuration();
 
@@ -49,7 +53,21 @@ config.findRendererName('.html.md')
     .use(MarkdownItAttrs, {
         allowedAttributes: [ 'id', 'class', 'caption', 'data' ]
     })
-    .use(MarkdownItDiv);
+    .use(MarkdownItDiv)
+    .use(MarkdownItSections)
+    .use(MarkdownItImageFigures, {
+        dataType: true,
+        figcaption: true,
+        tabindex: true
+    })
+    .use(MarkdownItMultiMDTable, {
+        multiline:  true,
+        rowspan:    true,
+        headerless: true,
+        multibody:  true,
+        aotolabel:  true,
+    })
+    .use(MarkdownItTableCaptions);
 
 config
     .addFooterJavaScript({
