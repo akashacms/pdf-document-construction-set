@@ -714,7 +714,7 @@ async function renderLESSCSS(config, options) {
                 config, lessInfo
             );
             config.addStylesheet({
-                href: renderTo
+                href: path.join('/', renderTo)
             });
             console.log(result);
         }
