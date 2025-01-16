@@ -91,7 +91,7 @@
 		page-break-after: avoid; }
 	canvas, img, svg {
 		margin: 1em auto; }
-	address, blockquote, details, dl, figure, ol, p, pre, ruby, table /*, ul */ {
+	address, blockquote, details, dl, figure, /* ol, */ p, pre, ruby, table /*, ul */ {
 		margin: 1em 0; }
 	dd, ul, ol {
 		margin-left: 2em; }

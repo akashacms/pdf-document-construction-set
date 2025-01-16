@@ -168,13 +168,14 @@
 -->
 
 <div class="row">
-  <article class="col-sm-10">
+  <article class="col-sm-12">
     
     <p><em>PDF Document Maker</em> is an integrated application, built from <em>AkashaCMS</em> components, for producing good-quality PDF documents from Markdown or AsciiDoc files.</p>
 <p>In the <a href="guide.html">PDF Document Maker Guide</a>, we learned how to build a PDF document with this tool.</p>
 <p>The same content can be reused between a PDF document and a website.  The project website (<a href="https://akashacms.github.io/pdf-document-construction-set/index.html">https://akashacms.github.io/pdf-document-construction-set/index.html</a>) is an example of an AkashaCMS website containing the PDF Document Maker Guide as both <a href="https://akashacms.github.io/pdf-document-construction-set/guide/guide.html">HTML</a> and <a href="https://akashacms.github.io/pdf-document-construction-set/guide/guide.pdf">PDF</a>.  In both cases, this content is built from the same file.</p>
 <p>This page is meant to show how to build a website documenting an open source software project (<em>PDF Document Maker</em>), and to reuse part of that website to build a downloadable standalone PDF documenting how to use the application.</p>
 <p>The same pattern could be used by other open source software projects.</p>
+<section>
 <h2>Quick overview of AkashaCMS website project configuration</h2>
 <p>The name <em>AkashaCMS</em> is an umbrella term over a group of software components.  <em>AkashaRender</em> is the core, and is primarily tasked with rendering content into websites.  <em>Mahabhuta</em> is the engine for DOM manipulation.  The <em>plugins</em> extend the capabilities, and the <em>Bootstrap theme</em> component helps with making the website prettier.</p>
 <p>The AkashaCMS website has lots of documentation of AkashaCMS project configuration.</p>
@@ -184,6 +185,7 @@
 <li><a href="https://akashacms.com/plugins/index.html">https://akashacms.com/plugins/index.html</a> - List of, and documentation for, the AkashaCMS plugins</li>
 </ul>
 <p>Rather than replicate all that material, this document will show by example how this works.</p>
+<section>
 <h3>The <code>package.json</code> is used for <em>AkashaCMS</em> or <em>PDF Document Maker</em> project administration</h3>
 <p>An <em>AkashaCMS</em>, or <em>PDF Document Maker</em>, project directory contains a <code>package.json</code> file containing the administrative information about the project, a Configuration file describing the structure of the project, and content files from which the website or document is produced.</p>
 <p>The <code>package.json</code> file comes from the Node.js ecosystem.  The prototypical use for this file is informing the npm package registry (<code>npmjs.com</code>) the characteristics of a Node.js package.</p>
@@ -221,6 +223,8 @@ user	0m3.491s
 sys	0m0.497s
 </code></pre>
 <p>It is quite easy to do this on a developers laptop or in a GitHub Actions script.  One consideration for the latter is that under the covers of <em>PDF Document Maker</em> is Puppeteer, which relies on the Chromium web browser running in headless mode.  The memory requirements for that may exceed (this hasn&apos;t been tested) the capacity of GitHub Actions.</p>
+</section>
+<section>
 <h3>Configuration file</h3>
 <p>Many of the scripts just mentioned reference the configuration file, <a href="https://github.com/akashacms/pdf-document-construction-set/blob/main/guide/config.mjs">https://github.com/akashacms/pdf-document-construction-set/blob/main/guide/config.mjs</a></p>
 <p>An AkashaCMS configuration file is a JavaScript file where the goal is to instantiate and initialize a Configuration object.  This file is then used at every step of rendering content files to create the website or PDF document.</p>
@@ -322,6 +326,9 @@ config.findRendererName(&apos;.html.md&apos;)
     });
 </code></pre>
 <p>This says the <em>news</em> blog is made of files within the VPath space starting with &quot;<em>blog/</em>&quot;, and who are formatted using the <code>blog.njk</code> layout template.  The blog produces an RSS feed at <code>/blog/rss.xml</code>, and the rest are parameters held inside the RSS feed.</p>
+</section>
+</section>
+<section>
 <h2>Tour of important files in the <em>PDF Document Maker</em> website</h2>
 <p>The repository &#xbb; PDF Document Maker &#xbb; PDF Document Maker Guide &#xbb; PDF Document Maker Guidehttps://github.com/akashacms/pdf-document-construction-set contains:</p>
 <ul>
@@ -388,6 +395,8 @@ documents
 
 8 directories, 28 files
 </code></pre>
+</section>
+<section>
 <h2>Process for building the <em>PDF Document Maker</em> website</h2>
 <p>To build the website:</p>
 <pre><code class="language-shell">&#x24; cd guide
@@ -398,10 +407,14 @@ documents
 <pre><code class="language-json">&quot;build:site&quot;: &quot;npx akasharender render --copy-assets config.mjs&quot;,
 </code></pre>
 <p>It&apos;s expected you&apos;ll use <code>npm run preview</code> to preview the website locally, so you can edit the content, handle content layout issues, etc, before deploying it to the web server.</p>
+<section>
 <h3>Adding announcements (blog posts)</h3>
 <p>It is very easy to add new content to an AkashaCMS website.  You simply create a file in a <code>documents</code> directory.  The next time you run the <code>render</code> command it will be automatically rendered into the output directory.</p>
 <p>In the tree shown above, the announcements blog is stored in <code>documents/blog</code>.  It is structured with a date-oriented directory tree so one can easily determine when a blog post was made.  The directory tree in an AkashaCMS blog is entirely arbitrary, and the Blog-Podcast plugin does not force any file structure.</p>
 <p>The <code>index.html.md</code> files in that directory hierarchy form an index of postings in the child directories to that directory.  Hence, <code>blog/2025/index.html</code> will contain a different index from <code>blog/2025/01/index.html</code>.</p>
+</section>
+</section>
+<section>
 <h2>Process for building PDF of <em>PDF Document Maker Guide</em></h2>
 <p>To build the user guide PDF:</p>
 <pre><code class="language-shell">&#x24; cd guide
@@ -414,11 +427,37 @@ documents
 <p>Once the PDF is built, it&apos;s up to you how this it is distributed.  For this project, copying the PDF into the HTML output directory ensures we can distribute the PDF via the website.</p>
 <p>Notice that the scripts for building the PDF refer to the same content files as are used to build the website.  The <code>documents</code> directory contains <code>guide/guide.md</code> which produces <code>guide/guide.html</code> on the website, and which produces the <code>guide.pdf</code> PDF document.</p>
 <p>It&apos;s the exact same file.</p>
+</section>
+<section>
+<h2>Process for auto-rebuild and live-reloading</h2>
+<p>By using Nodemon and Live Reload, we can improve the user experience of inspecting the results of our edits.</p>
+<p>With what we&apos;ve shown so far, after editing files you must go to a terminal and type <code>npm run build:guide</code> or <code>npm run build:site</code>.  While that&apos;s not onerous, we can improve on this.</p>
+<p>This will rely on two tools:</p>
+<ul>
+<li>Nodemon - <a href="https://www.npmjs.com/package/nodemon">https://www.npmjs.com/package/nodemon</a></li>
+<li>Live Server - <a href="https://www.npmjs.com/package/@compodoc/live-server">https://www.npmjs.com/package/@compodoc/live-server</a></li>
+</ul>
+<p>The <em>Live Server</em> application watches the directory containing HTML+CSS+JS files, and when there&apos;s a change it causes the browser to reload the page.</p>
+<p>It is started with this <code>package.json</code> script:</p>
+<pre><code class="language-json">&quot;preview&quot;: &quot;live-server out&quot;,
+</code></pre>
+<p>The <em>Nodemon</em> application is used in this case to watch the source files, and to run the <code>build:site</code> or <code>build:guide</code> script.</p>
+<p>In the repository, the <code>guide/package.json</code> has these scripts tags:</p>
+<pre><code class="language-json">&quot;watch:site&quot;: &quot;npx nodemon -e less,md,css,html,png,mmd \
+      --watch assets --watch documents --watch layouts --watch partials \
+      --exec npm run build:site&quot;,
+&quot;watch:guide&quot;: &quot;npx nodemon -e less,md,css,html,png,mmd \
+      --watch assets --watch documents --watch layouts-pdf --watch partials \
+      --exec npm run build:guide&quot;,
+</code></pre>
+<p>This has been reformatted for readability.  With these options, Nodemon watches the important directories, and if a change occurs it reruns the command named after <code>--exec</code>.</p>
+<p>In one terminal window, run: <code>npm run watch:site</code> OR <code>npm run watch:guide</code></p>
+<p>In another terminal window, run: <code>npm run preview</code></p>
+<p>The last will automatically open a browser tab, and you can browse the website view of your content.</p>
+<p>Go back to your editor, make a change, then go back to your browser, and the browser might have reloaded by the time you&apos;re able to switch windows.</p>
+</section>
 
   </article>
-  <section id="right" class="col-sm-2">
-    <!-- Place sidebar content here -->
-  </section>
 </div>
 
 <footer class="row" style="text-align: center; height: 100px;">

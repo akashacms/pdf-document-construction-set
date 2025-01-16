@@ -15,3 +15,14 @@ body {
   padding-left: 100px;
   padding-right: 100px;
 }
+table caption {
+  font-weight: bold;
+  font-style: italic;
+  font-size: larger;
+}
+table.table-caption-above caption {
+  caption-side: top !important;
+}
+table.table-caption-below caption {
+  caption-side: bottom !important;
+}
