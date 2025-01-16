@@ -41,7 +41,7 @@ program
     .argument('<docPaths>', 'VPath for document to render')
     .option('--title <title>', 'Document title, overwriting any title in the document metadata.')
     .option('--layout <layoutTemplate>', 'File name, in a layouts directory, for the layout template. Overwrites any layout in the document metadata.')
-    // .option('--publication-date <publDate')
+    .option('--publication-date <publDate>', 'String containing a Date to be used in the publicationDate metdata field.')
     .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     // .option('--paper-orientation [orientation]', '"portrait" or "landscape"')
     .option('--pdf-output <pdfDir>', 'Output directory for PDF generation. Default process.cwd()/PDF')
@@ -123,6 +123,18 @@ program
         if (options.heightFooter) {
             if (!isHdrFooterSize(options.heightFooter)) {
                 throw new Error(`--height-footer value incorrect ${util.inspect(options.heightFooter)}`);
+            }
+        }
+
+        if (options.publicationDate) {
+            if (!(typeof options.publicationDate === 'string')) {
+                throw new Error(`--publication-date must be a Date string`);
+            }
+            const d = new Date(options.publicationDate);
+            if (d.toString() === 'Invalid Date'
+             || isNaN(d.valueOf())
+            ) {
+                throw new Error(`--publication-date must be a Date string`);
             }
         }
 
@@ -750,7 +762,10 @@ async function docInfoForPath(config, options, docPath) {
         }
         if (options.title) {
             doc.metadata.title = options.title;
-        } 
+        }
+        if (options.publicationDate) {
+            doc.metadata.publicationDate = options.publicationDate;
+        }
         return doc;
     }
     // else
@@ -789,6 +804,10 @@ async function docInfoForPath(config, options, docPath) {
         context.metadata.title = options.title;
     } else if (!context.metadata.title) {
         console.warn(`No title in metadata for ${docPath} and no --title option provided`);
+    }
+
+    if (options.publicationDate) {
+        context.metadata.publicationDate = options.publicationDate;
     }
 
     // console.log(`docInfoForPath ${docPath} metadata=`, context.metadata);

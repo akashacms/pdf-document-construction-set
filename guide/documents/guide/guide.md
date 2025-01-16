@@ -40,12 +40,17 @@ Options:
   --layout <layoutTemplate>         File name, in a layouts directory, for the layout template.
                                     Overwrites any layout in the document metadata.
   --format <format>                 Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"
-  --pdf-output <pdfDir>             Output directory for PDF generation. Default process.cwd()/PDF
+  --publication-date <publDate>     String containing a Date to be used in the
+                                    publicationDate metdata field.
+  --pdf-output <pdfDir>             Output directory for PDF generation.
+                                    Default process.cwd()/PDF
   --html-output <htmlDir>           Output directory for HTML generation
   --template-header <tmplHeader     HTML template for page header
-  --height-header <height>          Height of header block. Valid units are mm, cm, in and px.
+  --height-header <height>          Height of header block.
+                                    Valid units are mm, cm, in and px.
   --template-footer <tmplFooter     HTML template for page footer
-  --height-footer <height>          Height of footer block. Valid units are mm, cm, in and px.
+  --height-footer <height>          Height of footer block.
+                                    Valid units are mm, cm, in and px.
   --style <cssFile...>              File name of CSS style sheet
   --lesscss <lesscssFile...>        File name of LESS file to render to CSS
   --layout-dir <layoutDir...>       One or more directories for layout templates
@@ -254,6 +259,7 @@ As a convenience, PDF Document Maker supports command-line options for two metad
 
 * `--title` supplies the value for `title`, and overrides any existing value
 * `--layout` supplies the value for `layout`, and overrides any existing value
+* `--publication-date` supplies the value for `publicationDate`, and overrides any existing value
 
 ## The meaning for certain metadata values
 
