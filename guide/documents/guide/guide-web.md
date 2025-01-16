@@ -328,3 +328,47 @@ Once the PDF is built, it's up to you how this it is distributed.  For this proj
 Notice that the scripts for building the PDF refer to the same content files as are used to build the website.  The `documents` directory contains `guide/guide.md` which produces `guide/guide.html` on the website, and which produces the `guide.pdf` PDF document.
 
 It's the exact same file.
+
+## Process for auto-rebuild and live-reloading
+
+By using Nodemon and Live Reload, we can improve the user experience of inspecting the results of our edits.
+
+With what we've shown so far, after editing files you must go to a terminal and type `npm run build:guide` or `npm run build:site`.  While that's not onerous, we can improve on this.
+
+This will rely on two tools:
+
+* Nodemon - https://www.npmjs.com/package/nodemon
+* Live Server - https://www.npmjs.com/package/@compodoc/live-server
+
+The _Live Server_ application watches the directory containing HTML+CSS+JS files, and when there's a change it causes the browser to reload the page.
+
+It is started with this `package.json` script:
+
+```json
+"preview": "live-server out",
+```
+
+The _Nodemon_ application is used in this case to watch the source files, and to run the `build:site` or `build:guide` script.
+
+In the repository, the `guide/package.json` has these scripts tags:
+
+```json
+"watch:site": "npx nodemon -e less,md,css,html,png,mmd \
+      --watch assets --watch documents --watch layouts --watch partials \
+      --exec npm run build:site",
+"watch:guide": "npx nodemon -e less,md,css,html,png,mmd \
+      --watch assets --watch documents --watch layouts-pdf --watch partials \
+      --exec npm run build:guide",
+```
+
+This has been reformatted for readability.  With these options, Nodemon watches the important directories, and if a change occurs it reruns the command named after `--exec`.
+
+In one terminal window, run: `npm run watch:site` OR `npm run watch:guide`
+
+In another terminal window, run: `npm run preview`
+
+The last will automatically open a browser tab, and you can browse the website view of your content.
+
+Go back to your editor, make a change, then go back to your browser, and the browser might have reloaded by the time you're able to switch windows.
+
+

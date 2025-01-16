@@ -12,6 +12,8 @@
     "build:mahabhuta": "npx mmdc -i documents/guide/img/mahabhuta-workflow.mmd -o documents/guide/img/mahabhuta-workflow.svg --outputFormat svg",
     "build:render": "node ../pdf-document-maker.mjs --partial-dir partials --layout-dir layouts-pdf --document-dir documents --lesscss style.css.less --pdf-output PDF --html-output out --title 'PDF Document Maker Guide' --format A4 --funcs ./mahafuncs.mjs guide/guide.md",
     "pdf2out": "cp PDF/guide.pdf out/guide/guide.pdf",
+    "watch:site": "npx nodemon -e less,md,css,html,png,mmd --watch assets --watch documents --watch layouts --watch partials --exec npm run build:site",
+    "watch:guide": "npx nodemon -e less,md,css,html,png,mmd --watch assets --watch documents --watch layouts-pdf --watch partials --exec npm run build:guide",
     "gh-pages": "npx akasharender gh-pages-publish config.mjs"
   },
   "keywords": [],
@@ -32,6 +34,7 @@
     "akasharender": "github:akashacms/akasharender#0.9",
     "bootstrap": "^4.6.x",
     "jquery": "^3.6.x",
+    "nodemon": "^3.1.9",
     "popper.js": "^1.16.x"
   }
 }
