@@ -27,6 +27,8 @@ import { default as MarkdownItTableCaptions } from 'markdown-it-table-captions';
 import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
 
+import { DiagramsPlugin } from '@akashacms/plugins-diagrams';
+
 // import { default as config } from './config.mjs';
 import puppeteer from 'puppeteer';
 import { Command } from 'commander';
@@ -56,8 +58,8 @@ program
     .option('--partial-dir <partialDir...>', 'One or more directories for partial templates')
     .option('--asset-dir <assetsDir...>', 'One or more directories for assets')
     .option('--document-dir <documentsDir...>', 'One or more directories for documents')
-    // TODO
-    .option('--plantuml-url', 'URL for a PlantUML server')
+    // TODO NODO
+    // .option('--plantuml-url <url>', 'URL for a PlantUML server')
     .option('--no-headless', 'Turn off headless mode')
     // .option('--no-exit', 'Do not exit when rendering finished')
     .option('--no-pdf', 'Do not generate PDFs')
@@ -71,7 +73,7 @@ program
     .option('--no-md-image-figures', 'Disable the markdown-it-image-figures extension')
     .option('--no-md-multimd-table', 'Disable the markdown-it-multimd-table extension')
     .option('--no-md-table-captions', 'Disable the markdown-it-table-captions extension')
-    .option('--no-md-plantuml', 'Disable the markdown-it-plantuml extension')
+    .option('--no-md-plantuml', 'Disable the @akashacms/plugins-plantuml extension')
     .option('--no-bootstrap', 'Disable Bootstrap v4 and related modules')
     // This turned out to not work.
     // .option('--use-mermaid', 'Enable MermaidJS rendering')
@@ -80,7 +82,7 @@ program
     .action(async (docPath, options, command) => {
 
         // TODO --watch  -- or nodemon
-        // TODO -- URL for PlantUML server
+        // TODO NODO -- URL for PlantUML server
         // TODO -- highlight.js theme link
 
         let config;
@@ -192,16 +194,16 @@ program
             }
         }
 
-        if (options.plantumlUrl) {
-            if (!(typeof options.plantumlUrl === 'string')) {
-                throw new Error(`Invalid argument for PlantUML server URL ${util.inspect(options.plantumlUrl)}`);
-            }
-            try {
-                options.plantumlURL = new URL(options.plantumlUrl);
-            } catch (err) {
-                throw new Error(`Plantuml URL ${util.inspect(options.plantumlUrl)} incorrect because ${err.message}`);
-            }
-        }
+        // if (options.plantumlUrl) {
+        //     if (!(typeof options.plantumlUrl === 'string')) {
+        //         throw new Error(`Invalid argument for PlantUML server URL ${util.inspect(options.plantumlUrl)}`);
+        //     }
+        //     try {
+        //         options.plantumlURL = new URL(options.plantumlUrl);
+        //     } catch (err) {
+        //         throw new Error(`Plantuml URL ${util.inspect(options.plantumlUrl)} incorrect because ${err.message}`);
+        //     }
+        // }
 
         if (options.funcs) {
             if (!(typeof options.funcs === 'string')) {
@@ -412,12 +414,17 @@ async function generateConfiguration(options) {
         typographer:  false,
     });
 
-    if (options.mdPlantuml) {
-        config.findRendererName('.html.md')
-        .use(MarkdownITPlantUML, {
-            imageFormat: 'svg'
-        });
-    }
+    // if (options.mdPlantuml) {
+    //     const PLoptions = {
+    //         imageFormat: 'svg'
+    //     };
+    //     if (options.plantumlURL instanceof URL) {
+    //         PLoptions.server = options.plantumlURL.href;
+    //     }
+    //     console.log({ PLoptions });
+    //     config.findRendererName('.html.md')
+    //     .use(MarkdownITPlantUML, PLoptions);
+    // }
     if (options.mdHighlightjs) {
         config.findRendererName('.html.md')
         .use(MarkdownITHighlightJS, { 
@@ -579,6 +586,11 @@ async function generateConfiguration(options) {
     .use(BasePlugin, {
         generateSitemapFlag: false
     });
+
+
+    if (options.mdPlantuml) {
+        config.use(DiagramsPlugin);
+    }
 
     // Add JavaScript, CSS
 

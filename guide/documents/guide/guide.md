@@ -57,7 +57,6 @@ Options:
   --partial-dir <partialDir...>     One or more directories for partial templates
   --asset-dir <assetsDir...>        One or more directories for assets
   --document-dir <documentsDir...>  One or more directories for documents
-  --plantuml-url                    URL for a PlantUML server
   --no-headless                     Turn off headless mode
   --no-pdf                          Do not generate PDFs
   --no-printcss                     Disable the print.css stylesheet
@@ -70,7 +69,7 @@ Options:
   --no-md-image-figures             Disable the markdown-it-image-figures extension
   --no-md-multimd-table             Disable the markdown-it-multimd-table extension
   --no-md-table-captions            Disable the markdown-it-table-captions extension
-  --no-md-plantuml                  Disable the markdown-it-plantuml extension
+  --no-md-plantuml                  Disable the @akashacms/plugins-plantuml extension
   --no-bootstrap                    Disable Bootstrap v4 and related modules
   --funcs <funcsFN>                 Name a JS file containing Mahafuncs for custom processing
   -h, --help                        display help for command
@@ -1017,7 +1016,9 @@ stop
 @enduml
 ```
 
-Imply insert that text in the Markdown file.  The default delimiters are `@startuml` and `@enduml`, with everything in-between interpreted as the PlantUML diagram.
+<!-- THIS IS THE OLD METHOD
+
+Simply insert that text in the Markdown file.  The default delimiters are `@startuml` and `@enduml`, with everything in-between interpreted as the PlantUML diagram.
 
 @startuml
 
@@ -1033,8 +1034,45 @@ endif
 stop
 
 @enduml
+-->
 
-TODO - Cover installing a local PlantUML server
+In PDF Document Maker, we use the custom tag `<pre class="plantuml-inline">` to insert a PlantUML diagram.  It looks like this:
+
+```
+<pre class="plantuml-inline">
+@startuml
+start
+
+if (Graphviz installed?) then (yes)
+  :process all 
+  diagrams;
+else (no)
+  :process only 
+  __sequence__ and __activity__ diagrams;
+endif
+
+stop
+@enduml
+</pre>
+```
+
+That renders as so:
+
+<pre class="plantuml-inline">
+@startuml
+start
+
+if (Graphviz installed?) then (yes)
+  :process all 
+  diagrams;
+else (no)
+  :process only 
+  __sequence__ and __activity__ diagrams;
+endif
+
+stop
+@enduml
+</pre>
 
 ## Using MermaidJS diagrams in PDF Document Maker
 

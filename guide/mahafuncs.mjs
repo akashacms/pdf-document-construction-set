@@ -1,4 +1,9 @@
 
+import path from 'node:path';
+import { execSync } from 'node:child_process';
+
+const __dirname = import.meta.dirname;
+
 // import util from 'node:util';
 // import { promises as fsp } from "node:fs";
 // import YAML from 'js-yaml';
@@ -30,9 +35,61 @@ const pluginName = 'PDF-Document-Maker-Guide';
 
 export function mahabhutaArray(options) {
     let ret = new mahabhuta.MahafuncArray(pluginName, options);
+    // ret.addMahafunc(new PlantUMLLocal());
     ret.addMahafunc(new HnNumbering());
     return ret;
 };
+
+// This test has become @akashacms/plugins-diagrams
+
+// class PlantUMLLocal extends mahabhuta.PageProcessor {
+//     get selector() { return "pre[class=plantuml-inline]"; }
+//     async process($, metadata, dirty) {
+
+//         $('article').find('pre[class=plantuml-inline]').each(function() {
+
+//             const body  = $(this).html();
+
+//             console.log({ body });
+
+//             const plantumlJar = path.join(__dirname, 'plantuml-mit-1.2025.0.jar');
+//             const result = execSync(
+//                 [
+//                     'java',
+//                     '-jar',
+//                     '-Djava.awt.headless=true',
+//                     '--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax="ALL-UNNAMED"',
+//                     plantumlJar,
+//                     '-tsvg',
+//                     '-pipe',
+//                 ].join(' '),
+//                 { input: body }
+//             );
+
+//             $(this).replaceWith(result.toString());
+    
+//         });
+//         // const body  = $element.html();
+
+//         // console.log({ body });
+
+//         // const plantumlJar = path.join(__dirname, 'plantuml-mit-1.2025.0.jar');
+//         // const result = execSync(
+//         //     [
+//         //         'java',
+//         //         '-jar',
+//         //         '-Djava.awt.headless=true',
+//         //         '--add-opens=java.xml/com.sun.org.apache.xalan.internal.xsltc.trax="ALL-UNNAMED"',
+//         //         plantumlJar,
+//         //         '-tsvg',
+//         //         '-pipe',
+//         //     ].join(' '),
+//         //     { input: body }
+//         // );
+    
+//         // return result.toString();
+//     }
+// }
 
 /**
  * Generate numbering for Hn tags, along with generating
