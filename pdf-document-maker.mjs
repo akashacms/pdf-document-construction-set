@@ -11,7 +11,6 @@ import akasha from 'akasharender';
 const mahabhuta = akasha.mahabhuta;
 import { parseFrontmatter } from '@akashacms/renderers';
 
-import { default as MarkdownITPlantUML } from 'markdown-it-plantuml';
 import { default as MarkdownITHighlightJS } from 'markdown-it-highlightjs';
 import { default as MarkdownItAttrs } from 'markdown-it-attrs';
 import { default as MarkdownItDiv } from 'markdown-it-div';
@@ -27,7 +26,7 @@ import { default as MarkdownItTableCaptions } from 'markdown-it-table-captions';
 import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
 
-import { DiagramsPlugin } from '@akashacms/plugins-diagrams';
+import { DiagramsPlugin } from '@akashacms/diagram-maker';
 
 // import { default as config } from './config.mjs';
 import puppeteer from 'puppeteer';

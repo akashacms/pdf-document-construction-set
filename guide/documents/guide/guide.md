@@ -1036,43 +1036,80 @@ stop
 @enduml
 -->
 
-In PDF Document Maker, we use the custom tag `<pre class="plantuml-inline">` to insert a PlantUML diagram.  It looks like this:
+In PDF Document Maker, we use the custom tag `<diagrams-plantuml>` to insert a PlantUML diagram.
 
+It looks like this:
+
+```html
+<diagrams-plantuml input-file="img/activity-1.puml"
+    output-file="activity-1.png" tpng/>
 ```
-<pre class="plantuml-inline">
-@startuml
-start
 
-if (Graphviz installed?) then (yes)
-  :process all 
-  diagrams;
-else (no)
-  :process only 
-  __sequence__ and __activity__ diagrams;
-endif
+The above diagram, in this case, is saved in the file `activity-1.puml` in the `img` subdirectory.  The file is read in, and passed to PlantUML for rendering.
 
-stop
-@enduml
-</pre>
+That renders as so:
+
+<diagrams-plantuml input-file="img/activity-1.puml"
+    output-file="activity-1.png" tpng/>
+
+To render it as SVG replace `tpng` with `tsvg`.
+
+```html
+<diagrams-plantuml input-file="img/activity-1.puml"
+    output-file="activity-1.svg" tsvg/>
 ```
 
 That renders as so:
 
-<pre class="plantuml-inline">
+<diagrams-plantuml input-file="img/activity-1.puml"
+    output-file="activity-1.svg" tsvg/>
+
+Both `tsvg` and `tpng` are properties, not attributes, and they should be used in this way without an attribute value.
+
+The diagram can also be used inline like so:
+
+```html
+<diagrams-plantuml
+      output-file="activity-1-inline.png" tpng>
 @startuml
+
 start
 
 if (Graphviz installed?) then (yes)
-  :process all 
-  diagrams;
+  :process all
+   diagrams;
 else (no)
-  :process only 
+  :process only
   __sequence__ and __activity__ diagrams;
 endif
 
 stop
+
 @enduml
-</pre>
+</diagrams-plantuml>
+```
+
+Which renders as so:
+
+<diagrams-plantuml output-file="activity-1-inline.png" tpng>
+@startuml
+
+start
+
+if (Graphviz installed?) then (yes)
+  :process all
+     diagrams;
+else (no)
+  :process only
+  __sequence__ and __activity__ diagrams;
+endif
+
+stop
+
+@enduml
+</diagrams-plantuml>
+
+In this case no `input-file` is given, and the input comes from the element body.
 
 ## Using MermaidJS diagrams in PDF Document Maker
 

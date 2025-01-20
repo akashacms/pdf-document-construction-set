@@ -20,7 +20,7 @@
     "@akashacms/plugins-base": "^0.9.x",
     "@akashacms/renderers": "^0.9.x",
     "@akashacms/theme-bootstrap": "^0.9.x",
-    "@akashacms/plugins-diagrams": "akashacms/plugins-diagrams",
+    "@akashacms/diagram-maker": "akashacms/plugins-diagrams",
     "@compodoc/live-server": "^1.2.x",
     "akasharender": "^0.9.x",
     "bootstrap": "^4.6.x",
