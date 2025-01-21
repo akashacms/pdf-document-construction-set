@@ -10,179 +10,94 @@
 
 <title>PDF Document Maker Guide</title>
 
-
-
-
-
- 
- 
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<meta name="pagename" content="PDF Document Maker Guide">
-
-
-
-
-
-
-
-
-
-
-
-<meta name="DC.title" content="PDF Document Maker Guide">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- OpenGraph Meta Tags -->
-
-<meta name="og:title" content="PDF Document Maker Guide">
-
-<meta name="og:url" content="https://akashacms.github.io/pdf-document-construction-set/guide/guide.html">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="canonical" href="https://akashacms.github.io/pdf-document-construction-set/guide/guide.html">
-
-
-<link rel="sitemap" type="application/xml" href="../sitemap.xml" title="Sitemap">
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap-theme.min.css"><link rel="stylesheet" type="text/css" href="../style.css">
+<link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" type="text/css" href="../vendor/highlight.js/styles/stackoverflow-dark.css"><link rel="stylesheet" type="text/css" href="../vendor/printcss/print.css"><link rel="stylesheet" type="text/css" href="../style.css">
 
 
 
 </head>
 <body>
 
-<nav class="navbar fixed-top navbar-expand-md navbar-light bg-light">
-    <a class="navbar-brand" href="../index.html">PDF Document Maker</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="../index.html">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">Guide</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../blog/index.html">News</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-<!-- partial file-name="site-navbar.html"></partial -->
-
 <div class="container" role="main">
-<div class="row">
-
-<!-- partial file-name="header.html"></partial -->
-</div>
-
-<div class="row">
-  <section id="breadcrumb" class="col-sm-12">
-    <div id="breadcrumbTrail">
-    
-        &#xbb; <a class="p-category" href="../index.html">PDF Document Maker</a>
-    
-        &#xbb; <a class="p-category" href="index.html">PDF Document Maker Guide</a>
-    
-        &#xbb; <a class="p-category" href="guide.html">PDF Document Maker Guide</a>
-    
-</div>
-
-  </section>
-</div>
-<!-- 
-<div class="row">
-  <section id="byline" class="col-sm-12">
-    <publication-date></publication-date>;
-  </section>
-</div>
--->
 
 <div class="row">
   <article class="col-sm-12">
+    <h1 class="header-title">PDF Document Maker Guide</h1>
     
     <p><em>PDF Document Maker</em> is a comprehensive tool for producing good quality PDFs from Markdown or AsciiDoc files.</p>
 <p>Under the covers it uses a full-featured static HTML processing system, AkashaCMS, that&apos;s designed for producing websites and E-Books.  The HTML is then converted to PDF using Puppeteer.  These capabilities are bundled into an easy-to-use command-line utility with a long list of options.</p>
-<p><toc-text-here></toc-text-here></p>
-<section>
-<h1>Installation and Project setup for PDF Document Maker</h1>
+<p><span id="table-of-contents">
+  <ul class="list-no-margin"><li>
+        <a href="#installation-and-project-setup-for-pdf-document-maker">1. Installation and Project setup for PDF Document Maker</a>
+        </li><li>
+        <a href="#quick-start-for-using-pdf-document-maker">2. Quick start for using PDF Document Maker</a>
+        <ul class="list-no-margin"><li>
+                        <a href="#what-did-that-command-do%3F">2.1. What did that command do?</a></li>
+                </ul>
+        </li><li>
+        <a href="#file-name-conventions">3. File name conventions</a>
+        </li><li>
+        <a href="#page-layouts">4. Page layouts</a>
+        <ul class="list-no-margin"><li>
+                        <a href="#partial-templates">4.1. Partial templates</a></li>
+                </ul>
+        </li><li>
+        <a href="#document-format%2C-and-document-metadata">5. Document format, and document metadata</a>
+        <ul class="list-no-margin"><li>
+                        <a href="#default-metadata-values-in-pdf-document-maker">5.1. Default metadata values in PDF Document Maker</a></li>
+                <li>
+                        <a href="#the-meaning-for-certain-metadata-values">5.2. The meaning for certain metadata values</a></li>
+                </ul>
+        </li><li>
+        <a href="#css-styles-for-print">6. CSS styles for print</a>
+        </li><li>
+        <a href="#project-configuration-with-the-pdf-document-maker-cli">7. Project configuration with the PDF Document Maker CLI</a>
+        <ul class="list-no-margin"><li>
+                        <a href="#output-directories">7.1. Output directories</a></li>
+                <li>
+                        <a href="#header-and-footer-text-in-the-pdf">7.2. Header and Footer text in the PDF</a></li>
+                <li>
+                        <a href="#controlling-page-layout">7.3. Controlling page layout</a></li>
+                <li>
+                        <a href="#page-styling-using-css-stylesheets">7.4. Page styling using CSS stylesheets</a></li>
+                <li>
+                        <a href="#markdown-extensions-supported-by-pdf-document-maker">7.5. Markdown extensions supported by PDF Document Maker</a></li>
+                </ul>
+        </li><li>
+        <a href="#automating-pdf-document-making-using-package.json">8. Automating PDF Document Making using package.json</a>
+        </li><li>
+        <a href="#project-configuration-with-akashacms-configuration-files">9. Project configuration with AkashaCMS configuration files</a>
+        </li><li>
+        <a href="#drawing-diagrams-with-draw.io%2C-plantuml%2C-mermaid%2C-or-katex">10. Drawing diagrams with draw.io, PlantUML, Mermaid, or KaTeX</a>
+        <ul class="list-no-margin"><li>
+                        <a href="#using-draw.io-diagrams-in-pdf-document-maker">10.1. Using draw.io diagrams in PDF Document Maker</a></li>
+                <li>
+                        <a href="#using-plantuml-diagrams-in-pdf-document-maker">10.2. Using PlantUML diagrams in PDF Document Maker</a></li>
+                <li>
+                        <a href="#using-mermaidjs-diagrams-in-pdf-document-maker">10.3. Using MermaidJS diagrams in PDF Document Maker</a></li>
+                <li>
+                        <a href="#high-quality-equation-(mathematical-and-chemical)-rendering-with-katex">10.4. High quality equation (mathematical and chemical) rendering with KaTeX</a></li>
+                </ul>
+        </li><li>
+        <a href="#custom-html-tags-and-custom-html-processing">11. Custom HTML tags and custom HTML processing</a>
+        </li><li>
+        <a href="#generating-a-table-of-contents%2C-automating-section-numbering">12. Generating a table of contents, automating section numbering</a>
+        </li><li>
+        <a href="#pdf-document-maker-inner-workflow">13. PDF Document Maker inner workflow</a>
+        </li><li>
+        <a href="#pdf-document-maker-inner-workflow">14. Footnotes</a>
+        </li></ul>
+</span>
+</p>
+<section id="installation-and-project-setup-for-pdf-document-maker" tabindex="-1">
+<h1 tabindex="-1">1. Installation and Project setup for PDF Document Maker</h1>
 <p>PDF Document Maker runs on the Node.js platform, and is tested with Node.js v20.  It should work for later releases.</p>
 <p>A project directory consists of a <em>package.json</em> file which is used for listing dependencies and build processes.  Instead of being used for building Node.js packages, we will use it to record project dependencies and for build scripts.</p>
-<pre><code class="language-shell">&#x24; node --version  # Make sure v20 or later
-&#x24; npm init -y     # Set up a default package.json
-&#x24; npm install pdf-document-maker --save
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">node --version  <span class="hljs-comment"># Make sure v20 or later</span></span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm init -y     <span class="hljs-comment"># Set up a default package.json</span></span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm install pdf-document-maker --save</span>
 </code></pre>
 <p>Once installed you can get help:</p>
-<pre><code class="language-shell">&#x24; npx pdf-document-maker --help
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npx pdf-document-maker --<span class="hljs-built_in">help</span></span>
 Usage: pdf-document-maker [options] &lt;docPaths...&gt;
 
 CLI to build PDF files from Markdown/AsciiDoc documents
@@ -215,7 +130,6 @@ Options:
   --partial-dir &lt;partialDir...&gt;     One or more directories for partial templates
   --asset-dir &lt;assetsDir...&gt;        One or more directories for assets
   --document-dir &lt;documentsDir...&gt;  One or more directories for documents
-  --plantuml-url                    URL for a PlantUML server
   --no-headless                     Turn off headless mode
   --no-pdf                          Do not generate PDFs
   --no-printcss                     Disable the print.css stylesheet
@@ -228,41 +142,41 @@ Options:
   --no-md-image-figures             Disable the markdown-it-image-figures extension
   --no-md-multimd-table             Disable the markdown-it-multimd-table extension
   --no-md-table-captions            Disable the markdown-it-table-captions extension
-  --no-md-plantuml                  Disable the markdown-it-plantuml extension
+  --no-md-plantuml                  Disable the @akashacms/plugins-plantuml extension
   --no-bootstrap                    Disable Bootstrap v4 and related modules
   --funcs &lt;funcsFN&gt;                 Name a JS file containing Mahafuncs for custom processing
   -h, --help                        display help for command
 </code></pre>
 <p>The application has a lot of options.  But, most of them have reasonable defaults, and typically you&apos;ll use only a few.</p>
 </section>
-<section>
-<h1>Quick start for using PDF Document Maker</h1>
+<section id="quick-start-for-using-pdf-document-maker" tabindex="-1">
+<h1 tabindex="-1">2. Quick start for using PDF Document Maker</h1>
 <p>Before going deep into using PDF Document Maker, let&apos;s do a quick and easy example.  We will format a test file into a PDF.</p>
 <p>The search phrase &quot;<em>standard markdown test file</em>&quot; turns up several test Markdown files.  This repository has a very good one:   <a href="https://github.com/mxstbr/markdown-test-file"><code>https://github.com/mxstbr/markdown-test-file</code></a></p>
 <p>Start by creating a directory, adding a <code>package.json</code>, and installing <code>pdf-document-maker</code> as shown above.</p>
 <p>The GitHub repository for this tool already has this set up in <a href="https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple"><code>https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple</code></a></p>
 <p>In that directory, create a directory named <code>documents</code>:</p>
-<pre><code class="language-shell">&#x24; mkdir documents
-&#x24; cd documents
-&#x24; wget https://...   # Download TEST.md
-&#x24; cd ..
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">mkdir</span> documents</span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">cd</span> documents</span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">wget https://...   <span class="hljs-comment"># Download TEST.md</span></span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">cd</span> ..</span>
 </code></pre>
 <p>With a file, <code>documents/TEST.md</code>, run this command:</p>
-<pre><code class="language-shell">&#x24; npx pdf-document-maker  \
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npx pdf-document-maker  \
         --document-dir documents \
         --pdf-output PDF \
         --html-output out \
-        --title &apos;Markdown test document&apos; \
+        --title <span class="hljs-string">&apos;Markdown test document&apos;</span> \
         --format A4 \
-        TEST.md
+        TEST.md</span>
 </code></pre>
 <p>This command creates two files:</p>
 <ul>
 <li><code>out/TEST.html</code> - is the HTML intermediate file</li>
 <li><code>PDF/TEST.pdf</code> - is the PDF result</li>
 </ul>
-<section>
-<h2>What did that command do?</h2>
+<section id="what-did-that-command-do%3F" tabindex="-1">
+<h2 tabindex="-1">2.1. What did that command do?</h2>
 <p>A lot happened under the covers:</p>
 <ul>
 <li>A configuration object was built for rendering documents into an HTML output directory.</li>
@@ -314,8 +228,8 @@ Options:
 <p>There is a default layout directory within PDF Document Maker holding a single layout template, <code>default.njk</code>.  If no layout template is specified, that one is used.</p>
 </section>
 </section>
-<section>
-<h1>File name conventions</h1>
+<section id="file-name-conventions" tabindex="-1">
+<h1 tabindex="-1">3. File name conventions</h1>
 <p>We already discussed how the virtual directory stack works, and that a VPath are path names relative o the root directory(ies).</p>
 <p><em>Documents</em> directories file names have file extensions naming the file type, as is usual practice.  The extension is used to select the rendering package required to process that file.</p>
 <table>
@@ -382,75 +296,75 @@ Options:
 <p>In partials or layouts directories, files have either extension, and are used while rendering files in the documents directories.  These files are not copied to the HTML output directory.</p>
 <p>In assets directories, files are simply copied to the HTML output directory.</p>
 </section>
-<section>
-<h1>Page layouts</h1>
+<section id="page-layouts" tabindex="-1">
+<h1 tabindex="-1">4. Page layouts</h1>
 <p>One way PDF Document Maker differs from other Markdown-PDF tools is by supporting the use of a layout template.  Layout templates are responsible for establishing the entire page structure.</p>
 <p>The HTML resulting from rendering the Markdown or AsciiDoc is available to the layout template as a variable named <em>content</em>.</p>
 <p>Consider the default layout template, <code>default.njk</code>:</p>
-<pre><code class="language-html">&lt;!doctype html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-&lt;meta charset=&quot;utf-8&quot; /&gt;
-&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge,chrome=1&quot; /&gt;
-&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;/&gt;
+<pre><code class="hljs language-html"><span class="hljs-meta">&lt;!doctype <span class="hljs-keyword">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">&quot;en&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">&quot;utf-8&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;X-UA-Compatible&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;IE=edge,chrome=1&quot;</span> /&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;viewport&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;width=device-width, initial-scale=1.0&quot;</span>/&gt;</span>
 
 {% import &quot;ak_core_macros.njk&quot; as ak_core with context %}
 {% import &quot;ak_base_macros.njk&quot; as ak_base with context %}
 
-&lt;title&gt;{{ title }}&lt;/title&gt;
+<span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>{{ title }}<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
 {{ ak_core.stylesheets() }}
 {{ ak_core.headerJavaScript() }}
-&lt;/head&gt;
-&lt;body&gt;
-&lt;div class=&quot;container-fluid&quot; role=&quot;main&quot;&gt;
-&lt;div class=&quot;row&quot;&gt;
-  &lt;!-- include our document&apos;s content --&gt;
-  &lt;article class=&quot;col-md-9&quot;&gt;
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;container-fluid&quot;</span> <span class="hljs-attr">role</span>=<span class="hljs-string">&quot;main&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;row&quot;</span>&gt;</span>
+  <span class="hljs-comment">&lt;!-- include our document&apos;s content --&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">article</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;col-md-9&quot;</span>&gt;</span>
       {{ content }}
-  &lt;/article&gt;
-&lt;/div&gt;
+  <span class="hljs-tag">&lt;/<span class="hljs-name">article</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 {{ ak_core.footerJavaScript() }}
-&lt;/body&gt;
-&lt;/html&gt;
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
 </code></pre>
 <p>This template is derived from ones used for regular websites.  It is in Nunjucks format.</p>
 <p>It imports Nunjucks macros from the AkashaCMS <em>built-in</em> and <em>base</em> plugins.  The PDF Document Maker tool is built using AkashaCMS components, which cover a broad range of website or EBook building needs.</p>
 <p>In this case we see that lists of CSS stylesheets and JavaScript files can be included in the top of the document (<code>&lt;head&gt;</code>) or the bottom of the document.  That&apos;s handled by calling a couple functions in the <em>built-in</em> plugin.</p>
 <p>Bootstrap classes are used to aid page layout, but can be used for other purposes.</p>
 <p>As said earlier, the content from the previous rendering stage is available as the variable <em>content</em>. The page title is also available as a variable.</p>
-<section>
-<h2>Partial templates</h2>
+<section id="partial-templates" tabindex="-1">
+<h2 tabindex="-1">4.1. Partial templates</h2>
 <p>Partials are typically a small template meant to help format commonly used HTML structures.</p>
 <p>For example, each document might have a metadata field (we&apos;ll discuss this later) named <code>publicationDate</code> which you might want to present somewhere.  In the AkashaCMS Base plugin, the partial <code>ak_publdate.html.njk</code> is available for this purpose (in NJK format):</p>
-<pre><code class="language-html">{% if publicationDate %}
+<pre><code class="hljs language-html">{% if publicationDate %}
     Date: {{ publicationDate | escape }}
 {% endif %}
 </code></pre>
 <p>This can be invoked by the custom tag</p>
-<pre><code class="language-html">&lt;partial file-name=&quot;ak_publdate.html.njk&quot; data-publication-date=&quot;Date String&quot;/&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">partial</span> <span class="hljs-attr">file-name</span>=<span class="hljs-string">&quot;ak_publdate.html.njk&quot;</span> <span class="hljs-attr">data-publication-date</span>=<span class="hljs-string">&quot;Date String&quot;</span>/&gt;</span>
 </code></pre>
 <p>There are other methods such as the <code>&lt;publication-date&gt;</code> tag, or the <code>akpublicationdate</code> extension installed in Nunjucks, both of which invoke this same partial template.</p>
 </section>
 </section>
-<section>
-<h1>Document format, and document metadata</h1>
+<section id="document-format%2C-and-document-metadata" tabindex="-1">
+<h1 tabindex="-1">5. Document format, and document metadata</h1>
 <p>We&apos;ve already discussed three items that are contained in document metadata.</p>
 <p>Like many systems, the document format supports YAML frontmatter which turns into the document metadata.</p>
 <p>It looks roughly like this:</p>
-<pre><code class="language-yaml">---
-title: Gettysburg Address
-layout: page.html.ejs
-publicationDate: January 7, 2025
-otherTag: otherValue
-tag42: &quot;The Meaning of Life&quot;
----
-This is the content area.
+<pre><code class="hljs language-yaml"><span class="hljs-meta">---</span>
+<span class="hljs-attr">title:</span> <span class="hljs-string">Gettysburg</span> <span class="hljs-string">Address</span>
+<span class="hljs-attr">layout:</span> <span class="hljs-string">page.html.ejs</span>
+<span class="hljs-attr">publicationDate:</span> <span class="hljs-string">January</span> <span class="hljs-number">7</span><span class="hljs-string">,</span> <span class="hljs-number">2025</span>
+<span class="hljs-attr">otherTag:</span> <span class="hljs-string">otherValue</span>
+<span class="hljs-attr">tag42:</span> <span class="hljs-string">&quot;The Meaning of Life&quot;</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-string">This</span> <span class="hljs-string">is</span> <span class="hljs-string">the</span> <span class="hljs-string">content</span> <span class="hljs-string">area.</span>
 </code></pre>
 <p>The area reading <em>this is the content area</em> is the content body for the document.  The part between the lines of three dashes (<code>---</code>) is the frontmatter, and must be in YAML format.</p>
 <p>When a document is read, it is first parsed into <em>body</em> (or sometimes <em>docContent</em>) and <em>metadata</em> (or sometimes <em>docMetadata</em>).</p>
 <p>The metadata object is available, as discussed earlier, to templates as &quot;<em>variables</em>&quot;.  The NJK template snippet, <code>{{ publicationDate | escape }}</code>, means to access the metadata variable <code>publicationDate</code> and then apply the <code>escape</code> filter.</p>
-<section>
-<h2>Default metadata values in PDF Document Maker</h2>
+<section id="default-metadata-values-in-pdf-document-maker" tabindex="-1">
+<h2 tabindex="-1">5.1. Default metadata values in PDF Document Maker</h2>
 <p>As a convenience, PDF Document Maker supports command-line options for two metadata values:</p>
 <ul>
 <li><code>--title</code> supplies the value for <code>title</code>, and overrides any existing value</li>
@@ -458,8 +372,8 @@ This is the content area.
 <li><code>--publication-date</code> supplies the value for <code>publicationDate</code>, and overrides any existing value</li>
 </ul>
 </section>
-<section>
-<h2>The meaning for certain metadata values</h2>
+<section id="the-meaning-for-certain-metadata-values" tabindex="-1">
+<h2 tabindex="-1">5.2. The meaning for certain metadata values</h2>
 <p>Generally the content metadata is simply data with no other defined purpose.  It is up to the templates used for processing your documents define the purpose of each metadata value.</p>
 <p>Some fields do have defined purposes:</p>
 <ul>
@@ -469,24 +383,24 @@ This is the content area.
 </ul>
 </section>
 </section>
-<section>
-<h1>CSS styles for print</h1>
+<section id="css-styles-for-print" tabindex="-1">
+<h1 tabindex="-1">6. CSS styles for print</h1>
 <p>Most of us use CSS for theming web pages shown in a web browser.  We&apos;ll create a CSS stylesheet, include it in our web page, and not at all care about the <code>@media</code> tag in CSS.</p>
 <p>Using <code>@media</code> we can target some of our CSS declarations for <code>screen</code> display:</p>
-<pre><code class="language-css">@media screen and (min-width: 900px) {
-    /* ... */
+<pre><code class="hljs language-css"><span class="hljs-keyword">@media</span> screen <span class="hljs-keyword">and</span> (<span class="hljs-attribute">min-width</span>: <span class="hljs-number">900px</span>) {
+    <span class="hljs-comment">/* ... */</span>
 }
 </code></pre>
 <p>This targets regular display screens at least 900px wide.</p>
 <p>We might not be aware of the need for specific CSS rules to handle printing.  Printed output has different requirements than screen display.  To produce a good quality PDF/print document we must take this into account.  Doing so starts with this:</p>
-<pre><code class="language-css">@media print {
-    /* All your print styles go here */
+<pre><code class="hljs language-css"><span class="hljs-keyword">@media</span> print {
+    <span class="hljs-comment">/* All your print styles go here */</span>
 }
 </code></pre>
 <p>What you do is up to you.</p>
 <p>To specify stylesheets:</p>
-<pre><code>--style &lt;cssFile...&gt;        File names of CSS style sheets
---lesscss &lt;lesscssFile...&gt;  File names of LESS files to render to CSS
+<pre><code class="hljs"><span class="hljs-attr">--style</span> &lt;cssFile...&gt;        File names of CSS style sheets
+<span class="hljs-attr">--lesscss</span> &lt;lesscssFile...&gt;  File names of LESS files <span class="hljs-selector-tag">to</span> render <span class="hljs-selector-tag">to</span> CSS
 </code></pre>
 <p>The <code>--style</code> parameter is used for regular CSS files.  These can be stored either in an <code>asset</code> directory or a <code>document</code> directory.  When the document is rendered, the CSS files will be copied unmodified into the HTML output directory.</p>
 <p>The <code>--lesscss</code> parameter is used for LESS files, which is a format for improved CSS syntax.  These files must be stored in a <code>document</code> directory, have an extension of either <code>.less</code> or <code>.css.less</code>, and are rendered from LESS the format to CSS.</p>
@@ -509,28 +423,28 @@ This is the content area.
 <li><a href="https://www.getpapercss.com/"><code>https://www.getpapercss.com/</code></a></li>
 </ul>
 <p>For example to use Gutenberg, start by adding it to your project dependencies:</p>
-<pre><code class="language-shell">&#x24; npm install gutenberg-css --save
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm install gutenberg-css --save</span>
 </code></pre>
 <p>Then create an asset directory:</p>
-<pre><code class="language-shell">&#x24; mkdir -p assets/vendor/gutenberg
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">mkdir</span> -p assets/vendor/gutenberg</span>
 </code></pre>
 <p>It is good practice to use a directory path <code>/vendor/VENDOR-NAME</code> to store files sourced from a particular project.</p>
 <p>Then copy the Gutenberg CSS into that directory:</p>
-<pre><code class="language-shell">&#x24; cp -r node_modules/gutenberg-css/dist/ assets/vendor/gutenberg/
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">cp</span> -r node_modules/gutenberg-css/dist/ assets/vendor/gutenberg/</span>
 </code></pre>
 <p>And finally, when running PDF Document Maker we add <code>--style vendor/gutenberg/dist/gutenberg.css</code></p>
-<pre><code class="language-shell">&#x24; npx pdf-document-maker  \
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npx pdf-document-maker  \
         --document-dir documents \
         --pdf-output PDF \
         --html-output out \
-        --title &apos;Markdown test document&apos; \
+        --title <span class="hljs-string">&apos;Markdown test document&apos;</span> \
         --style vendor/gutenberg/dist/gutenberg.css \
         --format A4 \
-        TEST.md
+        TEST.md</span>
 </code></pre>
 </section>
-<section>
-<h1>Project configuration with the PDF Document Maker CLI</h1>
+<section id="project-configuration-with-the-pdf-document-maker-cli" tabindex="-1">
+<h1 tabindex="-1">7. Project configuration with the PDF Document Maker CLI</h1>
 <p>We discussed earlier that a PDF Document Maker project directory contains the Node.js <code>package.json</code> file where one dependency is <code>pdf-document-maker</code>.  The directory must also contain the sort of files mentioned earlier.</p>
 <p>Most of the project configuration is handled with command-line options.  The <code>--help</code> option will show you the full list of options.</p>
 <p>The configuration options cover two broad areas:</p>
@@ -538,8 +452,8 @@ This is the content area.
 <li>Generating HTML from the input files - These options control generation of the AkashaCMS configuration object</li>
 <li>Generating PDF from the HTML - These options control the Puppeteer configuration</li>
 </ul>
-<section>
-<h2>Output directories</h2>
+<section id="output-directories" tabindex="-1">
+<h2 tabindex="-1">7.1. Output directories</h2>
 <p>Two output directories are created:</p>
 <table>
 <thead>
@@ -563,8 +477,8 @@ This is the content area.
 </tbody>
 </table>
 </section>
-<section>
-<h2>Header and Footer text in the PDF</h2>
+<section id="header-and-footer-text-in-the-pdf" tabindex="-1">
+<h2 tabindex="-1">7.2. Header and Footer text in the PDF</h2>
 <p>A key feature offered by word processing systems like Libre Office is placing text in the margin at the top and bottom of the page.  This header and footer text usually carries a date, page number, copyright statement, and document title.</p>
 <p>PDF Document Maker supports four options to control headers and footers:</p>
 <ul>
@@ -582,41 +496,41 @@ This is the content area.
 <li><code>totalPages</code> total pages in the document</li>
 </ul>
 <p>For example, to putput the text <em>Page 2 of 42</em>, use this template:</p>
-<pre><code class="language-html">Page &lt;span class=&quot;pageNumber&quot;&gt;&lt;/span&gt; of &lt;span class=&quot;totalPages&quot;&gt;&lt;/span&gt;
+<pre><code class="hljs language-html">Page <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;pageNumber&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span> of <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;totalPages&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
 </code></pre>
 <p>For the <code>&lt;span&gt;</code> with <code>class=&quot;pageNumber&quot;</code>, the current page number is injected into the content of that HTML element.</p>
 <p>An additional thing to know is that the context where the header and footer is rendered has zero CSS settings.  It does not inherit the CSS of the main part of the page, and you must initialize any CSS settings required to ensure your header and footer shows up.</p>
 <p>An example complete footer template is:</p>
-<pre><code class="language-html">&lt;div class=&quot;text-left&quot;
-  style=&quot;margin: 0 auto 0 20mm; text-align: left; font-size: 12px;&quot;&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-left&quot;</span>
+  <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin: 0 auto 0 20mm; text-align: left; font-size: 12px;&quot;</span>&gt;</span>
     PDF Document Maker Organization
-&lt;/div&gt;
-&lt;div class=&quot;text-right&quot;
-  style=&quot;margin: 0 20mm 0 auto; text-align: right; font-size: 12px;&quot;&gt;
-    Page &lt;span class=&quot;pageNumber&quot;&gt;&lt;/span&gt;
-      of &lt;span class=&quot;totalPages&quot;&gt;&lt;/span&gt;
-  &lt;/div&gt;
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-right&quot;</span>
+  <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;margin: 0 20mm 0 auto; text-align: right; font-size: 12px;&quot;</span>&gt;</span>
+    Page <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;pageNumber&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+      of <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;totalPages&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre>
 <p>The <code>text-left</code> span has style which glues it to the left hand side of the row, sets the row to 20mm high, and sets the font-size to 12px.  The <code>text-right</code> span is the same, but glues itself to the right-hand side of the row.</p>
 <p>Example parameters are:</p>
-<pre><code>--template-header header-template.html \
---height-header 20mm \
---template-footer footer-template.html \
---height-footer 20mm 
+<pre><code class="hljs">--<span class="hljs-keyword">template</span>-header header-<span class="hljs-keyword">template</span>.html \
+--height-header <span class="hljs-number">20</span>mm \
+--<span class="hljs-keyword">template</span>-footer footer-<span class="hljs-keyword">template</span>.html \
+--height-footer <span class="hljs-number">20</span>mm 
 </code></pre>
 </section>
-<section>
-<h2>Controlling page layout</h2>
+<section id="controlling-page-layout" tabindex="-1">
+<h2 tabindex="-1">7.3. Controlling page layout</h2>
 <p>As we discussed earlier, the <code>--layout</code> option lets us specify a page layout template.</p>
 <p>Layout templates are stored in the <em>Layouts Dirs</em>, which we specify using the <code>--layout-dir</code> option.</p>
 </section>
-<section>
-<h2>Page styling using CSS stylesheets</h2>
+<section id="page-styling-using-css-stylesheets" tabindex="-1">
+<h2 tabindex="-1">7.4. Page styling using CSS stylesheets</h2>
 <p>We can further customize the document presentation using CSS stylesheets.  The design allows us to use any number of stylesheets, and to use the LESS format for creating stylesheets.</p>
 <p>For each kind of stylesheet we can repeat the option more than once:</p>
-<pre><code class="language-shell">&#x24; npx pdf-document-maker ... \
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npx pdf-document-maker ... \
     --style assets/style1.css --style assets/style2.css \
-    --lesscss assets/style3.less --style assets/style4.less
+    --lesscss assets/style3.less --style assets/style4.less</span>
     ...
 </code></pre>
 <p>The filenames are VPaths.  In this example, each of the CSS files are located in the <code>assets</code> virtual directory.</p>
@@ -625,149 +539,148 @@ This is the content area.
 <p>Additionally, by default the <em>PrintCSS</em> stylesheet will be used.  This is from an open source project, and is CSS for produces good looking print documents.  This style-sheet can be disabled using the <code>--no-printcss</code> option.</p>
 <p>Additionally, by default the Bootstrap v4 framework is used.  For the PDF documents most of Bootstrap is not useful.  It has powerful page layout capabilities, and certain components may be useful for creating visual effects.  This framework may be disabled with the <code>--no-bootstrap</code> option.</p>
 <p>All style-sheets, whether the default <code>print.css</code> file or those specified on the command line, are added to a list.  The page layout template is expected to use either of these methods:</p>
-<pre><code class="language-html">&lt;!-- NJK macro for generating link tags to CSS files --&gt;
+<pre><code class="hljs language-html"><span class="hljs-comment">&lt;!-- NJK macro for generating link tags to CSS files --&gt;</span>
 {{ ak_core.stylesheets() }}
-&lt;!-- a custom HTML tag for the same purpose --&gt;
-&lt;ak-stylesheets&gt;&lt;/ak-stylesheets&gt;
+<span class="hljs-comment">&lt;!-- a custom HTML tag for the same purpose --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">ak-stylesheets</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ak-stylesheets</span>&gt;</span>
 </code></pre>
 <p>Both of these convert the list of style-sheet references into <code>&lt;link&gt;</code> tags referencing the style-sheets.</p>
 </section>
-<section>
-<h2>Markdown extensions supported by PDF Document Maker</h2>
+<section id="markdown-extensions-supported-by-pdf-document-maker" tabindex="-1">
+<h2 tabindex="-1">7.5. Markdown extensions supported by PDF Document Maker</h2>
 <p>The Markdown ecosystem includes a wide variety of extensions, adding additional features to the language.  PDF Document Maker uses the Node.js Markdown IT engine, and can in theory use any of the available plugins.  Several are already bundled into the application, with these effects.</p>
-<section>
-<h4>Auto-generating &quot;anchor&quot; text for header tags</h4>
+<section id="auto-generating-%22anchor%22-text-for-header-tags" tabindex="-1">
+<h4 tabindex="-1">Auto-generating &quot;anchor&quot; text for header tags</h4>
 <p>This extension causes an <code>id=&quot;anchor&quot;</code> attribute to be added to the HTML header tag like so:</p>
-<pre><code class="language-html">## A Markdown H2 tag
-&lt;!-- becomes --&gt;
-&lt;h2 id=&quot;generated anchor&quot;&gt;A Markdown H2 tag&lt;/h2&gt;
+<pre><code class="hljs language-html">## A Markdown H2 tag
+<span class="hljs-comment">&lt;!-- becomes --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">h2</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;generated anchor&quot;</span>&gt;</span>A Markdown H2 tag<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
 </code></pre>
 <p>This allows an <code>&lt;a href=&quot;#anchor&quot;&gt;Link text&lt;/a&gt;</code> tag to link directly to the header tag.  This would be useful in Tables of Content, where the links would go directly to the section.</p>
 <p>This feature can be disabled with <code>--no-md-anchor</code></p>
 </section>
-<section>
-<h4>Generating footnote blocks</h4>
-<p>Allows authors to write footnotes.[^1]  A footnote is referenced with a marker, such as <code>[^1]</code>.  The footnote is defined by writing a paragraph like this:</p>
-<pre><code>[^1]: This is the body of the footnote.
+<section id="generating-footnote-blocks" tabindex="-1">
+<h4 tabindex="-1">Generating footnote blocks</h4>
+<p>Allows authors to write footnotes.<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>  A footnote is referenced with a marker, such as <code>[^1]</code>.  The footnote is defined by writing a paragraph like this:</p>
+<pre><code class="hljs">[<span class="hljs-symbol">^1</span>]: <span class="hljs-link">This is the body of the footnote.</span>
 </code></pre>
 <p>The extension sets up internal links between the two points.</p>
-<p>[^1]: This is the body of the footnote.</p>
 <p>This feature can be disabled with <code>--no-md-footnote</code></p>
 </section>
-<section>
-<h4>Adding either id= or class= attributes to HTML</h4>
+<section id="adding-either-id%3D-or-class%3D-attributes-to-html" tabindex="-1">
+<h4 tabindex="-1">Adding either id= or class= attributes to HTML</h4>
 <p>To implement styling using CSS requires the ability to set ID or Class values.  Example:</p>
-<pre><code># header {.style-me}
-paragraph {data-toggle=modal}
+<pre><code class="hljs"><span class="hljs-meta"># header {.style-me}</span>
+<span class="hljs-title">paragraph</span> {<span class="hljs-class"><span class="hljs-keyword">data</span>-toggle=modal}</span>
 </code></pre>
 <p>The stuff between <code>{</code> and <code>}</code> are where we list the attributes to add to the rendered HTML tags after.  The above will be converted to:</p>
-<pre><code class="language-html">&lt;h1 class=&quot;style-me&quot;&gt;header&lt;/h1&gt;
-&lt;p data-toggle=&quot;modal&quot;&gt;paragraph&lt;/p&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;style-me&quot;</span>&gt;</span>header<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">data-toggle</span>=<span class="hljs-string">&quot;modal&quot;</span>&gt;</span>paragraph<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
 </code></pre>
 <p>The extension allows setting other attributes beyond ID and Class.  But, most other attributes are potential security vulnerabilities.  The extension has been configured to only allow <code>id=</code> and <code>class=</code> attributes.</p>
 <p>Use of these attributes should then correspond to entries in CSS stylesheets.</p>
 <p>Be aware that the <code>-anchors</code> extension and <code>-attrs</code> extension both deal with the <code>id=</code> value on headers.  With <code>-anchors</code> the author is not in control of the choice for the <code>id=</code> value, whereas with the <code>-attrs</code> extension the author chooses the <code>id=</code> value.</p>
 <p>This feature can be disabled with <code>--no-md-attrs</code></p>
 </section>
-<section>
-<h4>Simplify adding a <code>&lt;div&gt;</code> block</h4>
+<section id="simplify-adding-a-%3Cdiv%3E-block" tabindex="-1">
+<h4 tabindex="-1">Simplify adding a <code>&lt;div&gt;</code> block</h4>
 <p>Another way to customize the resulting HTML is to add <code>&lt;div&gt;</code> tags with certain attributes.  For example a box with a yellow background and solid brown border could serve to draw attention to some content.  The color effects are easy to define in CSS, and the ability to add a <code>&lt;div&gt;</code> gives the opportunity to wrap a contain some content within a box.</p>
 <p>Example:</p>
-<pre><code>::: #warning
-*here be dragons*
-:::
+<pre><code class="hljs"><span class="hljs-meta">:::</span> #warning
+<span class="hljs-strong">*here be dragons*</span>
+<span class="hljs-meta">:::</span>
 </code></pre>
 <p>That generates the following:</p>
-<pre><code class="language-html">&lt;div id=&quot;warning&quot;&gt;
-&lt;em&gt;here be dragons&lt;/em&gt;
-&lt;/div&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;warning&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">em</span>&gt;</span>here be dragons<span class="hljs-tag">&lt;/<span class="hljs-name">em</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre>
 <p>While this is easy to use, one has to consider that Markdown engines like Markdown-IT allow the author to use HTML tags.  It&apos;s therefore easy to add <code>&lt;div&gt;</code> tags without requiring a Markdown extension.</p>
 <p>This feature can be disabled with <code>--no-md-div</code></p>
 </section>
-<section>
-<h4>Adding <code>&lt;section&gt;</code> tags corresponding to header tags</h4>
+<section id="adding-%3Csection%3E-tags-corresponding-to-header-tags" tabindex="-1">
+<h4 tabindex="-1">Adding <code>&lt;section&gt;</code> tags corresponding to header tags</h4>
 <p>One may think of a Header tag followed by some content as a &quot;section&quot; of a document.  This extension implements that idea with HTML tags.</p>
 <p>Consider:</p>
-<pre><code># Header 1
+<pre><code class="hljs"># Header <span class="hljs-number">1</span>
 Text.
-### Header 2
+### Header <span class="hljs-number">2</span>
 Lorem?
-## Header 3
+## Header <span class="hljs-number">3</span>
 Ipsum.
 # Last header
 Markdown rules!
 </code></pre>
 <p>That&apos;s four sections, some of which should be nested within outer sections.</p>
 <p>It generates the following:</p>
-<pre><code class="language-html">&lt;section&gt;
-  &lt;h1&gt;Header 1&lt;/h1&gt;
-  &lt;p&gt;Text.&lt;/p&gt;
-  &lt;section&gt;
-    &lt;h3&gt;Header 2&lt;/h3&gt;
-    &lt;p&gt;Lorem?&lt;/p&gt;
-  &lt;/section&gt;
-  &lt;section&gt;
-    &lt;h2&gt;Header 3&lt;/h2&gt;
-    &lt;p&gt;Ipsum.&lt;/p&gt;
-  &lt;/section&gt;
-&lt;/section&gt;
-&lt;section&gt;
-  &lt;h1&gt;Last header&lt;/h1&gt;
-  &lt;p&gt;Markdown rules!&lt;/p&gt;
-&lt;/section&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Header 1<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Text.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h3</span>&gt;</span>Header 2<span class="hljs-tag">&lt;/<span class="hljs-name">h3</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Lorem?<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span>Header 3<span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Ipsum.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">section</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Last header<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>Markdown rules!<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">section</span>&gt;</span>
 </code></pre>
 <p>If the <code>-attrs</code> extension is enabled, we might have added <code>id=</code> or <code>class=</code> attributes to our headers.  If so, these attributes are moved to the <code>&lt;section&gt;</code> surrounding the header.</p>
 <p>This feature can be disabled with <code>--no-md-header-section</code></p>
 </section>
-<section>
-<h4>Adding syntax highlighting to code sections</h4>
+<section id="adding-syntax-highlighting-to-code-sections" tabindex="-1">
+<h4 tabindex="-1">Adding syntax highlighting to code sections</h4>
 <p>The HighlightJS package handles syntax coloring for content within code blocks.  There are many examples of this all through this document.</p>
 <p>At the HTML level the HighlightJS package looks for this:</p>
-<pre><code class="language-html">&lt;pre&gt;&lt;code class=&quot;html&quot;&gt;...&lt;/code&gt;&lt;/pre&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">pre</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">code</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;html&quot;</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">pre</span>&gt;</span>
 </code></pre>
 <p>The class name is a language code.  The supported languages are listed in their GitHub repository: <a href="https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md"><code>https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md</code></a></p>
 <p>In Markdown a code block is text within two lines of three backticks.  The language code is placed immediately after the opening backticks.</p>
 <p>This feature can be disabled with <code>--no-md-highlightjs</code></p>
 </section>
-<section>
-<h4>Convert image references into <code>&lt;figure&gt;</code> tags</h4>
+<section id="convert-image-references-into-%3Cfigure%3E-tags" tabindex="-1">
+<h4 tabindex="-1">Convert image references into <code>&lt;figure&gt;</code> tags</h4>
 <p>This allows rendering an image reference in Markdown as a <code>&lt;figure&gt;</code> tag containing an <code>&lt;img&gt;</code> tag and optionally a <code>&lt;figcaption&gt;</code> tag.  This construct is important in modern HTML.</p>
 <p>The <code>&lt;figure&gt;</code> element represents self-contained content.  The figure, its caption, and its contents are treated by web browsers as a single unit.</p>
 <p>For example:</p>
-<pre><code>![This is an alt](fig.png &quot;This is a title&quot;)
+<pre><code class="hljs">!<span class="hljs-selector-attr">[This is an alt]</span>(fig<span class="hljs-selector-class">.png</span> <span class="hljs-string">&quot;This is a title&quot;</span>)
 </code></pre>
 <p>Renders as:</p>
-<pre><code class="language-html">&lt;figure&gt;
-    &lt;img src=&quot;fig.png&quot; alt=&quot;This is an alt&quot;&gt;
-    &lt;figcaption&gt;This is a title&lt;/figcaption&gt;
-&lt;/figure&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">figure</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;fig.png&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;This is an alt&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">figcaption</span>&gt;</span>This is a title<span class="hljs-tag">&lt;/<span class="hljs-name">figcaption</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">figure</span>&gt;</span>
 </code></pre>
 <p>One can also put a Markdown link tag around it:</p>
-<pre><code>[![This is an alt](fig.png &quot;This is a title&quot;)](http://some.where)
+<pre><code class="hljs">[<span class="hljs-name">!</span>[<span class="hljs-name">This</span> is an alt](<span class="hljs-name">fig.png</span> <span class="hljs-string">&quot;This is a title&quot;</span>)](<span class="hljs-name">http://some.where</span>)
 </code></pre>
 <p>Notice that this is structured as so: <code>[...image tag..](URL)</code></p>
 <p>It is rewritten to:</p>
-<pre><code class="language-html">&lt;figure&gt;
-    &lt;a href=&quot;http://some.where&quot;&gt;
-      &lt;img src=&quot;fig.png&quot; alt=&quot;This is an alt&quot;&gt;
-    &lt;/a&gt;
-    &lt;figcaption&gt;This is a title&lt;/figcaption&gt;
-&lt;/figure&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">figure</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;http://some.where&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;fig.png&quot;</span> <span class="hljs-attr">alt</span>=<span class="hljs-string">&quot;This is an alt&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">figcaption</span>&gt;</span>This is a title<span class="hljs-tag">&lt;/<span class="hljs-name">figcaption</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">figure</span>&gt;</span>
 </code></pre>
 <p>This feature can be disabled with <code>--no-md-image-figure</code></p>
 </section>
-<section>
-<h4>Special image processing</h4>
+<section id="special-image-processing" tabindex="-1">
+<h4 tabindex="-1">Special image processing</h4>
 <p>More advanced image processing is available in the extended <code>&lt;img&gt;</code> tag implemented by AkashaCMS components.  This is the normal <code>&lt;img&gt;</code> tag with a few extra attributes and properties.  These allow us to specify a <code>&lt;figure&gt;/&lt;figcaption&gt;</code> structure or to resize images.</p>
 <p>Adding the <code>figure</code> property triggers a rewrite of the following</p>
-<pre><code class="language-html">&lt;img id=&quot;..ID&quot; figure src=&quot;..HREF&quot; caption=&quot;..CAPTION&quot;/&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;..ID&quot;</span> <span class="hljs-attr">figure</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;..HREF&quot;</span> <span class="hljs-attr">caption</span>=<span class="hljs-string">&quot;..CAPTION&quot;</span>/&gt;</span>
 </code></pre>
 <p>Into this structure:</p>
-<pre><code class="language-html">&lt;figure&gt;
-    &lt;img id=&quot;..ID&quot; src=&quot;..HREF&quot;&gt;
-    &lt;figcaption&gt;..CAPTION&lt;/figcaption&gt;
-&lt;/figure&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">figure</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;..ID&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;..HREF&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">figcaption</span>&gt;</span>..CAPTION<span class="hljs-tag">&lt;/<span class="hljs-name">figcaption</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">figure</span>&gt;</span>
 </code></pre>
 <p>The recognized attributes are:</p>
 <ul>
@@ -779,17 +692,17 @@ Markdown rules!
 <li><code>caption</code> becomes a <code>&lt;figcaption&gt;</code> tag within the <code>&lt;figure&gt;</code></li>
 </ul>
 <p>Hence,</p>
-<pre><code class="language-html">&lt;img figure id=&quot;fig1&quot; caption=&quot;Figure 1.&quot;
-   class=&quot;some-class&quot; width=&quot;400&quot; style=&quot;CSS declarations&quot;
-   dest=&quot;http://example.com&quot;
-   src=&quot;./img/fig1.png&quot;/&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">figure</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;fig1&quot;</span> <span class="hljs-attr">caption</span>=<span class="hljs-string">&quot;Figure 1.&quot;</span>
+   <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;some-class&quot;</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;400&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;CSS declarations&quot;</span>
+   <span class="hljs-attr">dest</span>=<span class="hljs-string">&quot;http://example.com&quot;</span>
+   <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./img/fig1.png&quot;</span>/&gt;</span>
 </code></pre>
 <p>Would become:</p>
-<pre><code class="language-html">&lt;figure id=&quot;fig1&quot; class=&quot;some-class&quot; style=&quot;CSS&quot;&gt;
-  &lt;a href=&quot;http://example.org&quot;&gt;
-    &lt;img src=&quot;./img/fig1.png&quot;/&gt;
-  &lt;/a&gt;
-&lt;/figure&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">figure</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;fig1&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;some-class&quot;</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;CSS&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;http://example.org&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./img/fig1.png&quot;</span>/&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">figure</span>&gt;</span>
 </code></pre>
 <p>This extended <code>&lt;img&gt;</code> tag does more than the <code>-image-figures</code> extension from the previous section.</p>
 <p>An image can also be resized when copied to the HTML directory.  It allows you to store a full-size image in the documents directory, but use a smaller image when deploying to a website, or in a PDF.</p>
@@ -800,31 +713,31 @@ Markdown rules!
 <li><code>resize-width</code> The resulting image width as discussed above.</li>
 </ul>
 <p>This tag</p>
-<pre><code class="language-html">&lt;img id=&quot;resizeto150&quot; 
-        src=&quot;img/Human-Skeleton.jpg&quot;
-        resize-width=&quot;150&quot;
-        resize-to=&quot;img/Human-Skeleton-150.jpg&quot;&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;resizeto150&quot;</span> 
+        <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;img/Human-Skeleton.jpg&quot;</span>
+        <span class="hljs-attr">resize-width</span>=<span class="hljs-string">&quot;150&quot;</span>
+        <span class="hljs-attr">resize-to</span>=<span class="hljs-string">&quot;img/Human-Skeleton-150.jpg&quot;</span>&gt;</span>
 </code></pre>
 <p>Becomes the following:</p>
-<pre><code class="language-html">&lt;img id=&quot;resizeto150&quot; src=&quot;img/Human-Skeleton-150.jpg&quot;&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;resizeto150&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;img/Human-Skeleton-150.jpg&quot;</span>&gt;</span>
 </code></pre>
 <p>Additionally, the source file <code>img/Human-Skeleton.jpg</code> is copied to the HTML directory as the destination file <code>img/Human-Skeleton-150.jpg</code>, and is resized to 150 pixels in width.</p>
 </section>
-<section>
-<h4>Multimarkdown table format</h4>
+<section id="multimarkdown-table-format" tabindex="-1">
+<h4 tabindex="-1">Multimarkdown table format</h4>
 <p>Multimarkdown is one of the extended Markdown specifications.  This extension supports its table format.</p>
 <p>This feature can be disabled with <code>--no-md-multimd-table</code></p>
 </section>
-<section>
-<h4>Add <code>&lt;caption&gt;</code> tag to a table</h4>
+<section id="add-%3Ccaption%3E-tag-to-a-table" tabindex="-1">
+<h4 tabindex="-1">Add <code>&lt;caption&gt;</code> tag to a table</h4>
 <p>We might want to place &quot;<em>Table 1. Global Policy Challenges</em>&quot; either before or after a table, and have it treated as being associated with the table.</p>
-<pre><code>Table: A Caption
+<pre><code class="hljs">Table: A Caption
 
-| A | B |
-|---|---|
-| 1 | 2 |
-| 3 | 4 |
-| 5 | 6 |
+|<span class="hljs-string"> A </span>|<span class="hljs-string"> B </span>|
+|<span class="hljs-string">---</span>|<span class="hljs-string">---</span>|
+|<span class="hljs-string"> 1 </span>|<span class="hljs-string"> 2 </span>|
+|<span class="hljs-string"> 3 </span>|<span class="hljs-string"> 4 </span>|
+|<span class="hljs-string"> 5 </span>|<span class="hljs-string"> 6 </span>|
 </code></pre>
 <p>Renders as:</p>
 <table>
@@ -852,29 +765,29 @@ Markdown rules!
 </table>
 <p>The effect is to add a <code>&lt;caption&gt;</code> tag within the <code>&lt;table&gt;</code>.</p>
 <p>To control the style of the caption, we can add a CSS declaration targeting table captions as so:</p>
-<pre><code class="language-css">table caption {
-    caption-side: top;
-    font-weight: bold;
-    font-style: italic;
-    font-size: larger;
+<pre><code class="hljs language-css"><span class="hljs-selector-tag">table</span> <span class="hljs-selector-tag">caption</span> {
+    <span class="hljs-attribute">caption-side</span>: top;
+    <span class="hljs-attribute">font-weight</span>: bold;
+    <span class="hljs-attribute">font-style</span>: italic;
+    <span class="hljs-attribute">font-size</span>: larger;
 }
 </code></pre>
 <p>To demonstrate, we&apos;ll create two tables.  The first will have the class <code>.table-caption-above</code>, and the second the class <code>{.table-caption-below}</code>.  The corresponding CSS is:</p>
-<pre><code class="language-css">table.table-caption-above caption {
-    caption-side: top;
+<pre><code class="hljs language-css"><span class="hljs-selector-tag">table</span><span class="hljs-selector-class">.table-caption-above</span> <span class="hljs-selector-tag">caption</span> {
+    <span class="hljs-attribute">caption-side</span>: top;
 }
-table.table-caption-below caption {
-    caption-side: bottom;
+<span class="hljs-selector-tag">table</span><span class="hljs-selector-class">.table-caption-below</span> <span class="hljs-selector-tag">caption</span> {
+    <span class="hljs-attribute">caption-side</span>: bottom;
 }
 </code></pre>
 <p>Next, to construct our table while adding a class attribute:</p>
-<pre><code>Table: A Caption Above
+<pre><code class="hljs">Table: A Caption Above
 
-| A | B |
-|---|---|
-| 1 | 2 |
-| 3 | 4 |
-| 5 | 6 |
+|<span class="hljs-string"> A </span>|<span class="hljs-string"> B </span>|
+|<span class="hljs-string">---</span>|<span class="hljs-string">---</span>|
+|<span class="hljs-string"> 1 </span>|<span class="hljs-string"> 2 </span>|
+|<span class="hljs-string"> 3 </span>|<span class="hljs-string"> 4 </span>|
+|<span class="hljs-string"> 5 </span>|<span class="hljs-string"> 6 </span>|
 
 {.table-caption-above}
 </code></pre>
@@ -939,46 +852,46 @@ table.table-caption-below caption {
 <p>The important CSS attribute is <code>caption-side</code>, because it control where the caption is shown.</p>
 <p>This feature can be disabled with <code>--no-md-table-captions</code></p>
 </section>
-<section>
-<h4>Bootstrap card groups in Markdown</h4>
+<section id="bootstrap-card-groups-in-markdown" tabindex="-1">
+<h4 tabindex="-1">Bootstrap card groups in Markdown</h4>
 <p>How did we get those two tables to appear side-by-side?</p>
 <p>This page includes the Bootstrap framework.  What we did was to create a Card Group containing two Cards.</p>
 <p>To generate the required <code>&lt;div&gt;</code> we used the <code>::: .div-class</code> syntax described earlier.  To implement the card group required:</p>
-<pre><code>
-::: .card-group
+<pre><code class="hljs">
+<span class="hljs-meta">:::</span> .card-group
 
-::: .card
-::: .card-body
+<span class="hljs-meta">:::</span> .card
+<span class="hljs-meta">:::</span> .card-body
 
 CONTENT FOR FIRST CARD GROUP
 
-:::
-:::
+<span class="hljs-meta">:::</span>
+<span class="hljs-meta">:::</span>
 
 
-::: .card
-::: .card-body
+<span class="hljs-meta">:::</span> .card
+<span class="hljs-meta">:::</span> .card-body
 
 CONTENT FOR SECOND CARD GROUP
 
-:::
-:::
+<span class="hljs-meta">:::</span>
+<span class="hljs-meta">:::</span>
 
-:::
+<span class="hljs-meta">:::</span>
 </code></pre>
 <p>This translates to:</p>
-<pre><code class="language-html">&lt;div class=&quot;card-group&quot;&gt;
-  &lt;div class=&quot;card&quot;&gt;
-    &lt;div class=&quot;card-body&quot;&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;card-group&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;card&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;card-body&quot;</span>&gt;</span>
       CONTENT FOR FIRST CARD GROUP
-    &lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class=&quot;card&quot;&gt;
-    &lt;div class=&quot;card-body&quot;&gt;
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;card&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;card-body&quot;</span>&gt;</span>
       CONTENT FOR SECOND CARD GROUP
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre>
 <p>Or, this:</p>
 <div class="card-group">
@@ -995,42 +908,43 @@ CONTENT FOR SECOND CARD GROUP
 </div>
 <p>Hence, one browses the Bootstrap documentation, or the documentation for your preferred CSS framework, and look at the HTML+CSS structures are required to achieve the desired effect.  One then uses <code>:::</code> to create the <code>&lt;div&gt;</code> portion, and <code>{#id .class-name}</code> to implement the ID or Class attributes.</p>
 </section>
-<section>
-<h4>Diagrams using PlantUML</h4>
+<section id="diagrams-using-plantuml" tabindex="-1">
+<h4 tabindex="-1">Diagrams using PlantUML</h4>
 <p>This is a powerful format for drawing diagrams of importance to software engineers, such as UML diagrams.  The feature is discussed later.</p>
 <p>This feature can be disabled with <code>--no-md-plantuml</code></p>
 </section>
 </section>
 </section>
-<section>
-<h1>Automating PDF Document Making using <code>package.json</code></h1>
+<section id="automating-pdf-document-making-using-package.json" tabindex="-1">
+<h1 tabindex="-1">8. Automating PDF Document Making using package.json</h1>
 <p>The <code>package.json</code> file can serve as a way to record our build procedure.  In this file the <code>scripts</code> section stores commands which can be run.  It&apos;s useful to create and test prebaked scripts so you don&apos;t have to remember how to do things.</p>
 <p>It will help to first install <code>npm-run-all</code> because it cleans up the scripts section of <code>package.json</code>.</p>
-<pre><code class="language-shell">&#x24; npm install npm-run-all --save
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm install npm-run-all --save</span>
 </code></pre>
 <p>Then in <code>package.json</code> add these items to the <code>scripts</code> tag:</p>
-<pre><code class="language-json">&quot;scripts&quot;: {
-  &quot;build:guide&quot;: &quot;npm-run-all build:render&quot;,
-  &quot;build:render&quot;: &quot;npx pdf-document-maker --partial-dir partials --layout-dir layouts --document-dir documents --lesscss guide/style.css.less --pdf-output PDF --html-output out --title &apos;PDF Document Maker Guide&apos; --format A4 guide/guide.md&quot;
-},
+<pre><code class="hljs language-json"><span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;build:guide&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npm-run-all build:render&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;build:render&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx pdf-document-maker --partial-dir partials --layout-dir layouts --document-dir documents --lesscss guide/style.css.less --pdf-output PDF --html-output out --title &apos;PDF Document Maker Guide&apos; --format A4 guide/guide.md&quot;</span>
+<span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
 </code></pre>
 <p>To rebuild the document simply run:</p>
-<pre><code class="language-shell">&#x24; npm run build:guide
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm run build:guide</span>
 </code></pre>
 </section>
-<section>
-<h1>Project configuration with AkashaCMS configuration files</h1>
+<section id="project-configuration-with-akashacms-configuration-files" tabindex="-1">
+<h1 tabindex="-1">9. Project configuration with AkashaCMS configuration files</h1>
 <p>Under the covers, PDF Document Maker creates an AkashaCMS configuration file.  This file instructs AkashaCMS components on where to find input files, and customizations for generating HTML and other files.</p>
 <p>One learns about this configuration file at <a href="https://akashacms.com"><code>https://akashacms.com</code></a>  There is an example file in the repository.</p>
 <p>For most projects using the command-line to auto-generate a configuration object is sufficient.  But, some projects may want more control than we can expose with command-line options.</p>
 <p>Once you have a config file, add <code>--config configFN</code> to the options.</p>
 </section>
-<section>
-<h1>Drawing diagrams with <code>draw.io</code>, PlantUML or Mermaid</h1>
+<section id="drawing-diagrams-with-draw.io%2C-plantuml%2C-mermaid%2C-or-katex" tabindex="-1">
+<h1 tabindex="-1">10. Drawing diagrams with draw.io, PlantUML, Mermaid, or KaTeX</h1>
 <p>There are many tools for creating images of all kinds.  Images feed our need to have a visual view counterpoint to the text in our documents.</p>
 <p>There are three tools we can focus on that are of use to typical software engineers.</p>
-<section>
-<h2>Using <code>draw.io</code> diagrams in PDF Document Maker</h2>
+<p>A fourth tool, KaTeX, is useful for mathematicians, chemists, physicists, engineers, and the like, because of its excellent support for rendering high quality equations.</p>
+<section id="using-draw.io-diagrams-in-pdf-document-maker" tabindex="-1">
+<h2 tabindex="-1">10.1. Using draw.io diagrams in PDF Document Maker</h2>
 <p>The first, <code>draw.io</code>, is a diagramming tool with built-in clip art useful for software engineering, hardware deployment, and other technical diagrams.  It is very easy to use, and with it one can quickly create complex diagrams.</p>
 <p>To learn about the application, visit <a href="https://www.drawio.com/"><code>https://www.drawio.com/</code></a></p>
 <p>To use it online, visit <a href="https://draw.io"><code>https://draw.io</code></a></p>
@@ -1041,19 +955,38 @@ CONTENT FOR SECOND CARD GROUP
 <figure data-type="image" tabindex="2"><img src="./img/draw-io-export-png.png" alt="Choosing export options"></figure>
 <p>The &quot;<em>include a copy of my diagram</em>&quot; ensures that the PNG can be edited by <code>draw.io</code> in the future.  That is, the resulting PNG has information about the drawing such that <code>draw.io</code> can recreate the editing experience.</p>
 <p>The diagram is easy to include in Markdown using the normal image tag.</p>
-<pre><code>![Example diagram](./img/example-drawio-diagram.png)
+<pre><code class="hljs">!<span class="hljs-selector-attr">[Example diagram]</span>(./<span class="hljs-selector-tag">img</span>/example-drawio-diagram<span class="hljs-selector-class">.png</span>)
 </code></pre>
 <p>Which results in the following:</p>
 <figure data-type="image" tabindex="3"><img src="./img/example-drawio-diagram.png" alt="Example diagram"></figure>
 <p>If in the future you need to edit the diagram, simply load the PNG file back into <code>draw.io</code>.  When done editing the file make sure to save it using the same procedure.</p>
 </section>
-<section>
-<h2>Using PlantUML diagrams in PDF Document Maker</h2>
+<section id="using-plantuml-diagrams-in-pdf-document-maker" tabindex="-1">
+<h2 tabindex="-1">10.2. Using PlantUML diagrams in PDF Document Maker</h2>
 <p>PlantUML - <a href="https://plantuml.com/"><code>https://plantuml.com/</code></a> - is a versatile tool for creating a number of diagrams useful in software engineering and related fields.  As the name suggests it focuses mostly on UML diagrams.</p>
 <p>With PlantUML you create a textual description of the diagram to create.  The description is placed inline with the Markdown file.  When the document is rendered to HTML, the description is converted to an SVG representation of the description.</p>
 <p>The conversion can be disabled by using the <code>--no-md-plantuml</code> option.</p>
 <p>A sample diagram looks like this:</p>
-<pre><code>@startuml
+<pre><code class="hljs">@startuml
+
+start
+
+<span class="hljs-keyword">if</span> (Graphviz installed?) <span class="hljs-keyword">then</span> (<span class="hljs-literal">yes</span>)
+  :process all<span class="hljs-string">\ndiagrams;</span>
+<span class="hljs-keyword">else</span> (<span class="hljs-literal">no</span>)
+  :process only
+  __sequence__ <span class="hljs-keyword">and</span> __activity__ diagrams;
+endif
+
+stop
+
+@enduml
+</code></pre>
+<!-- THIS IS THE OLD METHOD
+
+Simply insert that text in the Markdown file.  The default delimiters are `@startuml` and `@enduml`, with everything in-between interpreted as the PlantUML diagram.
+
+@startuml
 
 start
 
@@ -1067,30 +1000,71 @@ endif
 stop
 
 @enduml
+-->
+<p>In PDF Document Maker, we use the custom tag <code>&lt;diagrams-plantuml&gt;</code> to insert a PlantUML diagram.</p>
+<p>It looks like this:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">diagrams-plantuml</span> <span class="hljs-attr">input-file</span>=<span class="hljs-string">&quot;img/activity-1.puml&quot;</span>
+    <span class="hljs-attr">output-file</span>=<span class="hljs-string">&quot;activity-1.png&quot;</span> <span class="hljs-attr">tpng</span>/&gt;</span>
 </code></pre>
-<p>Imply insert that text in the Markdown file.  The default delimiters are <code>@startuml</code> and <code>@enduml</code>, with everything in-between interpreted as the PlantUML diagram.</p>
-<p>@startuml</p>
-<p>start</p>
-<p>if (Graphviz installed?) then (yes)
-:process all\ndiagrams;
+<p>The above diagram, in this case, is saved in the file <code>activity-1.puml</code> in the <code>img</code> subdirectory.  The file is read in, and passed to PlantUML for rendering.</p>
+<p>That renders as so:</p>
+<p>
+        <figure>
+        <img src="activity-1.png">
+        
+        </figure>
+        </p>
+<p>To render it as SVG replace <code>tpng</code> with <code>tsvg</code>.</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">diagrams-plantuml</span> <span class="hljs-attr">input-file</span>=<span class="hljs-string">&quot;img/activity-1.puml&quot;</span>
+    <span class="hljs-attr">output-file</span>=<span class="hljs-string">&quot;activity-1.svg&quot;</span> <span class="hljs-attr">tsvg</span>/&gt;</span>
+</code></pre>
+<p>That renders as so:</p>
+<p>
+        <figure>
+        <img src="activity-1.svg">
+        
+        </figure>
+        </p>
+<p>Both <code>tsvg</code> and <code>tpng</code> are properties, not attributes, and they should be used in this way without an attribute value.</p>
+<p>The diagram can also be used inline like so:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">diagrams-plantuml</span>
+      <span class="hljs-attr">output-file</span>=<span class="hljs-string">&quot;activity-1-inline.png&quot;</span> <span class="hljs-attr">tpng</span>&gt;</span>
+@startuml
+
+start
+
+if (Graphviz installed?) then (yes)
+  :process all
+   diagrams;
 else (no)
-:process only
-<strong>sequence</strong> and <strong>activity</strong> diagrams;
-endif</p>
-<p>stop</p>
-<p>@enduml</p>
-<p>TODO - Cover installing a local PlantUML server</p>
+  :process only
+  __sequence__ and __activity__ diagrams;
+endif
+
+stop
+
+@enduml
+<span class="hljs-tag">&lt;/<span class="hljs-name">diagrams-plantuml</span>&gt;</span>
+</code></pre>
+<p>Which renders as so:</p>
+
+        <figure>
+        <img src="activity-1-inline.png">
+        
+        </figure>
+        <p></p>
+<p>In this case no <code>input-file</code> is given, and the input comes from the element body.</p>
 </section>
-<section>
-<h2>Using MermaidJS diagrams in PDF Document Maker</h2>
+<section id="using-mermaidjs-diagrams-in-pdf-document-maker" tabindex="-1">
+<h2 tabindex="-1">10.3. Using MermaidJS diagrams in PDF Document Maker</h2>
 <p>Mermaid - <a href="https://mermaid.js.org/"><code>https://mermaid.js.org/</code></a> - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description o the diagram, pasting it into a Markdown document.</p>
 <p>Unlike with PlantUML we were unable to integrate Mermaid such that a code block with the <code>mermaid</code> class would be automatically rendered as an inline SVG.</p>
 <p>The most convenient path is to install Mermaid-CLI - <a href="https://github.com/mermaid-js/mermaid-cli"><code>https://github.com/mermaid-js/mermaid-cli</code></a></p>
 <p>In your project directory do this:</p>
-<pre><code class="language-shell">&#x24; npm install @mermaid-js/mermaid-cli --save
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm install @mermaid-js/mermaid-cli --save</span>
 </code></pre>
 <p>This installs a program you can run as so:</p>
-<pre><code class="language-shell">&#x24; npx mmdc --help
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npx mmdc --<span class="hljs-built_in">help</span></span>
 Usage: mmdc [options]
 
 Options:
@@ -1131,7 +1105,7 @@ stateDiagram-v2
     C<span class="hljs-function"><span class="hljs-title">rash</span> --&gt;</span> [*]</code></pre>
 <p>This must be saved as a separate file in the file-system.  For example, a subdirectory <code>img</code> is a useful place to store images.  In that case, save the text in a file <code>./img/simple-sample-1.mmd</code>.</p>
 <p>Next, the file is processed to SVG like so:</p>
-<pre><code class="language-shell">npx mmdc -i documents/guide/img/simple-sample-1.mmd \
+<pre><code class="hljs language-shell">npx mmdc -i documents/guide/img/simple-sample-1.mmd \
   -o documents/guide/img/simple-sample-1.svg \
   --outputFormat svg
 </code></pre>
@@ -1149,30 +1123,90 @@ stateDiagram-v2
 <p>Let&apos;s talk a little about rendering SVG images in HTML.  SVG is a vector image format, meaning that an SVG file contains commands for drawing lines and circles and the like.  It also means SVG files do not have a defined width/height, unlike pixel image formats.  Therefore SVG files can scale to any amount with no pixelation.</p>
 <p>Initially, as a result, this image filled an entire page in the PDF file.</p>
 <p>One way to give an SVG file a size is by editing the SVG to set <code>width=</code>, <code>height=</code> and other parameters.  But the simplest way is to use HTML directly like so:</p>
-<pre><code class="language-html">&lt;figure&gt;
-  &lt;img width=&quot;300px&quot; src=&quot;./img/simple-sample-1.svg&quot;/&gt;
-  &lt;figcaption&gt;Simple Sample 1&lt;/figcaption&gt;
-&lt;/figure&gt;
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">figure</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">width</span>=<span class="hljs-string">&quot;300px&quot;</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;./img/simple-sample-1.svg&quot;</span>/&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">figcaption</span>&gt;</span>Simple Sample 1<span class="hljs-tag">&lt;/<span class="hljs-name">figcaption</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">figure</span>&gt;</span>
 </code></pre>
 <p>This <code>&lt;img&gt;</code> is displaying the SVG, and is defined with a <code>300 pixel</code> width.  The SVG then renders to that size.</p>
 <p>Next is to automate building the images before building the document.  Earlier we went over using the <code>scripts</code> tag in <code>package.json</code>.  Let&apos;s add to that workflow.</p>
 <p>First, add a command to build each Mermaid file:</p>
-<pre><code class="language-json">&quot;build:sample-1&quot;: &quot;npx mmdc -i documents/guide/simple-sample-1.mmd -o documents/guide/simple-sample-1.svg --outputFormat svg&quot;,
+<pre><code class="hljs language-json"><span class="hljs-attr">&quot;build:sample-1&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx mmdc -i documents/guide/simple-sample-1.mmd -o documents/guide/simple-sample-1.svg --outputFormat svg&quot;</span><span class="hljs-punctuation">,</span>
 </code></pre>
 <p>We take the same command, and add it to the script.  The tag name format is <code>build:file-name</code>.</p>
 <p>Next is to reference this from the <code>build:guide</code> script</p>
-<pre><code class="language-json">&quot;build:guide&quot;: &quot;npm-run-all build:sample-1 build:render&quot;,
+<pre><code class="hljs language-json"><span class="hljs-attr">&quot;build:guide&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npm-run-all build:sample-1 build:render&quot;</span><span class="hljs-punctuation">,</span>
 </code></pre>
 <p>The resulting SVG file can be referenced from Markdown using:</p>
-<pre><code>![Simple Sample 1](./img/simple-sample-1.svg)
+<pre><code class="hljs">!<span class="hljs-selector-attr">[Simple Sample 1]</span>(./<span class="hljs-selector-tag">img</span>/simple-sample-<span class="hljs-number">1</span><span class="hljs-selector-class">.svg</span>)
 </code></pre>
 <p>This is a normal Markdown image tag which will contain the alt-text <em>Simple Sample 1</em>.</p>
+<p>But, if you have multiple files to render it&apos;s more efficient to use the Mermaid CLI API in a script like this:</p>
+<pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { run } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;@mermaid-js/mermaid-cli&quot;</span>
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;./documents/guide/img/mahabhuta-workflow.mmd&quot;</span>);
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">run</span>(
+   <span class="hljs-string">&quot;./documents/guide/img/mahabhuta-workflow.mmd&quot;</span>,
+   <span class="hljs-string">&quot;./documents/guide/img/mahabhuta-workflow.svg&quot;</span>,
+);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;./documents/guide/img/pdf-document-workflow.mmd&quot;</span>);
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">run</span>(
+    <span class="hljs-string">&quot;./documents/guide/img/pdf-document-workflow.mmd&quot;</span>,
+    <span class="hljs-string">&quot;./documents/guide/img/pdf-document-workflow.svg&quot;</span>,
+);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;./documents/guide/img/simple-sample-1.mmd&quot;</span>);
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">run</span>(
+    <span class="hljs-string">&quot;./documents/guide/img/simple-sample-1.mmd&quot;</span>,
+    <span class="hljs-string">&quot;./documents/guide/img/simple-sample-1.svg&quot;</span>,
+);
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;./documents/guide/img/simple-sample-2.mmd&quot;</span>);
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">run</span>(
+    <span class="hljs-string">&quot;./documents/guide/img/simple-sample-2.mmd&quot;</span>,
+    <span class="hljs-string">&quot;./documents/guide/img/simple-sample-2.svg&quot;</span>,
+);
+</code></pre>
+<p>This should save the time required to initialize Puppeteer four times.</p>
+</section>
+<section id="high-quality-equation-(mathematical-and-chemical)-rendering-with-katex" tabindex="-1">
+<h2 tabindex="-1">10.4. High quality equation (mathematical and chemical) rendering with KaTeX</h2>
+<p>We can discuss an equation like this:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><mn>3</mn><mi>x</mi><mo>&#x2212;</mo><mn>1</mn></mrow></msqrt><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>+</mo><mi>x</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sqrt{3x-1}+(1+x)^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.1744em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8656em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">3</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">&#x2212;</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">1</span></span></span><span style="top:-2.8256em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:0.1744em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></p>
+<p>That is, if we can remember anything from university.</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="center" columnspacing="0em"><mtr><mtd class="mtr-glue"/><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>a</mi><mo>=</mo><mi>b</mi></mrow></mstyle></mtd><mtd class="mtr-glue"/><mtd class="mml-eqn-num"/></mtr><mtr><mtd class="mtr-glue"/><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>e</mi><mo>=</mo><mi>b</mi><mo>+</mo><mi>c</mi></mrow></mstyle></mtd><mtd class="mtr-glue"/><mtd class="mml-eqn-num"/></mtr></mtable><annotation encoding="application/x-tex">\begin{gather}
+   a=b \\
+   e=b+c
+\end{gather}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3em;vertical-align:-1.25em;"></span><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">b</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">c</span></span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span></span></span><span class="tag"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.75em;"><span style="top:-3.75em;"><span class="pstrut" style="height:2.84em;"></span><span class="eqn-num"></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:2.84em;"></span><span class="eqn-num"></span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:1.25em;"><span></span></span></span></span></span></span></span></span></p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable rowspacing="0.25em" columnalign="center center center" columnspacing="0.5em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>A</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><munderover><mo stretchy="true" minsize="3.0em">&#x2192;</mo><mpadded width="+0.6em" lspace="0.3em"><mrow/></mpadded><mpadded width="+0.6em" lspace="0.3em"><mi>a</mi></mpadded></munderover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>B</mi></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow><mstyle displaystyle="false" scriptlevel="1"><mpadded width="0" lspace="-1width" voffset="0.7em"><mrow><mi>b</mi></mrow></mpadded></mstyle><mo fence="false" stretchy="true" minsize="1.8em" maxsize="1.8em">&#x2193;</mo><mstyle displaystyle="false" scriptlevel="1"><mpadded width="0" voffset="0.7em"><mrow><mrow/></mrow></mpadded></mstyle></mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"/></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow><mstyle displaystyle="false" scriptlevel="1"><mpadded width="0" lspace="-1width" voffset="0.7em"><mrow><mrow/></mrow></mpadded></mstyle><mo fence="false" stretchy="true" minsize="1.8em" maxsize="1.8em">&#x2191;</mo><mstyle displaystyle="false" scriptlevel="1"><mpadded width="0" voffset="0.7em"><mrow><mi>c</mi></mrow></mpadded></mstyle></mrow></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>C</mi></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mover><mo stretchy="true" minsize="3.0em">=</mo><mpadded width="+0.6em" lspace="0.3em"/></mover></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mi>D</mi></mstyle></mtd></mtr><mtr/></mtable><annotation encoding="application/x-tex">\begin{CD}
+   A @&gt;a&gt;&gt; B \\
+@VbVV @AAcA \\
+   C @= D
+\end{CD}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:5.3053em;vertical-align:-1.6062em;"></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.6992em;"><span style="top:-5.9268em;"><span class="pstrut" style="height:3.151em;"></span><span class="mord mathnormal">A</span></span><span style="top:-4.0879em;"><span class="pstrut" style="height:3.151em;"></span><span class="mord cd-vert-arrow"><span class="sizing reset-size6 size3 mtight cd-label-left" style="bottom:0.8em;"><span class="mord mtight"><span class="mord mathnormal mtight">b</span></span></span><span class="mord"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.151em;"><span style="top:-1.966em;"><span class="pstrut" style="height:2.616em;"></span><span class="delimsizinginner delim-size1"><span>&#x2193;</span></span></span><span style="top:-2.558em;"><span class="pstrut" style="height:2.616em;"></span><span style="height:0.616em;width:0.6667em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.6667em" height="0.616em" style="width:0.6667em" viewBox="0 0 666.67 616" preserveAspectRatio="xMinYMin"><path d="M312 0 H355 V616 H312z M312 0 H355 V616 H312z"/></svg></span></span><span style="top:-3.166em;"><span class="pstrut" style="height:2.616em;"></span><span class="delimsizinginner delim-size1"><span>&#x23d0;</span></span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:0.65em;"><span></span></span></span></span></span></span><span class="sizing reset-size6 size3 mtight cd-label-right" style="bottom:0.8em;"><span class="mord mtight"></span></span></span></span><span style="top:-2.2327em;"><span class="pstrut" style="height:3.151em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:1.6062em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.25em;"></span><span class="arraycolsep" style="width:0.25em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.6992em;"><span style="top:-5.9268em;"><span class="pstrut" style="height:3.151em;"></span><span class="mrel x-arrow"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9234em;"><span style="top:-3.322em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight cd-arrow-pad"><span class="mord mtight"><span class="mord mathnormal mtight">a</span></span></span></span><span class="svg-align" style="top:-2.689em;"><span class="pstrut" style="height:2.7em;"></span><span class="hide-tail" style="height:0.522em;min-width:3em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.522em" viewBox="0 0 400000 522" preserveAspectRatio="xMaxYMin slice"><path d="M0 241v40h399891c-47.3 35.3-84 78-110 128
+-16.7 32-27.7 63.7-33 95 0 1.3-.2 2.7-.5 4-.3 1.3-.5 2.3-.5 3 0 7.3 6.7 11 20
+ 11 8 0 13.2-.8 15.5-2.5 2.3-1.7 4.2-5.5 5.5-11.5 2-13.3 5.7-27 11-41 14.7-44.7
+ 39-84.5 73-119.5s73.7-60.2 119-75.5c6-2 9-5.7 9-11s-3-9-9-11c-45.3-15.3-85
+-40.5-119-75.5s-58.3-74.8-73-119.5c-4.7-14-8.3-27.3-11-40-1.3-6.7-3.2-10.8-5.5
+-12.5-2.3-1.7-7.5-2.5-15.5-2.5-14 0-21 3.7-21 11 0 2 2 10.3 6 25 20.7 83.3 67
+ 151.7 139 205zm0 0v40h399900v-40z"/></svg></span></span><span style="top:-2.578em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight cd-arrow-pad"><span class="mord mtight"></span></span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:0.122em;"><span></span></span></span></span></span></span><span style="top:-4.0879em;"><span class="pstrut" style="height:3.151em;"></span></span><span style="top:-2.2327em;"><span class="pstrut" style="height:3.151em;"></span><span class="mrel x-arrow"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.528em;"><span style="top:-2.862em;"><span class="pstrut" style="height:2.334em;"></span><span class="cd-arrow-pad"></span></span><span class="svg-align" style="top:-2.417em;"><span class="pstrut" style="height:2.334em;"></span><span class="hide-tail" style="height:0.334em;min-width:3em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="0.334em" viewBox="0 0 400000 334" preserveAspectRatio="xMinYMin slice"><path d="M0 50 h400000 v40H0z m0 194h40000v40H0z
+M0 50 h400000 v40H0z m0 194h40000v40H0z"/></svg></span></span></span></span></span></span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:1.6062em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:0.25em;"></span><span class="arraycolsep" style="width:0.25em;"></span><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.6992em;"><span style="top:-5.9268em;"><span class="pstrut" style="height:3.151em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span><span style="top:-4.0879em;"><span class="pstrut" style="height:3.151em;"></span><span class="mord cd-vert-arrow"><span class="sizing reset-size6 size3 mtight cd-label-left" style="bottom:0.8em;"><span class="mord mtight"></span></span><span class="mord"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.151em;"><span style="top:-1.966em;"><span class="pstrut" style="height:2.616em;"></span><span class="delimsizinginner delim-size1"><span>&#x23d0;</span></span></span><span style="top:-2.559em;"><span class="pstrut" style="height:2.616em;"></span><span style="height:0.616em;width:0.6667em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.6667em" height="0.616em" style="width:0.6667em" viewBox="0 0 666.67 616" preserveAspectRatio="xMinYMin"><path d="M312 0 H355 V616 H312z M312 0 H355 V616 H312z"/></svg></span></span><span style="top:-3.167em;"><span class="pstrut" style="height:2.616em;"></span><span class="delimsizinginner delim-size1"><span>&#x2191;</span></span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:0.65em;"><span></span></span></span></span></span></span><span class="sizing reset-size6 size3 mtight cd-label-right" style="bottom:0.8em;"><span class="mord mtight"><span class="mord mathnormal mtight">c</span></span></span></span></span><span style="top:-2.2327em;"><span class="pstrut" style="height:3.151em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span><span class="vlist-s">&#x200b;</span></span><span class="vlist-r"><span class="vlist" style="height:1.6062em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
 </section>
 </section>
-<section>
-<h1>Custom HTML tags and custom HTML processing</h1>
-<p>The AkashaCMS contains the Mahabhuta engine [^defs] which handles custom DOM processing, server-side, using a jQuery-like API.  The workflow diagram later includes these steps:</p>
-<p>[^defs]: In Sanskrit, <em>Akasha</em> is the underlying stuff from which the universe is made, and <em>Mahabhuta</em> relates to the five elements.  Hence, the Mahabhuta engine handles HTML element processing, while AkashaCMS helps writers build their website.</p>
+<section id="custom-html-tags-and-custom-html-processing" tabindex="-1">
+<h1 tabindex="-1">11. Custom HTML tags and custom HTML processing</h1>
+<p>The AkashaCMS contains the Mahabhuta engine <sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> which handles custom DOM processing, server-side, using a jQuery-like API.  The workflow diagram later includes these steps:</p>
 <figure>
   <img class="max-w-100" max-width="100%" src="./img/mahabhuta-workflow.svg">
   <figcaption>DOM Processing workflow</figcaption>
@@ -1184,25 +1218,25 @@ stateDiagram-v2
 <p>Full Mahabhuta documentation is at: <a href="https://akashacms.com/mahabhuta/toc.html"><code>https://akashacms.com/mahabhuta/toc.html</code></a></p>
 <p>In PDF Document Maker, the <code>--funcs &lt;funcsFN&gt;</code> parameter allows us to supply a JavaScript file containing a <code>Mahafuncarray</code>.</p>
 </section>
-<section>
-<h1>Generating a table of contents, automating section numbering</h1>
+<section id="generating-a-table-of-contents%2C-automating-section-numbering" tabindex="-1">
+<h1 tabindex="-1">12. Generating a table of contents, automating section numbering</h1>
 <p>That discussion of Mahabhuta functions needs a practical demonstration.  For that purpose, let&apos;s go over a method of adding section numbers to header tags, and creating a Table of Contents from the header tags.</p>
 <p>In the Markdown-IT ecosystem, some plugins promise to create a Table of Contents.  But they did not work well in testing.  Instead the following technique was developed.</p>
 <p>The code for this is in the PDF Document Maker website, in the <code>guide</code> directory.  The file, <code>mahafuncs.mjs</code>, contains a <code>MahafuncArray</code> containing a Mahafunc named <code>HnNumbering</code>.</p>
 <p>In a Node.js module exporting a MahafuncArray, it must have a function like this:</p>
-<pre><code class="language-js">const pluginName = &apos;PDF-Document-Maker-Guide&apos;;
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> pluginName = <span class="hljs-string">&apos;PDF-Document-Maker-Guide&apos;</span>;
 
-export function mahabhutaArray(options) {
-    let ret = new mahabhuta.MahafuncArray(pluginName, options);
-    ret.addMahafunc(new HnNumbering());
-    return ret;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">mahabhutaArray</span>(<span class="hljs-params">options</span>) {
+    <span class="hljs-keyword">let</span> ret = <span class="hljs-keyword">new</span> mahabhuta.<span class="hljs-title class_">MahafuncArray</span>(pluginName, options);
+    ret.<span class="hljs-title function_">addMahafunc</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">HnNumbering</span>());
+    <span class="hljs-keyword">return</span> ret;
 };
 </code></pre>
 <p>This function is executed from PDF Document Maker.  It creates a MahafuncArray, adds instances of Mahafuncs, returning the array.  The array is then added into the Configuration.</p>
 <p>When the Mahabhuta stage runs, it simply steps through each MahafuncArray, executing every Mahafunc array it contains.</p>
-<pre><code class="language-js">class HnNumbering extends mahabhuta.PageProcessor {
-	async process(&#x24;, metadata, dirty) /* : Promise&lt;string&gt; */ {
-    // ...
+<pre><code class="hljs language-js"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HnNumbering</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">mahabhuta.PageProcessor</span> {
+	<span class="hljs-keyword">async</span> <span class="hljs-title function_">process</span>(&#x24;, metadata, dirty) <span class="hljs-comment">/* : Promise&lt;string&gt; */</span> {
+    <span class="hljs-comment">// ...</span>
   }
 }
 </code></pre>
@@ -1210,48 +1244,50 @@ export function mahabhutaArray(options) {
 <p>The <code>&#x24;</code> parameter is a jQuery-like <code>&#x24;</code> object.  It has most of the jQuery methods, allowing one to search around the page and make manipulations mostly like you&apos;d do with jQuery in a browser.</p>
 <p>Because the Mahafuncs are exected after the HTML is rendered, the DOM held by the <code>&#x24;</code> object is what&apos;s about to be written as the final HTML.  This is our chance to customize that HTML.</p>
 <p>This particular function loops over all H1, H2, and H3 tags like so:</p>
-<pre><code class="language-js">&#x24;(&apos;article&apos;).find(&apos;h1:not(.header-title), h2, h3&apos;).each(function() {
+<pre><code class="hljs language-js">&#x24;(<span class="hljs-string">&apos;article&apos;</span>).<span class="hljs-title function_">find</span>(<span class="hljs-string">&apos;h1:not(.header-title), h2, h3&apos;</span>).<span class="hljs-title function_">each</span>(<span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) {
 });
 </code></pre>
 <p>What happens inside this loop is a little hairy, but one key part is to add a section number to the H1/2/3 tag like so:</p>
-<pre><code class="language-js">const title = `&#x24;{counter_h1}.&#x24;{counter_h2}.&#x24;{counter_h3}. &#x24;{&#x24;(this).text()}`;
-&#x24;(this).text(title);
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> title = <span class="hljs-string">`<span class="hljs-subst">&#x24;{counter_h1}</span>.<span class="hljs-subst">&#x24;{counter_h2}</span>.<span class="hljs-subst">&#x24;{counter_h3}</span>. <span class="hljs-subst">&#x24;{&#x24;(<span class="hljs-variable language_">this</span>).text()}</span>`</span>;
+&#x24;(<span class="hljs-variable language_">this</span>).<span class="hljs-title function_">text</span>(title);
 </code></pre>
 <p>That loop also constructs a data structure of the H1/2/3 tags, formatting it into a UL/LI list using this partial template:</p>
-<pre><code class="language-js">const toctext = await this.array.options.akasha.partial(
-    this.array.options.config,
-    &apos;toc.html.njk&apos;, {
+<pre><code class="hljs language-js"><span class="hljs-keyword">const</span> toctext = <span class="hljs-keyword">await</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">array</span>.<span class="hljs-property">options</span>.<span class="hljs-property">akasha</span>.<span class="hljs-title function_">partial</span>(
+    <span class="hljs-variable language_">this</span>.<span class="hljs-property">array</span>.<span class="hljs-property">options</span>.<span class="hljs-property">config</span>,
+    <span class="hljs-string">&apos;toc.html.njk&apos;</span>, {
     headers
 });
 </code></pre>
 <p>Once the UL/LI list is constructed, the tag <code>&lt;toc-text-here&gt;</code> is replaced with that list like so:</p>
-<pre><code class="language-js">&#x24;(&apos;toc-text-here&apos;).replaceWith(toctext);
+<pre><code class="hljs language-js">&#x24;(<span class="hljs-string">&apos;toc-text-here&apos;</span>).<span class="hljs-title function_">replaceWith</span>(toctext);
 </code></pre>
 <p>The PDF version of this document you&apos;re reading has section numbering, and a table of contents, generated by that function.</p>
 </section>
-<section>
-<h1>PDF Document Maker inner workflow</h1>
+<section id="pdf-document-maker-inner-workflow" tabindex="-1">
+<h1 tabindex="-1">13. PDF Document Maker inner workflow</h1>
 <p>This diagram may help you understand what&apos;s happening.</p>
 <figure>
   <img class="max-w-100" max-width="100%" src="./img/pdf-document-workflow.svg">
   <figcaption>PDF Document Maker workflow</figcaption>
 </figure>
+<h1 class="mt-3">14. Footnotes</h1>
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>This is the body of the footnote. <a href="#fnref1" class="footnote-backref">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>In Sanskrit, <em>Akasha</em> is the underlying stuff from which the universe is made, and <em>Mahabhuta</em> relates to the five elements.  Hence, the Mahabhuta engine handles HTML element processing, while AkashaCMS helps writers build their website. <a href="#fnref2" class="footnote-backref">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
 </section>
 
   </article>
 </div>
 
-<footer class="row" style="text-align: center; height: 100px;">
-<div class="col-sm-12">
 
-<!-- partial file-name="footer.html"></partial></div -->
-</div></footer>
-</div>
+<script src="../vendor/jquery/jquery.min.js"></script><script src="../vendor/popper.js/umd/popper.min.js"></script><script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 
 
-<script src="../vendor/jquery/jquery.min.js"></script><script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-
-
-</body>
+</div></body>
 </html>
 
