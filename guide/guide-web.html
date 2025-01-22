@@ -110,7 +110,7 @@
 
 
 
-<link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap-theme.min.css"><link rel="stylesheet" type="text/css" href="../style.css">
+<link rel="stylesheet" type="text/css" href="../vendor/katex/dist/katex.min.css"><link rel="stylesheet" type="text/css" href="../vendor/markdown-it-texmath/css/texmath.css"><link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap-theme.min.css"><link rel="stylesheet" type="text/css" href="../vendor/highlight.js/styles/stackoverflow-dark.css"><link rel="stylesheet" type="text/css" href="../style.css">
 
 
 
@@ -169,6 +169,10 @@
 
 <div class="row">
   <article class="col-sm-12">
+    <div class="article-heading">
+        <h1 class="article-title" align="center">Building websites with AkashaCMS and PDF Document Maker
+    </h1></div>
+
     
     <p><em>PDF Document Maker</em> is an integrated application, built from <em>AkashaCMS</em> components, for producing good-quality PDF documents from Markdown or AsciiDoc files.</p>
 <p>In the <a href="guide.html">PDF Document Maker Guide</a>, we learned how to build a PDF document with this tool.</p>
@@ -192,31 +196,31 @@
 <p>An AkashaCMS project, or a PDF Document Maker project, uses this file in a slightly different way.  Neither a website project, nor a PDF document project, is suitable for distribution through the npm registry.  Instead, we use this file to record the dependencies required to build the website or document, as well as the build and deployment processes.</p>
 <p>In <a href="https://github.com/akashacms/pdf-document-construction-set/blob/main/guide/package.json">https://github.com/akashacms/pdf-document-construction-set/blob/main/guide/package.json</a> we see an example.</p>
 <p>The <em>scripts</em> section contains scripts for building the website, and the PDF document, as well as deploying the website to GitHub Pages.</p>
-<pre><code class="language-json">&quot;scripts&quot;: {
-    &quot;preview&quot;: &quot;live-server out&quot;,
-    &quot;build:site&quot;: &quot;npx akasharender render --copy-assets config.mjs&quot;,
-    &quot;build:guide&quot;: &quot;npm-run-all build:sample-1 build:sample-2 build:workflow build:mahabhuta build:render pdf2out&quot;,
-    &quot;build:sample-1&quot;: &quot;npx mmdc -i documents/guide/img/simple-sample-1.mmd -o documents/guide/img/simple-sample-1.svg --outputFormat svg&quot;,
-    &quot;build:sample-2&quot;: &quot;npx mmdc -i documents/guide/img/simple-sample-2.mmd -o documents/guide/img/simple-sample-2.svg --outputFormat svg&quot;,
-    &quot;build:workflow&quot;: &quot;npx mmdc -i documents/guide/img/pdf-document-workflow.mmd -o documents/guide/img/pdf-document-workflow.svg --outputFormat svg&quot;,
-    &quot;build:mahabhuta&quot;: &quot;npx mmdc -i documents/guide/img/mahabhuta-workflow.mmd -o documents/guide/img/mahabhuta-workflow.svg --outputFormat svg&quot;,
-    &quot;build:render&quot;: &quot;node ../pdf-document-maker.mjs --partial-dir partials --layout-dir layouts --document-dir documents --lesscss style.css.less --pdf-output PDF --html-output out --title &apos;PDF Document Maker Guide&apos; --format A4 --funcs ./mahafuncs.mjs guide/guide.md&quot;,
-    &quot;pdf2out&quot;: &quot;cp PDF/guide.pdf out/guide/guide.pdf&quot;,
-    &quot;gh-pages&quot;: &quot;npx akasharender gh-pages-publish config.mjs&quot;
-},
+<pre><code class="hljs language-json"><span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;preview&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;live-server out&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;build:site&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx akasharender render --copy-assets config.mjs&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;build:guide&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npm-run-all build:sample-1 build:sample-2 build:workflow build:mahabhuta build:render pdf2out&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;build:sample-1&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx mmdc -i documents/guide/img/simple-sample-1.mmd -o documents/guide/img/simple-sample-1.svg --outputFormat svg&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;build:sample-2&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx mmdc -i documents/guide/img/simple-sample-2.mmd -o documents/guide/img/simple-sample-2.svg --outputFormat svg&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;build:workflow&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx mmdc -i documents/guide/img/pdf-document-workflow.mmd -o documents/guide/img/pdf-document-workflow.svg --outputFormat svg&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;build:mahabhuta&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx mmdc -i documents/guide/img/mahabhuta-workflow.mmd -o documents/guide/img/mahabhuta-workflow.svg --outputFormat svg&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;build:render&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;node ../pdf-document-maker.mjs --partial-dir partials --layout-dir layouts --document-dir documents --lesscss style.css.less --pdf-output PDF --html-output out --title &apos;PDF Document Maker Guide&apos; --format A4 --funcs ./mahafuncs.mjs guide/guide.md&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;pdf2out&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;cp PDF/guide.pdf out/guide/guide.pdf&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;gh-pages&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx akasharender gh-pages-publish config.mjs&quot;</span>
+<span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
 </code></pre>
 <p>The <code>preview</code> script lets us view the formatted content before deploying to a live server.</p>
 <p>The <code>build:site</code> script renders the full website content into the HTML output directory.  The <code>--copy-assets</code> parameter says to copy files from the <code>assets</code> directories.  The file, <code>config.mjs</code>, is the configuration file, which is discussed in the next section.</p>
 <p>The other <code>build:</code> scripts deal with rendering and formatting the PDF document.  A side note is that the commands in this group which use <code>mmdc</code> (the Mermaid CLI) render Mermaid documents into their matching SVG file.  The website also needs to display these SVG files, but in <code>build:script</code> these other files are not rendered, and therefore the PDF needs to have been rendered before running <code>build:script</code>.</p>
 <p>The <code>gh-pages</code> script handles deploying the website to the GitHub repository using the GitHub Pages feature.</p>
 <p>The time required to execute these on a mid-2016 x86 laptop, 16 GB of memory, on Ubuntu Linux, is:</p>
-<pre><code class="language-shell">&#x24; time npm run build:guide
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-keyword">time</span> npm run build:guide</span>
 ...
 real	0m20.722s
 user	0m14.697s
 sys	0m4.321s
-
-&#x24; time npm run build:site
+<span class="hljs-meta prompt_">
+&#x24; </span><span class="language-bash"><span class="hljs-keyword">time</span> npm run build:site</span>
 ...
 real	0m3.535s
 user	0m3.491s
@@ -230,20 +234,20 @@ sys	0m0.497s
 <p>An AkashaCMS configuration file is a JavaScript file where the goal is to instantiate and initialize a Configuration object.  This file is then used at every step of rendering content files to create the website or PDF document.</p>
 <p>The configuration file includes:</p>
 <p><strong>Lists of directories for input files, as well as the HTML Rendering output directory:</strong></p>
-<pre><code class="language-js">config
-    .addAssetsDir(&apos;assets&apos;)
-    .addAssetsDir({
-        src: &apos;node_modules/bootstrap/dist&apos;,
-        dest: &apos;vendor/bootstrap&apos;
+<pre><code class="hljs language-js">config
+    .<span class="hljs-title function_">addAssetsDir</span>(<span class="hljs-string">&apos;assets&apos;</span>)
+    .<span class="hljs-title function_">addAssetsDir</span>({
+        <span class="hljs-attr">src</span>: <span class="hljs-string">&apos;node_modules/bootstrap/dist&apos;</span>,
+        <span class="hljs-attr">dest</span>: <span class="hljs-string">&apos;vendor/bootstrap&apos;</span>
     })
-   .addAssetsDir({
-        src: &apos;node_modules/jquery/dist&apos;,
-        dest: &apos;vendor/jquery&apos;
+   .<span class="hljs-title function_">addAssetsDir</span>({
+        <span class="hljs-attr">src</span>: <span class="hljs-string">&apos;node_modules/jquery/dist&apos;</span>,
+        <span class="hljs-attr">dest</span>: <span class="hljs-string">&apos;vendor/jquery&apos;</span>
     })
-    .addLayoutsDir(&apos;layouts&apos;)
-    .addDocumentsDir(&apos;documents&apos;)
-    .addPartialsDir(&apos;partials&apos;)
-    .setRenderDestination(&apos;out&apos;);
+    .<span class="hljs-title function_">addLayoutsDir</span>(<span class="hljs-string">&apos;layouts&apos;</span>)
+    .<span class="hljs-title function_">addDocumentsDir</span>(<span class="hljs-string">&apos;documents&apos;</span>)
+    .<span class="hljs-title function_">addPartialsDir</span>(<span class="hljs-string">&apos;partials&apos;</span>)
+    .<span class="hljs-title function_">setRenderDestination</span>(<span class="hljs-string">&apos;out&apos;</span>);
 </code></pre>
 <p>All but the last of these are directories holding input files.  They fall into four groups:</p>
 <ul>
@@ -255,73 +259,73 @@ sys	0m0.497s
 <p>The last, <code>setRenderDestination</code>, is the HTML output directory.  All files are either copied into or rendered into this directory tree.  It results in a directory tree which may be directly deployed to a normal web server.</p>
 <p>In this case the <code>gh-pages</code> command uploads it to GitHub such that it is automatically published via GitHub Pages.</p>
 <p><strong>The plugins to be used, along with any configuration settings:</strong></p>
-<pre><code class="language-js">import { ThemeBootstrapPlugin } from &apos;@akashacms/theme-bootstrap&apos;;
-import { BasePlugin } from &apos;@akashacms/plugins-base&apos;;
-import { BreadcrumbsPlugin } from &apos;@akashacms/plugins-breadcrumbs&apos;;
-import { BooknavPlugin } from &apos;@akashacms/plugins-booknav&apos;;
-import { BlogPodcastPlugin } from &apos;@akashacms/plugins-blog-podcast&apos;;
+<pre><code class="hljs language-js"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">ThemeBootstrapPlugin</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;@akashacms/theme-bootstrap&apos;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">BasePlugin</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;@akashacms/plugins-base&apos;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">BreadcrumbsPlugin</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;@akashacms/plugins-breadcrumbs&apos;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">BooknavPlugin</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;@akashacms/plugins-booknav&apos;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-title class_">BlogPodcastPlugin</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;@akashacms/plugins-blog-podcast&apos;</span>;
 
 config
-    .use(ThemeBootstrapPlugin)
-    .use(BasePlugin, {
-        generateSitemapFlag: true
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title class_">ThemeBootstrapPlugin</span>)
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title class_">BasePlugin</span>, {
+        <span class="hljs-attr">generateSitemapFlag</span>: <span class="hljs-literal">true</span>
     })
-    .use(BreadcrumbsPlugin)
-    .use(BooknavPlugin)
-    .use(BlogPodcastPlugin);
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title class_">BreadcrumbsPlugin</span>)
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title class_">BooknavPlugin</span>)
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title class_">BlogPodcastPlugin</span>);
 </code></pre>
 <p>AkashaCMS plugins extend the capabilities in different ways.  For example the <em>BreadcrumbsPlugin</em> builds a navigation trail like this:</p>
-<pre><code>&#xbb; PDF Document Maker &#xbb; PDF Document Maker Guide &#xbb; Building websites with AkashaCMS and PDF Document Maker
+<pre><code class="hljs">&#xbb; <span class="hljs-built_in">PDF</span> <span class="hljs-variable">Document</span> <span class="hljs-variable">Maker</span> &#xbb; <span class="hljs-built_in">PDF</span> <span class="hljs-variable">Document</span> <span class="hljs-variable">Maker</span> <span class="hljs-variable">Guide</span> &#xbb; <span class="hljs-variable">Building</span> <span class="hljs-variable">websites</span> <span class="hljs-variable">with</span> <span class="hljs-variable">AkashaCMS</span> <span class="hljs-variable">and</span> <span class="hljs-built_in">PDF</span> <span class="hljs-variable">Document</span> <span class="hljs-variable">Maker</span>
 </code></pre>
 <p><strong>Possible configuration for the Markdown-IT engine, including adding Markdown extensions:</strong></p>
-<pre><code class="language-js">
-import { default as MarkdownItAttrs } from &apos;markdown-it-attrs&apos;;
-import { default as MarkdownItDiv } from &apos;markdown-it-div&apos;;
-config.findRendererName(&apos;.html.md&apos;)
-    .use(MarkdownItAttrs, {
-        allowedAttributes: [ &apos;id&apos;, &apos;class&apos;, &apos;caption&apos;, &apos;data&apos; ]
+<pre><code class="hljs language-js">
+<span class="hljs-keyword">import</span> { <span class="hljs-keyword">default</span> <span class="hljs-keyword">as</span> <span class="hljs-title class_">MarkdownItAttrs</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;markdown-it-attrs&apos;</span>;
+<span class="hljs-keyword">import</span> { <span class="hljs-keyword">default</span> <span class="hljs-keyword">as</span> <span class="hljs-title class_">MarkdownItDiv</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&apos;markdown-it-div&apos;</span>;
+config.<span class="hljs-title function_">findRendererName</span>(<span class="hljs-string">&apos;.html.md&apos;</span>)
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title class_">MarkdownItAttrs</span>, {
+        <span class="hljs-attr">allowedAttributes</span>: [ <span class="hljs-string">&apos;id&apos;</span>, <span class="hljs-string">&apos;class&apos;</span>, <span class="hljs-string">&apos;caption&apos;</span>, <span class="hljs-string">&apos;data&apos;</span> ]
     })
-    .use(MarkdownItDiv);
+    .<span class="hljs-title function_">use</span>(<span class="hljs-title class_">MarkdownItDiv</span>);
 </code></pre>
 <p>This, <code>findRendererName(&apos;.html.md&apos;)</code>, accesses the component for rendering Markdown to HTML.  It then adds two Markdown extensions.</p>
 <p><strong>Listing stylesheet and JavaScript files to be used on all webpages:</strong></p>
-<pre><code class="language-js">config
-    .addFooterJavaScript({
-        href: &quot;/vendor/jquery/jquery.min.js&quot;
+<pre><code class="hljs language-js">config
+    .<span class="hljs-title function_">addFooterJavaScript</span>({
+        <span class="hljs-attr">href</span>: <span class="hljs-string">&quot;/vendor/jquery/jquery.min.js&quot;</span>
     })
-    .addFooterJavaScript({
-        href: &quot;/vendor/bootstrap/js/bootstrap.min.js&quot;
+    .<span class="hljs-title function_">addFooterJavaScript</span>({
+        <span class="hljs-attr">href</span>: <span class="hljs-string">&quot;/vendor/bootstrap/js/bootstrap.min.js&quot;</span>
     })
-    .addStylesheet({
-        href: &quot;/vendor/bootstrap/css/bootstrap.min.css&quot;
+    .<span class="hljs-title function_">addStylesheet</span>({
+        <span class="hljs-attr">href</span>: <span class="hljs-string">&quot;/vendor/bootstrap/css/bootstrap.min.css&quot;</span>
     })
-    .addStylesheet({
-        href: &quot;/vendor/bootstrap/css/bootstrap-theme.min.css&quot;
+    .<span class="hljs-title function_">addStylesheet</span>({
+        <span class="hljs-attr">href</span>: <span class="hljs-string">&quot;/vendor/bootstrap/css/bootstrap-theme.min.css&quot;</span>
     })
-    .addStylesheet({
-        href: &quot;/style.css&quot;
+    .<span class="hljs-title function_">addStylesheet</span>({
+        <span class="hljs-attr">href</span>: <span class="hljs-string">&quot;/style.css&quot;</span>
     });
 </code></pre>
 <p>These file references are stored in a list, and a custom HTML element turns this list into a series of <code>&lt;link&gt;</code> or <code>&lt;script&gt;</code> tags.</p>
 <p><strong>If there is one or more blogs, configuring the characteristics of each:</strong></p>
-<pre><code class="language-js">config.plugin(&apos;@akashacms/plugins-blog-podcast&apos;)
-    .addBlogPodcast(config, &quot;news&quot;, {
-        rss: {
-            title: &quot;PDF Document Maker News&quot;,
-            description: &quot;News announcements for the PDF Document Maker project&quot;,
-            site_url: &quot;http://akashacms.github.io/pdf-document-construction-set/blog/index.html&quot;,
-            managingEditor: &apos;David Herron&apos;,
-            webMaster: &apos;David Herron&apos;,
-            copyright: &apos;2025 David Herron&apos;,
-            language: &apos;en&apos;,
-            categories: [
-                &quot;Node.js&quot;, &quot;Content Management System&quot;, &quot;HTML5&quot;, &quot;Static website generator&quot;
+<pre><code class="hljs language-js">config.<span class="hljs-title function_">plugin</span>(<span class="hljs-string">&apos;@akashacms/plugins-blog-podcast&apos;</span>)
+    .<span class="hljs-title function_">addBlogPodcast</span>(config, <span class="hljs-string">&quot;news&quot;</span>, {
+        <span class="hljs-attr">rss</span>: {
+            <span class="hljs-attr">title</span>: <span class="hljs-string">&quot;PDF Document Maker News&quot;</span>,
+            <span class="hljs-attr">description</span>: <span class="hljs-string">&quot;News announcements for the PDF Document Maker project&quot;</span>,
+            <span class="hljs-attr">site_url</span>: <span class="hljs-string">&quot;http://akashacms.github.io/pdf-document-construction-set/blog/index.html&quot;</span>,
+            <span class="hljs-attr">managingEditor</span>: <span class="hljs-string">&apos;David Herron&apos;</span>,
+            <span class="hljs-attr">webMaster</span>: <span class="hljs-string">&apos;David Herron&apos;</span>,
+            <span class="hljs-attr">copyright</span>: <span class="hljs-string">&apos;2025 David Herron&apos;</span>,
+            <span class="hljs-attr">language</span>: <span class="hljs-string">&apos;en&apos;</span>,
+            <span class="hljs-attr">categories</span>: [
+                <span class="hljs-string">&quot;Node.js&quot;</span>, <span class="hljs-string">&quot;Content Management System&quot;</span>, <span class="hljs-string">&quot;HTML5&quot;</span>, <span class="hljs-string">&quot;Static website generator&quot;</span>
             ]
         },
-        rssurl: &quot;/blog/rss.xml&quot;,
-        matchers: {
-            layouts: [ &quot;blog.njk&quot; ],
-            rootPath: &apos;blog/&apos;
+        <span class="hljs-attr">rssurl</span>: <span class="hljs-string">&quot;/blog/rss.xml&quot;</span>,
+        <span class="hljs-attr">matchers</span>: {
+            <span class="hljs-attr">layouts</span>: [ <span class="hljs-string">&quot;blog.njk&quot;</span> ],
+            <span class="hljs-attr">rootPath</span>: <span class="hljs-string">&apos;blog/&apos;</span>
         }
     });
 </code></pre>
@@ -338,7 +342,7 @@ config.findRendererName(&apos;.html.md&apos;)
 <li>A guide directory containing the project documentation, both the website (including the page you&apos;re reading right now) and the PDF version of the users guide.</li>
 </ul>
 <p>The files corresponding to the <em>PDF Document Maker</em> application package are:</p>
-<pre><code class="language-shell">&#x24; tree assets/ built-in.mjs layouts/ pdf-document-maker.mjs package.json README.md 
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">tree assets/ built-in.mjs layouts/ pdf-document-maker.mjs package.json README.md</span> 
 assets/
 &#x2514;&#x2500;&#x2500; vendor
     &#x2514;&#x2500;&#x2500; printcss
@@ -353,8 +357,8 @@ README.md
 4 directories, 6 files
 </code></pre>
 <p>The files corresponding to the documentation website, and users guide PDF, are:</p>
-<pre><code class="language-shell">&#x24; cd guide
-&#x24; tree assets partials layouts documents
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">cd</span> guide</span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">tree assets partials layouts documents</span>
 assets
 partials
 &#x251c;&#x2500;&#x2500; footer.html
@@ -399,12 +403,12 @@ documents
 <section>
 <h2>Process for building the <em>PDF Document Maker</em> website</h2>
 <p>To build the website:</p>
-<pre><code class="language-shell">&#x24; cd guide
-&#x24; npm run build:site
-&#x24; npm run gh-pages
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">cd</span> guide</span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm run build:site</span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm run gh-pages</span>
 </code></pre>
 <p>The <code>build:site</code> script simply uses AkashaRender to render the site to the output directory:</p>
-<pre><code class="language-json">&quot;build:site&quot;: &quot;npx akasharender render --copy-assets config.mjs&quot;,
+<pre><code class="hljs language-json"><span class="hljs-attr">&quot;build:site&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx akasharender render --copy-assets config.mjs&quot;</span><span class="hljs-punctuation">,</span>
 </code></pre>
 <p>It&apos;s expected you&apos;ll use <code>npm run preview</code> to preview the website locally, so you can edit the content, handle content layout issues, etc, before deploying it to the web server.</p>
 <section>
@@ -417,11 +421,11 @@ documents
 <section>
 <h2>Process for building PDF of <em>PDF Document Maker Guide</em></h2>
 <p>To build the user guide PDF:</p>
-<pre><code class="language-shell">&#x24; cd guide
-&#x24; npm run build:guide
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">cd</span> guide</span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm run build:guide</span>
 </code></pre>
 <p>This script is defined as so:</p>
-<pre><code class="language-json">&quot;build:guide&quot;: &quot;npm-run-all build:sample-1 build:sample-2 build:workflow build:mahabhuta build:render pdf2out&quot;,
+<pre><code class="hljs language-json"><span class="hljs-attr">&quot;build:guide&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npm-run-all build:sample-1 build:sample-2 build:workflow build:mahabhuta build:render pdf2out&quot;</span><span class="hljs-punctuation">,</span>
 </code></pre>
 <p>The <code>npm-run-all</code> program is a great way to simplify using <code>package.json</code> to define a build process.  This runs the individual scripts to build Mermaid documents, then to run PDF Document Maker to build the PDF, and finally copy the PDF to the HTML output directory.</p>
 <p>Once the PDF is built, it&apos;s up to you how this it is distributed.  For this project, copying the PDF into the HTML output directory ensures we can distribute the PDF via the website.</p>
@@ -439,16 +443,16 @@ documents
 </ul>
 <p>The <em>Live Server</em> application watches the directory containing HTML+CSS+JS files, and when there&apos;s a change it causes the browser to reload the page.</p>
 <p>It is started with this <code>package.json</code> script:</p>
-<pre><code class="language-json">&quot;preview&quot;: &quot;live-server out&quot;,
+<pre><code class="hljs language-json"><span class="hljs-attr">&quot;preview&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;live-server out&quot;</span><span class="hljs-punctuation">,</span>
 </code></pre>
 <p>The <em>Nodemon</em> application is used in this case to watch the source files, and to run the <code>build:site</code> or <code>build:guide</code> script.</p>
 <p>In the repository, the <code>guide/package.json</code> has these scripts tags:</p>
-<pre><code class="language-json">&quot;watch:site&quot;: &quot;npx nodemon -e less,md,css,html,png,mmd \
+<pre><code class="hljs language-json"><span class="hljs-attr">&quot;watch:site&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx nodemon -e less,md,css,html,png,mmd \
       --watch assets --watch documents --watch layouts --watch partials \
-      --exec npm run build:site&quot;,
-&quot;watch:guide&quot;: &quot;npx nodemon -e less,md,css,html,png,mmd \
+      --exec npm run build:site&quot;</span><span class="hljs-punctuation">,</span>
+<span class="hljs-attr">&quot;watch:guide&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;npx nodemon -e less,md,css,html,png,mmd \
       --watch assets --watch documents --watch layouts-pdf --watch partials \
-      --exec npm run build:guide&quot;,
+      --exec npm run build:guide&quot;</span><span class="hljs-punctuation">,</span>
 </code></pre>
 <p>This has been reformatted for readability.  With these options, Nodemon watches the important directories, and if a change occurs it reruns the command named after <code>--exec</code>.</p>
 <p>In one terminal window, run: <code>npm run watch:site</code> OR <code>npm run watch:guide</code></p>
