@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<div class="container" role="main">
+<div class="container-fluid" role="main">
 
 <div class="row">
   <article class="col-sm-12">
@@ -23,6 +23,8 @@
     {% if teaser %}<p><strong>{{ teaser }}</strong></p> {% endif %}
     {{ content }}
   </article>
+</div>
+
 </div>
 
 {{ ak_core.footerJavaScript() }}
