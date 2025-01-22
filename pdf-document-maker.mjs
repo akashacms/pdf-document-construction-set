@@ -22,6 +22,11 @@ import { default as MarkdownItSections } from 'markdown-it-header-sections';
 import { default as MarkdownItImageFigures } from 'markdown-it-image-figures';
 import { default as MarkdownItMultiMDTable } from 'markdown-it-multimd-table';
 import { default as MarkdownItTableCaptions } from 'markdown-it-table-captions';
+// import { default as MarkdownItKaTeX } from '@vscode/markdown-it-katex';
+
+import { default as MarkdownItTexmath } from 'markdown-it-texmath';
+import katex from 'katex';
+import 'katex/contrib/mhchem';
 
 import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
@@ -72,6 +77,7 @@ program
     .option('--no-md-image-figures', 'Disable the markdown-it-image-figures extension')
     .option('--no-md-multimd-table', 'Disable the markdown-it-multimd-table extension')
     .option('--no-md-table-captions', 'Disable the markdown-it-table-captions extension')
+    .option('--no-md-katex', 'Disable the @vscode/markdown-it-katex extension')
     .option('--no-md-plantuml', 'Disable the @akashacms/plugins-plantuml extension')
     .option('--no-bootstrap', 'Disable Bootstrap v4 and related modules')
     // This turned out to not work.
@@ -500,9 +506,39 @@ async function generateConfiguration(options) {
             aotolabel:  true,
         });
     }
+
     if (options.mdTableCaptions) {
         config.findRendererName('.html.md')
         .use(MarkdownItTableCaptions);
+    }
+
+    if (options.mdKatex) {
+        config.findRendererName('.html.md')
+        .use(MarkdownItTexmath, {
+            engine: katex,
+            delimiters: 'dollars'
+        });
+        // .use(MarkdownItKaTeX.default, { "throwOnError": true });
+
+
+        const uKTX = new URL(import.meta.resolve('katex'));
+        // file:///home/david/Projects/akasharender/pdf-document-construction-set/guide/node_modules/katex/dist/katex.mjs
+        const pKTX = uKTX.pathname;
+        const toMountKTX = path.dirname(path.dirname(pKTX));
+
+        const uTXM = new URL(import.meta.resolve('markdown-it-texmath'));
+        const pTXM = uTXM.pathname;
+        const toMountTXM = path.dirname(pTXM);
+
+        config.addAssetsDir({
+            src: toMountKTX,
+            dest: 'vendor/katex'
+        })
+        .addAssetsDir({
+            src: toMountTXM,
+            dest: 'vendor/markdown-it-texmath'
+        });
+
     }
 
     if (options.bootstrap) {
@@ -592,6 +628,14 @@ async function generateConfiguration(options) {
     }
 
     // Add JavaScript, CSS
+
+    if (options.mdKatex) {
+        config
+        .addStylesheet({ href: "/vendor/katex/dist/katex.min.css" })
+        .addStylesheet({
+            href: "/vendor/markdown-it-texmath/css/texmath.css"
+        });
+    }
 
     if (options.bootstrap) {
         config

@@ -17,15 +17,16 @@
     "dopublish": "npm publish --access public"
   },
   "dependencies": {
+    "@akashacms/diagram-maker": "akashacms/plugins-diagrams",
     "@akashacms/plugins-base": "^0.9.x",
     "@akashacms/renderers": "^0.9.x",
     "@akashacms/theme-bootstrap": "^0.9.x",
-    "@akashacms/diagram-maker": "akashacms/plugins-diagrams",
     "@compodoc/live-server": "^1.2.x",
     "akasharender": "^0.9.x",
     "bootstrap": "^4.6.x",
     "commander": "^12.1.0",
     "jquery": "^3.6.x",
+    "katex": "^0.16.21",
     "markdown-it-anchor": "^9.2.0",
     "markdown-it-attrs": "^4.3.0",
     "markdown-it-div": "^1.1.0",
@@ -36,9 +37,14 @@
     "markdown-it-multimd-table": "^4.2.3",
     "markdown-it-table-captions": "^1.0.4",
     "markdown-it-table-of-contents": "^0.8.0",
+    "markdown-it-texmath": "^1.0.0",
     "markdown-it-toc-done-right": "^4.2.0",
     "npm-run-all": "^4.1.x",
     "popper.js": "^1.16.x",
     "puppeteer": "^23.10.3"
+  },
+  "overrides": {
+    "rimraf@<4": "5.0.10",
+    "glob@<9": "10.4.5"
   }
 }
