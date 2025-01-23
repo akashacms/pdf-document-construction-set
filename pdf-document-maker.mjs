@@ -82,6 +82,7 @@ program
     // .option('--use-mermaid', 'Enable MermaidJS rendering')
     // .option('--no-md-table-of-contents', 'Disable the markdown-it-table-of-contents extension')
     .option('--funcs <funcsFN>', 'Name a JS file containing Mahafuncs for custom processing')
+    .option('--verbose', 'Print extra information during execution')
     .action(async (docPath, options, command) => {
 
         // TODO --watch  -- or nodemon
@@ -219,10 +220,12 @@ program
 
         // ALL PROCESSING/VALIDATING OF OPTIONS ENDED
 
-        console.log({
-            docPath,
-            options
-        });
+        if (options.verbose) {
+            console.log({
+                docPath,
+                options
+            });
+        }
 
 
         if (typeof options.config === 'string') {
@@ -251,7 +254,7 @@ program
         const renderedPaths = await renderDocuments(
             config, options, [ docPath ]
         );
-        console.log(renderedPaths);
+        // console.log(renderedPaths);
 
         const browser = await launchBrowser(
              options.headless
@@ -260,6 +263,7 @@ program
             for (const renderedPath of renderedPaths) {
                 await renderDocToPDF(
                     browser,
+                    options,
                     config,
                     renderedPath,
                     options.pdfOutput,
@@ -742,12 +746,14 @@ async function generateConfiguration(options) {
     // Prepare the configuration
     config.prepare();
 
-    console.log({
-        assets: config.assetDirs,
-        layouts: config.layoutDirs,
-        partials: config.partialDirs,
-        documents: config.documentDirs
-    })
+    if (options.verbose) {
+        console.log({
+            assets: config.assetDirs,
+            layouts: config.layoutDirs,
+            partials: config.partialDirs,
+            documents: config.documentDirs
+        });
+    }
     return config;
 }
 
@@ -762,14 +768,16 @@ async function renderLESSCSS(config, options) {
             }
             const renderer = config.findRendererPath(lessfn);
             const renderTo = renderer.filePath(lessfn);
-            console.log(`renderLESSCSS ${lessfn} renderer ${renderer.name} renders to ${renderTo}`);
+            // console.log(`renderLESSCSS ${lessfn} renderer ${renderer.name} renders to ${renderTo}`);
             let result = await akasha.renderDocument(
                 config, lessInfo
             );
             config.addStylesheet({
                 href: path.join('/', renderTo)
             });
-            console.log(result);
+            // if (options.verbose) {
+                console.log(result);
+            // }
         }
     }
 }
@@ -786,11 +794,12 @@ async function renderDocuments(config, options, docPaths) {
         const docInfo = await docInfoForPath(
             config, options, docPath
         );
-        console.log(`renderDocuments ${docPath}` /*, docInfo */);
         let result = await akasha.renderDocument(
             config, docInfo
         );
-        console.log(result);
+        // if (options.verbose) {
+            console.log(result);
+        // }
         renderedPaths.push(docInfo.renderPath);
     }
 
@@ -950,6 +959,7 @@ async function launchBrowser(
 
 async function renderDocToPDF(
     browser,
+    options,
     config,
     renderedPath,
     PDFdir,
@@ -995,7 +1005,9 @@ async function renderDocToPDF(
         footerTemplate: tmplFooter ? await fsp.readFile(tmplFooter, 'utf-8') : '',
         printBackground: true
     };
-    console.log(opts);
+    if (options.verbose) {
+        console.log(opts);
+    }
     const pdf = await page.pdf(opts);
 
     // Write PDF to file
