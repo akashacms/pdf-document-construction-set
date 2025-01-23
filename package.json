@@ -11,17 +11,19 @@
     "type": "git",
     "url": "git://github.com/akashacms/pdf-document-construction-set.git"
   },
+  "keywords": [
+    "PlantUML", "KaTeX", "Markdown", "AkashaCMS", "PDF"
+  ],
   "type": "module",
   "main": "./pdf-document-maker.mjs",
   "scripts": {
     "dopublish": "npm publish --access public"
   },
   "dependencies": {
-    "@akashacms/diagram-maker": "akashacms/plugins-diagrams",
+    "@akashacms/diagrams-maker": "^0.9.x",
     "@akashacms/plugins-base": "^0.9.x",
     "@akashacms/renderers": "^0.9.x",
     "@akashacms/theme-bootstrap": "^0.9.x",
-    "@compodoc/live-server": "^1.2.x",
     "akasharender": "^0.9.x",
     "bootstrap": "^4.6.x",
     "commander": "^12.1.0",
@@ -36,9 +38,7 @@
     "markdown-it-image-figures": "^2.1.1",
     "markdown-it-multimd-table": "^4.2.3",
     "markdown-it-table-captions": "^1.0.4",
-    "markdown-it-table-of-contents": "^0.8.0",
     "markdown-it-texmath": "^1.0.0",
-    "markdown-it-toc-done-right": "^4.2.0",
     "npm-run-all": "^4.1.x",
     "popper.js": "^1.16.x",
     "puppeteer": "^23.10.3"

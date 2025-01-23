@@ -16,8 +16,6 @@ import { default as MarkdownItAttrs } from 'markdown-it-attrs';
 import { default as MarkdownItDiv } from 'markdown-it-div';
 import { default as MarkdownItAnchor } from 'markdown-it-anchor';
 import { default as MarkdownItFootnote } from 'markdown-it-footnote';
-// import { default as MarkdownItTOC } from 'markdown-it-table-of-contents';
-// import { default as MarkdownItTOCDreapt } from 'markdown-it-toc-done-right';
 import { default as MarkdownItSections } from 'markdown-it-header-sections';
 import { default as MarkdownItImageFigures } from 'markdown-it-image-figures';
 import { default as MarkdownItMultiMDTable } from 'markdown-it-multimd-table';
@@ -31,7 +29,7 @@ import 'katex/contrib/mhchem';
 import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
 
-import { DiagramsPlugin } from '@akashacms/diagram-maker';
+import { DiagramsPlugin } from '@akashacms/diagrams-maker';
 
 // import { default as config } from './config.mjs';
 import puppeteer from 'puppeteer';
