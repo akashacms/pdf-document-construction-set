@@ -6,13 +6,14 @@
   },
   "name": "@akashacms/pdf-document-maker",
   "description": "Make good looking PDF Documents from Markdown or AsciiDoc files",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/akashacms/pdf-document-construction-set.git"
   },
   "keywords": [
-    "PlantUML", "KaTeX", "Markdown", "AkashaCMS", "PDF"
+    "PlantUML", "KaTeX", "Markdown", "AkashaCMS", "PDF",
+    "Document", "Puppeteer"
   ],
   "type": "module",
   "main": "pdf-document-maker.mjs",
