@@ -4,7 +4,7 @@
     "email": "david@davidherron.com",
     "url": "http://davidherron.com"
   },
-  "name": "pdf-document-maker",
+  "name": "@akashacms/pdf-document-maker",
   "description": "Make good looking PDF Documents from Markdown or AsciiDoc files",
   "version": "1.0.0",
   "repository": {
@@ -15,7 +15,10 @@
     "PlantUML", "KaTeX", "Markdown", "AkashaCMS", "PDF"
   ],
   "type": "module",
-  "main": "./pdf-document-maker.mjs",
+  "main": "pdf-document-maker.mjs",
+  "bin": {
+    "pdf-document-maker": "pdf-document-maker.mjs"
+  },
   "scripts": {
     "dopublish": "npm publish --access public"
   },
