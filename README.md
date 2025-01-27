@@ -1,8 +1,17 @@
+
+<figure class="ml-auto mr-auto">
+<img src="https://akashacms.github.io/pdf-document-construction-set/logo-pdf-document-maker.png" class="ml-auto mr-auto" alt="PDF Document Maker"/>
+</figure>
+
 # PDF Document Maker - Tooling to generate high fidelity PDF documents from Markdown or AsciiDoc
 
-It's easy to generate a plain PDF document from Markdown.  There are many tools for this purpose.  But, generating a PDF with fidelity close to what we'd get from a WYSIWYG word processor like Libre Office requires significant ability to customize the Markdown-HTML conversion result.
+_PDF Document Maker_ supports creating richly formatted documents, in both HTML and PDF format, using file types (Markdown, CSS, etc) which are easily tracked in a source code repository, and which are easily edited with IDEs like Visual Studio Code.
 
-_PDF Document Maker_ allows creating richly formatted documents in both HTML and PDF format.  The features include:
+There are many tools for creating richly formatted documents, such as WYSIWYG word processors like Libre Office.  But, they're not easily tracked in Git or other source code repositories.  Many kinds of technical projects require the ability to track all assets, including documentation, in a source repository, but also need to produce good looking documentation.
+
+While Markdown is a flexible markup format, it produces plain looking output.  Generating a PDF with fidelity close to what we'd get from a WYSIWYG word processor like Libre Office requires significant ability to customize the Markdown-HTML conversion result.  PDF Document Maker gives you a head start on that, and also helps to precisely customize the HTML and CSS any way you like.
+
+The features include:
 
 * Supporting A3, A4, A5, Legal, Letter or Tabloid page formats
 * Customizable header and footer on each page
