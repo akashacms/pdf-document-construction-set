@@ -12,8 +12,13 @@
     "url": "git://github.com/akashacms/pdf-document-construction-set.git"
   },
   "keywords": [
-    "PlantUML", "KaTeX", "Markdown", "AkashaCMS", "PDF",
-    "Document", "Puppeteer"
+    "PlantUML",
+    "KaTeX",
+    "Markdown",
+    "AkashaCMS",
+    "PDF",
+    "Document",
+    "Puppeteer"
   ],
   "type": "module",
   "main": "pdf-document-maker.mjs",
@@ -35,6 +40,7 @@
     "katex": "^0.16.21",
     "markdown-it-anchor": "^9.2.0",
     "markdown-it-attrs": "^4.3.0",
+    "markdown-it-bracketed-spans": "^1.0.1",
     "markdown-it-div": "^1.1.0",
     "markdown-it-footnote": "^4.0.0",
     "markdown-it-header-sections": "^1.0.0",

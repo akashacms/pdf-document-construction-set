@@ -4,6 +4,12 @@ title: PDF Document Maker
 publicationDate: January 6, 2025
 ---
 
+::: .row .ml-auto .mr-auto .text-center
+<figure class="ml-auto mr-auto">
+<img src="https://raw.githubusercontent.com/akashacms/pdf-document-construction-set/refs/heads/main/guide/assets/logo-pdf-document-maker.png" class="ml-auto mr-auto" alt="PDF Document Maker"/>
+</figure>
+:::
+
 ::: .jumbotron #main-page-hero
 _PDF Document Maker_ is a comprehensive tool for producing good quality documentation, in PDF format, from Markdown or AsciiDoc files.
 

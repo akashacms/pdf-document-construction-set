@@ -11,6 +11,7 @@ import { BooknavPlugin } from '@akashacms/plugins-booknav';
 import { BlogPodcastPlugin } from '@akashacms/plugins-blog-podcast';
 
 import { default as MarkdownITHighlightJS } from 'markdown-it-highlightjs';
+import { default as MarkdownITBracketedSpans } from 'markdown-it-bracketed-spans';
 import { default as MarkdownItAttrs } from 'markdown-it-attrs';
 import { default as MarkdownItDiv } from 'markdown-it-div';
 import { default as MarkdownItSections } from 'markdown-it-header-sections';
@@ -82,6 +83,7 @@ config
     .use(DiagramsPlugin);
     
 config.findRendererName('.html.md')
+    .use(MarkdownITBracketedSpans)
     .use(MarkdownItAttrs, {
         allowedAttributes: [ 'id', 'class', 'caption', 'data' ]
     })

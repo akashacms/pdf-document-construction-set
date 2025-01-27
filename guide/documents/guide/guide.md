@@ -1,7 +1,21 @@
 ---
 layout: article.njk
-title: PDF Document Maker - User GUide
+title: PDF Document Maker - User Guide
 ---
+
+::: .row .ml-auto .mr-auto .text-center
+<figure class="ml-auto mr-auto">
+<img src="/logo-pdf-document-maker.png" class="ml-auto mr-auto" alt="PDF Document Maker"/>
+</figure>
+:::
+
+Version: 1.0.1 {.text-center}
+
+Publication Date: January 27, 2025 {.text-center}
+
+Written by: David Herron {.text-center}
+
+Home page: https://akashacms.github.io/pdf-document-construction-set/index.html {.text-center}
 
 _PDF Document Maker_ is a comprehensive tool for producing good quality PDFs from Markdown or AsciiDoc files.
 
@@ -16,7 +30,16 @@ The features include
 * Built on top of AkashaCMS, a mature system that's designed for producing static HTML websites and E-Books.
 * HTML intermediary files are converted to PDF using Puppeteer
 
-All this is bundled into one easy-to-use command offering a lot of flexibility.
+All this is bundled into one easy-to-use command-line application offering a lot of flexibility.
+
+This document
+
+* Documents PDF Document Maker usage
+* Serves as an example document rendered to PDF using PDF Document Maker
+* Serves as a testbed for PDF Document Maker features
+* Demonstrates reusing the same content between PDF and Website
+
+This document is rendered from a project directory in the GitHub repository: https://github.com/akashacms/pdf-document-construction-set/tree/main/guide
 
 <toc-text-here></toc-text-here>
 
@@ -128,12 +151,16 @@ This diagram is itself an example of what's possible.  This is a UML Activity Di
 
 This diagram names four kinds of directories.  This comes from the underlying system, AkashaCMS, which supports four sets of input directories, _assets_, _partials_, _layouts_, and _documents_ with these purposes.
 
+Table: Table 1. Directory types
+
 | Type        | Option           | Description |
 |-------------|------------------|-------------|
 | _assets_    | `--asset-dir`    | Holds unprocessed files like CSS or images |
 | _partials_  | `--partial-dir`  | Holds templates for content snippets   |
 | _layouts_   | `--layout-dir`   | Holds page layout templates            |
 | _documents_ | `--document-dir` | Holds document files                 |
+
+{.table}
 
 For of the directory types there may be multiple actual directories.  The directories are _stacked_ with the later directories being higher in the stack.  This forms four virtual filesystems and we refer to files using the relative pathname from the root.
 
@@ -149,7 +176,9 @@ Look in the directory `out` and you'll find several files including `TEST.html`,
 
 We already discussed how the virtual directory stack works, and that a VPath is a path name relative to the root directory(ies).
 
-The file names in _documents_, _partials, and _layouts_ directories have file extensions naming the file type.  The extension is used to select the rendering package required to process that file.
+The file names in _documents_, _partials_, and _layouts_ directories have file extensions naming the file type.  The extension is used to select the rendering package required to process that file.
+
+Table: Table 2. Renderable file types
 
 Name | Extension | Output Ext | Description
 -----|-----------|-------------|-------------
@@ -161,6 +190,8 @@ Handlebars | `.handlebars` or `.html.handlebars` | `.html` | Handlebars
 JSON     | `.json` or `.html.json` | `.html` | Supports rendering a JSON document through a template to produce HTML
 Liquid   | `.liquid` or `.html.liquid` | `.html` | LiquidJS
 Nunjucks | `.njk` or `.html.njk`  | `.html` | Nunjucks
+
+{.table}
 
 In documents directories, files with these extensions are processed by the named rendering engine, then placed in the same VPath (with the new extension) in the HTML output directory.
 
@@ -461,10 +492,14 @@ The configuration options cover two broad areas:
 
 Two output directories are created:
 
+Table: Table 3. Output directories
+
 Output | Option | Description
 -------|--------|-----------------
 HTML Output | `--html-output` | This directory contains the directory structure of HTML, CSS, JavaScript, and images, which will be rendered into the PDF.  The structure is precisely the same as a static website, meaning the files are placed in a directory structure that can be deployed to a regular website.
 PDF Output | `--pdf-output` | This directory contains the PDF file which is generated.
+
+{.table}
 
 ## Header and Footer text in the PDF
 
@@ -668,6 +703,92 @@ The stuff between `{` and `}` are where we list the attributes to add to the ren
 :::
 :::
 
+For example, Bootstrap has some text colors available as classes such as `.text-primary`.  One can insert _primary_{.text-primary} text inline in a paragraph using `{.text-primary}`.  It appears there is a bug in that for the attribute to take effect it must be associated with text that has a tag, such as _primary_{.text-primary}, rather than simple text like primary{.text-primary}, which does not have a tag.
+
+Likewise, an entire paragraph can be in the `text-success` color using a suitable marker.  {.text-success}
+
+To fix the bug just described [surround some text in brackets]{.text-primary} which causes the bracketed-spans plugin to add a `<span>` tag around the bracketed text.
+
+To set `class=` or `id=` attributes on a table, place the marker two newlines after the table, like so:
+
+```
+Col 1 | Col 2
+------|------
+Val 1 | Val 2
+Val 1 | Val 2
+
+{#id-table-one .example-table-class}
+```
+
+Which renders as so:
+
+Col 1 | Col 2
+------|------
+Val 1 | Val 2
+Val 1 | Val 2
+
+{#id-table-one .example-table-class}
+
+You must inspect the page source to see the class and ID values.
+
+Special treatment is also required for lists.
+
+```
+* This item has the last word in **primary**{.text-primary}
+* If the final word is non-bold then this applies to the whole list item{.text-primary}
+* This item is completely in secondary {.text-secondary}
+```
+
+Which renders as
+
+* This item has the last word in **primary**{.text-primary}
+* If the final word is non-bold then this applies to the whole list item{.text-primary}
+* This item is completely in secondary {.text-secondary}
+
+Then, to apply a class to an entire list
+
+```
+* Every item in
+* this list is in
+* the danger color
+{.text-danger}
+```
+
+Which renders as so:
+
+* Every item in
+* this list is in
+* the danger color
+{.text-danger}
+
+A nested list has special treatment:
+
+```
+* Non-indented list item
+* Non-indented list item 2
+* Non-indented list items are in "text-success" color
+    * Indented list item
+    * Indented list item 2
+    * These items are in "text-info" color
+{.text-info}
+
+{.text-success}
+```
+
+Which renders as so:
+
+* Non-indented list item
+* Non-indented list item 2
+* Non-indented list items are in "text-success" color
+    * Indented list item
+    * Indented list item 2
+    * These items are in "text-info" color
+{.text-info}
+
+{.text-success}
+
+As with tables, the marker which applies to the entire list follows the list by two lines, whereas the marker for an indented sub-list immediately follows the list.
+
 The extension allows setting other attributes beyond ID and Class.  But, most other attributes are potential security vulnerabilities.  The extension has been configured to only allow `id=` and `class=` attributes.
 
 Use of these attributes should then correspond to entries in CSS stylesheets.
@@ -675,6 +796,29 @@ Use of these attributes should then correspond to entries in CSS stylesheets.
 Be aware that the `-anchors` extension and `-attrs` extension both deal with the `id=` value on headers.  With `-anchors` the author is not in control of the choice for the `id=` value, whereas with the `-attrs` extension the author chooses the `id=` value.
 
 This feature can be disabled with `--no-md-attrs`
+
+#### Adding a `<span>` tag around some text
+
+It is sometimes useful to add a `<span>` tag around some text.  Your document may need this to add an `id=` or `class=` to a section of text using the attributes marker shown in the previous section.
+
+As discussed in that section, this example does not attach the desired class attribute:
+
+```
+Text with desired primary{.text-primary} attribute.
+
+Other text using [bracketed span to utilize the primary]{.text-primary} attribute.
+```
+
+As noted in the previous section, the attribute does not get attached to text that does not have a tag.  Using the `[` and `]` around some text causes the bracketed-span extension to add a `<span>` tag.
+
+The above example renders as so:
+
+
+Text with desired primary{.text-primary} attribute.
+
+Other text using [bracketed span to utilize the primary]{.text-primary} attribute.
+
+This feature can be disabled with `--no-md-bracketed-span`.
 
 #### Simplify adding a `<div>` block
 

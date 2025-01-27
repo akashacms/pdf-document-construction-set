@@ -12,6 +12,7 @@ const mahabhuta = akasha.mahabhuta;
 import { parseFrontmatter } from '@akashacms/renderers';
 
 import { default as MarkdownITHighlightJS } from 'markdown-it-highlightjs';
+import { default as MarkdownITBracketedSpans } from 'markdown-it-bracketed-spans';
 import { default as MarkdownItAttrs } from 'markdown-it-attrs';
 import { default as MarkdownItDiv } from 'markdown-it-div';
 import { default as MarkdownItAnchor } from 'markdown-it-anchor';
@@ -69,6 +70,7 @@ program
     .option('--no-md-anchor', 'Disable the markdown-it-anchor extension')
     .option('--no-md-footnote', 'Disable the markdown-it-footnote extension')
     .option('--no-md-attrs', 'Disable the markdown-it-attrs extension')
+    .option('--no-md-bracketed-spans', 'Disable the markdown-it-bracketed-spans extension')
     .option('--no-md-div', 'Disable the markdown-it-div extension')
     .option('--no-md-header-sections', 'Disable the markdown-it-header-sections extension')
     .option('--no-md-highlightjs', 'Disable the markdown-it-highlightjs extension')
@@ -452,6 +454,10 @@ async function generateConfiguration(options) {
             src: path.dirname(path.dirname(pHL)),
             dest: 'vendor/highlight.js' 
         });
+    }
+    if (options.mdBracketedSpans) {
+        config.findRendererName('.html.md')
+        .use(MarkdownITBracketedSpans);
     }
     if (options.mdAttrs) {
         config.findRendererName('.html.md')
