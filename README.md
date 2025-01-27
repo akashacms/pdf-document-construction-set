@@ -1,6 +1,6 @@
 
 <figure class="ml-auto mr-auto">
-<img src="https://akashacms.github.io/pdf-document-construction-set/logo-pdf-document-maker.png" class="ml-auto mr-auto" alt="PDF Document Maker"/>
+<img src="https://raw.githubusercontent.com/akashacms/pdf-document-construction-set/refs/heads/main/guide/assets/logo-pdf-document-maker.png" class="ml-auto mr-auto" alt="PDF Document Maker"/>
 </figure>
 
 # PDF Document Maker - Tooling to generate high fidelity PDF documents from Markdown or AsciiDoc
