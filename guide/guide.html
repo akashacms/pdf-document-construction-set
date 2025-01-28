@@ -8,7 +8,7 @@
 
 
 
-<title>PDF Document Maker - User GUide</title>
+<title>PDF Document Maker - User Guide</title>
 
 
 
@@ -31,7 +31,7 @@
 
 
 
-<meta name="pagename" content="PDF Document Maker - User GUide">
+<meta name="pagename" content="PDF Document Maker - User Guide">
 
 
 
@@ -43,7 +43,7 @@
 
 
 
-<meta name="DC.title" content="PDF Document Maker - User GUide">
+<meta name="DC.title" content="PDF Document Maker - User Guide">
 
 
 
@@ -60,7 +60,7 @@
 
 <!-- OpenGraph Meta Tags -->
 
-<meta name="og:title" content="PDF Document Maker - User GUide">
+<meta name="og:title" content="PDF Document Maker - User Guide">
 
 <meta name="og:url" content="https://akashacms.github.io/pdf-document-construction-set/guide/guide.html">
 
@@ -153,7 +153,7 @@
     
         &#xbb; <a class="p-category" href="index.html">PDF Document Maker Guide</a>
     
-        &#xbb; <a class="p-category" href="guide.html">PDF Document Maker - User GUide</a>
+        &#xbb; <a class="p-category" href="guide.html">PDF Document Maker - User Guide</a>
     
 </div>
 
@@ -170,11 +170,20 @@
 <div class="row">
   <article class="col-sm-12">
     <div class="article-heading">
-        <h1 class="article-title" align="center">PDF Document Maker - User GUide
+        <h1 class="article-title" align="center">PDF Document Maker - User Guide
     </h1></div>
 
     
-    <p><em>PDF Document Maker</em> is a comprehensive tool for producing good quality PDFs from Markdown or AsciiDoc files.</p>
+    <div class="row ml-auto mr-auto text-center">
+<figure class="ml-auto mr-auto">
+<img src="../logo-pdf-document-maker.png" class="ml-auto mr-auto" alt="PDF Document Maker">
+</figure>
+</div>
+<p class="text-center">Version: 1.0.1</p>
+<p class="text-center">Publication Date: January 27, 2025</p>
+<p class="text-center">Written by: David Herron</p>
+<p class="text-center">Home page: <a href="https://akashacms.github.io/pdf-document-construction-set/index.html">https://akashacms.github.io/pdf-document-construction-set/index.html</a></p>
+<p><em>PDF Document Maker</em> is a comprehensive tool for producing good quality PDFs from Markdown or AsciiDoc files.</p>
 <p>The goal is producing documents with similar fidelity to those produced from WYSIWYG word processors, from files which are easily versioned in normal source code control systems (like Git).  A secondary goal is the ability to easily use the same content, as normal HTML pages, on a website.</p>
 <p>The features include</p>
 <ul>
@@ -185,7 +194,15 @@
 <li>Built on top of AkashaCMS, a mature system that&apos;s designed for producing static HTML websites and E-Books.</li>
 <li>HTML intermediary files are converted to PDF using Puppeteer</li>
 </ul>
-<p>All this is bundled into one easy-to-use command offering a lot of flexibility.</p>
+<p>All this is bundled into one easy-to-use command-line application offering a lot of flexibility.</p>
+<p>This document</p>
+<ul>
+<li>Documents PDF Document Maker usage</li>
+<li>Serves as an example document rendered to PDF using PDF Document Maker</li>
+<li>Serves as a testbed for PDF Document Maker features</li>
+<li>Demonstrates reusing the same content between PDF and Website</li>
+</ul>
+<p>This document is rendered from a project directory in the GitHub repository: <a href="https://github.com/akashacms/pdf-document-construction-set/tree/main/guide">https://github.com/akashacms/pdf-document-construction-set/tree/main/guide</a></p>
 <p><toc-text-here></toc-text-here></p>
 <section>
 <h1>Installation and Project setup for PDF Document Maker</h1>
@@ -256,7 +273,8 @@ CLI to build PDF files from Markdown/AsciiDoc documents
         
 <p>This diagram is itself an example of what&apos;s possible.  This is a UML Activity Diagram describing a high-level overview of <em>PDF Document Maker</em>&apos;s internal implementation.  The diagram is described in-line with the text, then formatted using PlantUML into a PNG.</p>
 <p>This diagram names four kinds of directories.  This comes from the underlying system, AkashaCMS, which supports four sets of input directories, <em>assets</em>, <em>partials</em>, <em>layouts</em>, and <em>documents</em> with these purposes.</p>
-<table>
+<table class="table">
+<caption>Table 1. Directory types</caption>
 <thead>
 <tr>
 <th>Type</th>
@@ -297,8 +315,9 @@ CLI to build PDF files from Markdown/AsciiDoc documents
 <section>
 <h1>File name conventions</h1>
 <p>We already discussed how the virtual directory stack works, and that a VPath is a path name relative to the root directory(ies).</p>
-<p>The file names in <em>documents</em>, _partials, and <em>layouts</em> directories have file extensions naming the file type.  The extension is used to select the rendering package required to process that file.</p>
-<table>
+<p>The file names in <em>documents</em>, <em>partials</em>, and <em>layouts</em> directories have file extensions naming the file type.  The extension is used to select the rendering package required to process that file.</p>
+<table class="table">
+<caption>Table 2. Renderable file types</caption>
 <thead>
 <tr>
 <th>Name</th>
@@ -593,7 +612,8 @@ CLI to build PDF files from Markdown/AsciiDoc documents
 <section>
 <h2>Output directories</h2>
 <p>Two output directories are created:</p>
-<table>
+<table class="table">
+<caption>Table 3. Output directories</caption>
 <thead>
 <tr>
 <th>Output</th>
@@ -776,10 +796,102 @@ CLI to build PDF files from Markdown/AsciiDoc documents
 </code></pre>
 </div>
 </div>
+<p>For example, Bootstrap has some text colors available as classes such as <code>.text-primary</code>.  One can insert <em class="text-primary">primary</em> text inline in a paragraph using <code>{.text-primary}</code>.  It appears there is a bug in that for the attribute to take effect it must be associated with text that has a tag, such as <em class="text-primary">primary</em>, rather than simple text like primary{.text-primary}, which does not have a tag.</p>
+<p class="text-success">Likewise, an entire paragraph can be in the <code>text-success</code> color using a suitable marker. </p>
+<p>To fix the bug just described <span class="text-primary">surround some text in brackets</span> which causes the bracketed-spans plugin to add a <code>&lt;span&gt;</code> tag around the bracketed text.</p>
+<p>To set <code>class=</code> or <code>id=</code> attributes on a table, place the marker two newlines after the table, like so:</p>
+<pre><code class="hljs">Col <span class="hljs-number">1</span> <span class="hljs-string">| Col 2</span>
+<span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-punctuation">-</span><span class="hljs-string">|------</span>
+Val <span class="hljs-number">1</span> <span class="hljs-string">| Val 2</span>
+Val <span class="hljs-number">1</span> <span class="hljs-string">| Val 2</span>
+
+{<span class="hljs-meta">#id-table-one .example-table-class}</span>
+</code></pre>
+<p>Which renders as so:</p>
+<table id="id-table-one" class="example-table-class">
+<thead>
+<tr>
+<th>Col 1</th>
+<th>Col 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Val 1</td>
+<td>Val 2</td>
+</tr>
+<tr>
+<td>Val 1</td>
+<td>Val 2</td>
+</tr>
+</tbody>
+</table>
+<p>You must inspect the page source to see the class and ID values.</p>
+<p>Special treatment is also required for lists.</p>
+<pre><code class="hljs">* This <span class="hljs-built_in">item</span> has <span class="hljs-keyword">the</span> <span class="hljs-keyword">last</span> <span class="hljs-built_in">word</span> <span class="hljs-keyword">in</span> **primary**{.<span class="hljs-built_in">text</span>-primary}
+* If <span class="hljs-keyword">the</span> final <span class="hljs-built_in">word</span> <span class="hljs-keyword">is</span> non-bold <span class="hljs-keyword">then</span> this applies <span class="hljs-keyword">to</span> <span class="hljs-keyword">the</span> whole <span class="hljs-built_in">list</span> <span class="hljs-built_in">item</span>{.<span class="hljs-built_in">text</span>-primary}
+* This <span class="hljs-built_in">item</span> <span class="hljs-keyword">is</span> completely <span class="hljs-keyword">in</span> secondary {.<span class="hljs-built_in">text</span>-secondary}
+</code></pre>
+<p>Which renders as</p>
+<ul>
+<li>This item has the last word in <strong class="text-primary">primary</strong></li>
+<li class="text-primary">If the final word is non-bold then this applies to the whole list item</li>
+<li class="text-secondary">This item is completely in secondary</li>
+</ul>
+<p>Then, to apply a class to an entire list</p>
+<pre><code class="hljs"><span class="hljs-comment">* Every item in</span>
+<span class="hljs-comment">* this list is in</span>
+<span class="hljs-comment">* the danger color</span>
+{.text-danger}
+</code></pre>
+<p>Which renders as so:</p>
+<ul class="text-danger">
+<li>Every item in</li>
+<li>this list is in</li>
+<li>the danger color</li>
+</ul>
+<p>A nested list has special treatment:</p>
+<pre><code class="hljs">* Non-indented <span class="hljs-built_in">list</span> <span class="hljs-built_in">item</span>
+* Non-indented <span class="hljs-built_in">list</span> <span class="hljs-built_in">item</span> <span class="hljs-number">2</span>
+* Non-indented <span class="hljs-built_in">list</span> items are <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;text-success&quot;</span> color
+    * Indented <span class="hljs-built_in">list</span> <span class="hljs-built_in">item</span>
+    * Indented <span class="hljs-built_in">list</span> <span class="hljs-built_in">item</span> <span class="hljs-number">2</span>
+    * These items are <span class="hljs-keyword">in</span> <span class="hljs-string">&quot;text-info&quot;</span> color
+{.<span class="hljs-built_in">text</span>-info}
+
+{.<span class="hljs-built_in">text</span>-success}
+</code></pre>
+<p>Which renders as so:</p>
+<ul class="text-success">
+<li>Non-indented list item</li>
+<li>Non-indented list item 2</li>
+<li>Non-indented list items are in &quot;text-success&quot; color
+<ul class="text-info">
+<li>Indented list item</li>
+<li>Indented list item 2</li>
+<li>These items are in &quot;text-info&quot; color</li>
+</ul>
+</li>
+</ul>
+<p>As with tables, the marker which applies to the entire list follows the list by two lines, whereas the marker for an indented sub-list immediately follows the list.</p>
 <p>The extension allows setting other attributes beyond ID and Class.  But, most other attributes are potential security vulnerabilities.  The extension has been configured to only allow <code>id=</code> and <code>class=</code> attributes.</p>
 <p>Use of these attributes should then correspond to entries in CSS stylesheets.</p>
 <p>Be aware that the <code>-anchors</code> extension and <code>-attrs</code> extension both deal with the <code>id=</code> value on headers.  With <code>-anchors</code> the author is not in control of the choice for the <code>id=</code> value, whereas with the <code>-attrs</code> extension the author chooses the <code>id=</code> value.</p>
 <p>This feature can be disabled with <code>--no-md-attrs</code></p>
+</section>
+<section>
+<h4>Adding a <code>&lt;span&gt;</code> tag around some text</h4>
+<p>It is sometimes useful to add a <code>&lt;span&gt;</code> tag around some text.  Your document may need this to add an <code>id=</code> or <code>class=</code> to a section of text using the attributes marker shown in the previous section.</p>
+<p>As discussed in that section, this example does not attach the desired class attribute:</p>
+<pre><code class="hljs"><span class="hljs-type">Text</span> <span class="hljs-keyword">with</span> desired <span class="hljs-keyword">primary</span>{.text-<span class="hljs-keyword">primary</span>} <span class="hljs-keyword">attribute</span>.
+
+Other <span class="hljs-type">text</span> <span class="hljs-keyword">using</span> [bracketed span <span class="hljs-keyword">to</span> utilize the <span class="hljs-keyword">primary</span>]{.text-<span class="hljs-keyword">primary</span>} <span class="hljs-keyword">attribute</span>.
+</code></pre>
+<p>As noted in the previous section, the attribute does not get attached to text that does not have a tag, as demonstrated by the first line of text.  The brackets (<code>[</code> and <code>]</code>) around text in the second line causes the bracketed-span extension to add a <code>&lt;span&gt;</code> tag, allowing the attribute to be applied.</p>
+<p>The above example renders as so:</p>
+<p>Text with desired primary{.text-primary} attribute.</p>
+<p>Other text using <span class="text-primary">bracketed span to utilize the primary</span> attribute.</p>
+<p>This feature can be disabled with <code>--no-md-bracketed-span</code>.</p>
 </section>
 <section>
 <h4>Simplify adding a <code>&lt;div&gt;</code> block</h4>
@@ -1602,6 +1714,25 @@ stateDiagram-v2
 </div>
 </div>
 <p>This should save the time required to initialize Puppeteer four times.</p>
+<section>
+<h3>Diagnosing a &quot;<em>Failed to launch the browser</em>&quot; failure with Mermaid</h3>
+<p>The following might happen when you run the Mermaid CLI tool:</p>
+<pre><code class="hljs language-shell">./documents/guide/img/mahabhuta-workflow.mmd
+Generating single mermaid chart
+file:///home/david/Projects/akasharender/pdf-document-construction-set/guide/node_modules/@puppeteer/browsers/lib/esm/launch.js:303
+                reject(new Error([
+                       ^
+
+Error: Failed to launch the browser process!
+[254374:254374:0128/141251.817539:FATAL:zygote_host_impl_linux.cc(128)] No usable sandbox! If you are running on Ubuntu 23.10+ or another Linux distro that has disabled unprivileged user namespaces with AppArmor, see https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md. Otherwise see https://chromium.googlesource.com/chromium/src/+/main/docs/linux/suid_sandbox_development.md for more information on developing with the (older) SUID sandbox. If you want to live dangerously and need an immediate workaround, you can try using --no-sandbox.
+
+TROUBLESHOOTING: https://pptr.dev/troubleshooting
+</code></pre>
+<p>The issue here is that Mermaid uses Puppeteer which in turn uses a Chrome instance for rendering files to PDF, and Chrome&apos;s security requires sandboxing its execution.</p>
+<p>The Puppeteer troubleshooting page explains what to do.  The first presented option is to turn off the sandboxing with the <code>--no-sandbox</code> option.  The Mermaid CLI doesn&apos;t offer a way to do this, and it&apos;s a bad idea anyway.</p>
+<p>What does work is to chdir to <code>~/.cache/puppeteer/chrome/linux-&lt;version&gt;/chrome-linux64/</code> (notice the version number) and run the commands listed in the troubleshooting guide.  This creates a setuid sandbox.  Because Chrome is routinely updated, you may have to rerun these commands from time to time.</p>
+<p>Also, review the guidance for running Puppeteer in build systems like Travis CI, or in Docker.  In some cases PDF Document Maker is likely to be used in an automated build system, which will require some environment preparation as outlined in the Puppeteer documentation.</p>
+</section>
 </section>
 <section>
 <h2>High quality equation (mathematical and chemical) rendering with KaTeX</h2>
@@ -1862,7 +1993,19 @@ $$\ce{$K = \ce{\frac{[Hg^2+][Hg]}{[Hg2^2+]}}$}$$
 
 <footer class="row" style="text-align: center; height: 100px;">
 <div class="col-sm-12">
-
+<div class="row">
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <p>&quot;PDF&quot; is the name for a file format developed by Adobe.  It&apos;s possible Adobe has a trademark on &quot;PDF&quot;.  The USPTO list of trademarks shows close to a zillion applications with the string &quot;PDF&quot; in the name.  Therefore, it is believed that &quot;PDF&quot; in &quot;PDF Document Maker&quot; is under fair use.</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <p><a href="https://akashacms.github.io/pdf-document-construction-set/">PDF Document Maker</a> is an application built on top of <a href="https://akashacms.com">AkashaCMS</a> components.</p>
+        </div>
+    </div>
+</div>
 <!-- partial file-name="footer.html"></partial></div -->
 </div></footer>
 </div>
