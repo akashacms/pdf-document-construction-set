@@ -809,10 +809,9 @@ Text with desired primary{.text-primary} attribute.
 Other text using [bracketed span to utilize the primary]{.text-primary} attribute.
 ```
 
-As noted in the previous section, the attribute does not get attached to text that does not have a tag.  Using the `[` and `]` around some text causes the bracketed-span extension to add a `<span>` tag.
+As noted in the previous section, the attribute does not get attached to text that does not have a tag, as demonstrated by the first line of text.  The brackets (`[` and `]`) around text in the second line causes the bracketed-span extension to add a `<span>` tag, allowing the attribute to be applied.
 
 The above example renders as so:
-
 
 Text with desired primary{.text-primary} attribute.
 
