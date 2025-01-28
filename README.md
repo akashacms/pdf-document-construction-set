@@ -18,7 +18,7 @@ The features include:
 * CSS stylesheets
 * Layout and Partial templates for custom formatting, using template engines like Nunjucks, Mustache, or EJS
 * Using PlantUML or Mermaid to support drawings
-* ??? Using KaTeX to support equations (NOT IMPLEMENTED YET)
+* Using KaTeX to support equations
 * Using HighlightJS for styling code blocks
 * Custom HTML elements to bring in external data sources
 * Custom HTML/DOM processing

@@ -1767,6 +1767,31 @@ await run(
 
 This should save the time required to initialize Puppeteer four times.
 
+### Diagnosing a "_Failed to launch the browser_" failure with Mermaid
+
+The following might happen when you run the Mermaid CLI tool:
+
+```shell
+./documents/guide/img/mahabhuta-workflow.mmd
+Generating single mermaid chart
+file:///home/david/Projects/akasharender/pdf-document-construction-set/guide/node_modules/@puppeteer/browsers/lib/esm/launch.js:303
+                reject(new Error([
+                       ^
+
+Error: Failed to launch the browser process!
+[254374:254374:0128/141251.817539:FATAL:zygote_host_impl_linux.cc(128)] No usable sandbox! If you are running on Ubuntu 23.10+ or another Linux distro that has disabled unprivileged user namespaces with AppArmor, see https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md. Otherwise see https://chromium.googlesource.com/chromium/src/+/main/docs/linux/suid_sandbox_development.md for more information on developing with the (older) SUID sandbox. If you want to live dangerously and need an immediate workaround, you can try using --no-sandbox.
+
+TROUBLESHOOTING: https://pptr.dev/troubleshooting
+```
+
+The issue here is that Mermaid uses Puppeteer which in turn uses a Chrome instance for rendering files to PDF, and Chrome's security requires sandboxing its execution.
+
+The Puppeteer troubleshooting page explains what to do.  The first presented option is to turn off the sandboxing with the `--no-sandbox` option.  The Mermaid CLI doesn't offer a way to do this, and it's a bad idea anyway.
+
+What does work is to chdir to `~/.cache/puppeteer/chrome/linux-<version>/chrome-linux64/` (notice the version number) and run the commands listed in the troubleshooting guide.  This creates a setuid sandbox.  Because Chrome is routinely updated, you may have to rerun these commands from time to time.
+
+Also, review the guidance for running Puppeteer in build systems like Travis CI, or in Docker.  In some cases PDF Document Maker will be used in an automated build system, which will require some environment preparation as outlined in that documentation.
+
 ## High quality equation (mathematical and chemical) rendering with KaTeX
 
 KaTeX is a LaTeX/TeX-inspired format for rendering beautiful mathematical equations.  Like with PlantUML and Mermaid, the model is to describe math equations in a textual format, which is rendered by KaTeX into the equations written by real mathematicians.
