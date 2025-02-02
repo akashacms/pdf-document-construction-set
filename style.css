@@ -26,3 +26,6 @@ table.table-caption-above caption {
 table.table-caption-below caption {
   caption-side: bottom !important;
 }
+.text-color-red {
+  color: #FF0000;
+}

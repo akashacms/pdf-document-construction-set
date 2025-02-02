@@ -13,7 +13,7 @@
 
 
 
-<title>Announcing the PDF Document Maker application</title>
+<title>Updated to v1.0.2, several added features</title>
 
 
 
@@ -36,7 +36,7 @@
 
 
 
-<meta name="pagename" content="Announcing the PDF Document Maker application">
+<meta name="pagename" content="Updated to v1.0.2, several added features">
 
 
 
@@ -48,7 +48,7 @@
 
 
 
-<meta name="DC.title" content="Announcing the PDF Document Maker application">
+<meta name="DC.title" content="Updated to v1.0.2, several added features">
 
 
 
@@ -65,11 +65,9 @@
 
 <!-- OpenGraph Meta Tags -->
 
-<meta name="og:title" content="Announcing the PDF Document Maker application">
+<meta name="og:title" content="Updated to v1.0.2, several added features">
 
-<meta name="og:url" content="https://akashacms.github.io/pdf-document-construction-set/blog/2025/01/announce.html">
-
-
+<meta name="og:url" content="https://akashacms.github.io/pdf-document-construction-set/blog/2025/01/name-update.html">
 
 
 
@@ -102,7 +100,9 @@
 
 
 
-<link rel="canonical" href="https://akashacms.github.io/pdf-document-construction-set/blog/2025/01/announce.html">
+
+
+<link rel="canonical" href="https://akashacms.github.io/pdf-document-construction-set/blog/2025/01/name-update.html">
 
 
 <link rel="sitemap" type="application/xml" href="../../../sitemap.xml" title="Sitemap">
@@ -162,7 +162,7 @@
     
         &#xbb; <a class="p-category" href="index.html">Q1</a>
     
-        &#xbb; <a class="p-category" href="announce.html">Announcing the PDF Document Maker application</a>
+        &#xbb; <a class="p-category" href="name-update.html">Updated to v1.0.2, several added features</a>
     
 </div>
 
@@ -171,7 +171,7 @@
 <div class="row">
   <section id="byline" class="col-sm-12">
     
-    Date: Sun Jan 05 2025
+    Date: Sun Feb 02 2025
 
 ;
   </section>
@@ -180,16 +180,31 @@
 <div class="row">
   <article class="col-sm-10">
     
-    <p>The package <code>@akashacms/pdf-document-maker</code> v1.0.0 has been published on npm.</p>
+    <p>The package <code>@akashacms/pdf-document-maker</code> v1.0.2 has been published on npm.</p>
 <p><a href="https://www.npmjs.com/package/@akashacms/pdf-document-maker">https://www.npmjs.com/package/@akashacms/pdf-document-maker</a></p>
-<p>Additionally, the package <code>@akashacms/diagrams-maker</code>, which was developed to support <code>pdf-document-maker</code>, has also been published.</p>
-<p><a href="https://www.npmjs.com/package/@akashacms/diagrams-maker">https://www.npmjs.com/package/@akashacms/diagrams-maker</a></p>
+<p>Updates include:</p>
+<p><strong>Adding KaTeX support</strong>:  This is a LaTeX-inspired (I&apos;m showing my age) syntax for describing both mathematical and chemical equations.  They look cool even if I don&apos;t remember much mathematics from college.</p>
+<p><strong>Spinning off a package, <code>@akashacms/diagrams-maker</code></strong>: While editing this website, it was noted that regular AkashaCMS websites needed an easier path for including diagrams and mathematics.  The <code>@akashacms/diagrams-maker</code> package does that.</p>
+<p><strong>Add the <code>markdown-it-bracketed-span</code> extension</strong>: This extension wraps a <code>&lt;span&gt;</code> around text by <code>[adding brackets around the text]</code>.  Bracketed text [that is wrapped by a <code>&lt;span&gt;</code> tag] is not by itself very interesting.  Unless you look at the page source you will not have noticed the previous sentence has some words wrapped by a <code>&lt;span&gt;</code> tag.  But, when combined with another Markdown extension, <code>markdown-it-attrs</code>, one can easily add <code>id=</code> or <code>class=</code> attributes to the <code>&lt;span&gt;</code>.</p>
+<p>To demonstrate, consider this CSS declaration:</p>
+<pre><code class="hljs language-css"><span class="hljs-selector-class">.text-color-red</span> { <span class="hljs-attribute">color</span>:<span class="hljs-number">#FF0000</span>; }
+</code></pre>
+<p>Then, write something like <code>[text within brackets]{.text-color-red}</code>, or <span class="text-color-red">example text within brackets</span>, and notice that the text is red.</p>
+<p>The HTML generated for the previous paragraph is:</p>
+<pre><code class="hljs language-html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>
+Then, write something like
+<span class="hljs-tag">&lt;<span class="hljs-name">code</span>&gt;</span>[text within brackets]{.text-color-red}<span class="hljs-tag">&lt;/<span class="hljs-name">code</span>&gt;</span>,
+or <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;text-color-red&quot;</span>&gt;</span>example text within brackets<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>,
+and notice that the text is red.
+<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span>
+</code></pre>
+<p>The <code>markdown-it-bracketed-span</code> plugin was needed because it was noted that simply adding an attribute marker, like <code>{.text-color-red}</code>, did not have an effect unless it were added to text that was wrapped by a tag.  The <code>&lt;span&gt;</code> it introduced took care of that issue.</p>
 
     <div class="btn-group blog-prev-next-wrapper" role="group" aria-label="Next/Previous">
-<a class="btn btn-outline-primary blog-prev-link" href="name-update.html" role="button">
-&#xab;&#xab;&#xab;&#xab;&#xab;&#xab; Updated to v1.0.2, several added features</a>
-<a class="btn btn-outline-primary blog-next-link" href="name-update.html" role="button">
-<span style="float: right">Updated to v1.0.2, several added features &#xbb;&#xbb;&#xbb;&#xbb;&#xbb;&#xbb;</span></a>
+<a class="btn btn-outline-primary blog-prev-link" href="announce.html" role="button">
+&#xab;&#xab;&#xab;&#xab;&#xab;&#xab; Announcing the PDF Document Maker application</a>
+<a class="btn btn-outline-primary blog-next-link" href="announce.html" role="button">
+<span style="float: right">Announcing the PDF Document Maker application &#xbb;&#xbb;&#xbb;&#xbb;&#xbb;&#xbb;</span></a>
 </div>
   </article>
   <section id="right" class="col-sm-2">

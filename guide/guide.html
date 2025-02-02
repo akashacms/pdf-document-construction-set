@@ -210,7 +210,7 @@
 <p>A project directory consists of a <em>package.json</em> file which is used for listing dependencies and build processes.  Instead of being used for building Node.js packages, we will use it to record project dependencies and for build scripts.</p>
 <pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">node --version  <span class="hljs-comment"># Make sure v20 or later</span></span>
 <span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm init -y     <span class="hljs-comment"># Set up a default package.json</span></span>
-<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm install pdf-document-maker --save</span>
+<span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npm install @akashacms/pdf-document-maker --save</span>
 </code></pre>
 <p>Once installed you can get help:</p>
 <pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash">npx pdf-document-maker --<span class="hljs-built_in">help</span></span>
@@ -226,7 +226,7 @@ CLI to build PDF files from Markdown/AsciiDoc documents
 <h1>Quick start for using PDF Document Maker</h1>
 <p>Before going deep into using PDF Document Maker, let&apos;s do a quick and easy example.  We will format a test file into a PDF.</p>
 <p>The search phrase &quot;<em>standard markdown test file</em>&quot; turns up several test Markdown files.  This repository has a very good one:   <a href="https://github.com/mxstbr/markdown-test-file"><code>https://github.com/mxstbr/markdown-test-file</code></a></p>
-<p>Start by creating a directory, adding a <code>package.json</code>, and installing <code>pdf-document-maker</code> as shown above.</p>
+<p>Start by creating a directory, adding a <code>package.json</code>, and installing <code>@akashacms/pdf-document-maker</code> as shown above.</p>
 <p>The GitHub repository for this tool already has this set up in <a href="https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple"><code>https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple</code></a></p>
 <p>In that directory, create a directory named <code>documents</code>:</p>
 <pre><code class="hljs language-shell"><span class="hljs-meta prompt_">&#x24; </span><span class="language-bash"><span class="hljs-built_in">mkdir</span> documents</span>
@@ -602,7 +602,7 @@ CLI to build PDF files from Markdown/AsciiDoc documents
 </section>
 <section>
 <h1>Project configuration with the PDF Document Maker CLI</h1>
-<p>We discussed earlier that a PDF Document Maker project directory contains the Node.js <code>package.json</code> file where one dependency is <code>pdf-document-maker</code>.  The directory must also contain the sort of files mentioned earlier.</p>
+<p>We discussed earlier that a PDF Document Maker project directory contains the Node.js <code>package.json</code> file where one dependency is <code>@akashacms/pdf-document-maker</code>.  The directory must also contain the sort of files mentioned earlier.</p>
 <p>Most of the project configuration is handled with command-line options.  The <code>--help</code> option will show you the full list of options.</p>
 <p>The configuration options cover two broad areas:</p>
 <ul>
@@ -1731,7 +1731,7 @@ TROUBLESHOOTING: https://pptr.dev/troubleshooting
 <p>The issue here is that Mermaid uses Puppeteer which in turn uses a Chrome instance for rendering files to PDF, and Chrome&apos;s security requires sandboxing its execution.</p>
 <p>The Puppeteer troubleshooting page explains what to do.  The first presented option is to turn off the sandboxing with the <code>--no-sandbox</code> option.  The Mermaid CLI doesn&apos;t offer a way to do this, and it&apos;s a bad idea anyway.</p>
 <p>What does work is to chdir to <code>~/.cache/puppeteer/chrome/linux-&lt;version&gt;/chrome-linux64/</code> (notice the version number) and run the commands listed in the troubleshooting guide.  This creates a setuid sandbox.  Because Chrome is routinely updated, you may have to rerun these commands from time to time.</p>
-<p>Also, review the guidance for running Puppeteer in build systems like Travis CI, or in Docker.  In some cases PDF Document Maker is likely to be used in an automated build system, which will require some environment preparation as outlined in the Puppeteer documentation.</p>
+<p>Also, review the guidance for running Puppeteer in build systems like Travis CI, or in Docker.  In some cases PDF Document Maker will be used in an automated build system, which will require some environment preparation as outlined in that documentation.</p>
 </section>
 </section>
 <section>
