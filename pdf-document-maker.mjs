@@ -39,7 +39,7 @@ import { Command } from 'commander';
 const program = new Command();
 
 program
-    // .name('build-documents')
+    .name('pdf-document-maker')
     .description('CLI to build PDF files from Markdown/AsciiDoc documents')
     .version(packageConfig.version,
         '-v, --version', 'output the current version')

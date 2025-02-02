@@ -52,7 +52,7 @@ A project directory consists of a _package.json_ file which is used for listing 
 ```shell
 $ node --version  # Make sure v20 or later
 $ npm init -y     # Set up a default package.json
-$ npm install pdf-document-maker --save
+$ npm install @akashacms/pdf-document-maker --save
 ```
 
 Once installed you can get help:
@@ -74,7 +74,7 @@ Before going deep into using PDF Document Maker, let's do a quick and easy examp
 
 The search phrase "_standard markdown test file_" turns up several test Markdown files.  This repository has a very good one:   [`https://github.com/mxstbr/markdown-test-file`](https://github.com/mxstbr/markdown-test-file)
 
-Start by creating a directory, adding a `package.json`, and installing `pdf-document-maker` as shown above.
+Start by creating a directory, adding a `package.json`, and installing `@akashacms/pdf-document-maker` as shown above.
 
 The GitHub repository for this tool already has this set up in [`https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple`](https://github.com/akashacms/pdf-document-construction-set/tree/main/example/simple)
 
@@ -479,7 +479,7 @@ $ npx pdf-document-maker  \
 
 # Project configuration with the PDF Document Maker CLI
 
-We discussed earlier that a PDF Document Maker project directory contains the Node.js `package.json` file where one dependency is `pdf-document-maker`.  The directory must also contain the sort of files mentioned earlier.
+We discussed earlier that a PDF Document Maker project directory contains the Node.js `package.json` file where one dependency is `@akashacms/pdf-document-maker`.  The directory must also contain the sort of files mentioned earlier.
 
 Most of the project configuration is handled with command-line options.  The `--help` option will show you the full list of options.
 

@@ -40,7 +40,7 @@ A project directory consists of a _package.json_ file which is used for listing 
 
 ```shell
 $ npm init -y   # Set up the package.json
-$ npm install pdf-document-maker --save
+$ npm install @akashacms/pdf-document-maker--save
 ```
 
 Once installed you can get help:
@@ -138,3 +138,10 @@ If more than one directory is named with `--document-dir` then the directories a
 
 The directories named with `--partial-dir`, `--asset-dir`, and `--layout-dir`, are treated the same way.  There can be multiple such directories, they are organized in a stack, and are searched from the top of the stack.
 
+## `@akashacms/pdf-document-maker` versus `pdf-document-maker`
+
+After publishing this package, `@akashacms/pdf-document-maker`, it was learned that a package, `pdf-document-maker`, already existed.
+
+Despite the name similarity the two are not related other than having a similar purpose.
+
+Be careful when installing to correctly choose which you prefer to use.
