@@ -1,0 +1,26 @@
+<div class="card-group container ak-blog-news-river-container">
+    <a href="{{ feedUrl | safe }}"><img src="/img/rss_button.gif" align="right" width="50"/></a>
+    <div class="row">
+    {%- for doc in documents -%}
+
+        <div class="card ak-blog-news-river-item border-primary col-sm-12">
+            <div class="card-body">
+
+                <a href="/{{ doc.renderPath | safe }}"
+                    class="card-title h3">
+                    {{- doc.docMetadata.title | safe -}}
+                </a>
+
+                <div class="card-subtitle text-muted">
+                    {{- doc.docMetadata.publicationDate | safe -}}
+                </div>
+
+                <p class="card-text">
+                    {{- doc.docMetadata.teaser -}}
+                </p>
+            </div>
+        </div>
+
+    {%- endfor -%}
+    </div>
+</div>

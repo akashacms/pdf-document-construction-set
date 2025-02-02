@@ -1,5 +1,5 @@
 ---
 layout: index-blog.njk
-title: January
+title: Q1
 blogtag: news
 ---
