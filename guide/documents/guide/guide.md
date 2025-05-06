@@ -1381,7 +1381,7 @@ For most projects using the command-line to auto-generate a configuration object
 
 Once you have a config file, add `--config configFN` to the options.
 
-# Drawing diagrams with `draw.io`, PlantUML, Mermaid, or KaTeX
+# Drawing diagrams with `draw.io`, PlantUML, Pintora, Mermaid, or KaTeX
 
 There are many tools for creating images of all kinds.  Images feed our need to have a visual view counterpoint to the text in our documents.
 
@@ -1576,9 +1576,117 @@ stop
 
 In this case no `input-file` is given.  Instead, the input comes from the element body.
 
+## Using Pintora diagrams in PDF Document Maker
+
+Pintora - [`https://pintorajs.vercel.app/`](https://pintorajs.vercel.app/) - is similar to PlantUML.   It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description of the diagram, in a separate file, or inline in the Markdown, which is then rendered as an image, and incorporated into the rendered output.
+
+
+::: .card
+::: .card-title
+**Figure 48. Example Pintora diagram**
+:::
+::: .card-body
+```
+classDiagram
+  class Fruit {
+    float sweetness
+
+    squeeze()
+  }
+
+  Fruit : getAge(): float
+```
+:::
+:::
+
+In PDF Document Maker, we use the custom tag `<diagrams-pintora>` to insert a Pintora diagram.
+
+It looks like this:
+
+::: .card
+::: .card-title
+**Figure 49. Referencing an external Pintora diagram**
+:::
+::: .card-body
+```html
+<diagrams-pintora input-file="img/pintora-class-1.pint"
+    output-file="img/pintora-class-1.png"
+    mime-type="image/png"/>
+```
+:::
+:::
+
+This says to read the contents of `input-file`, render it as PNG, placing it in the file `output-file`.
+
+That renders as so:
+
+<diagrams-pintora input-file="img/pintora-class-1.pint"
+    output-file="img/pintora-class-1.png"
+    mime-type="image/png"/>
+
+The diagram can also be rendered to SVG:
+
+::: .card
+::: .card-title
+**Figure 50. Rendering a Pintora diagram to SVG**
+:::
+::: .card-body
+```html
+<diagrams-pintora input-file="img/pintora-class-1.pint"
+    output-file="img/pintora-class-1.svg"
+    mime-type="image/svg+xml"/>
+```
+:::
+:::
+
+That renders as so:
+
+<diagrams-pintora input-file="img/pintora-class-1.pint"
+    output-file="img/pintora-class-1.svg"
+    mime-type="image/svg+xml"/>
+
+Unlike PlantUML, the Pintora driver does not support rendering SVG to inline code.
+
+::: .card
+::: .card-title
+**Figure 51. Rendering a inline Pintora diagram**
+:::
+::: .card-body
+```html
+<diagrams-pintora
+    output-file="img/pintora-class-1.svg"
+    mime-type="image/jpeg">
+sequenceDiagram
+  Frida-->>Georgia: Flowers are beautiful
+  @note over Frida,Georgia: Painters
+  @note right of Georgia: Right
+  @start_note left of Georgia
+  multiline
+  note
+  @end_note
+</diagrams-pintora>
+```
+:::
+:::
+
+It does allow rendering an inline Pintora diagram description, which looks like this:
+
+<diagrams-pintora
+    output-file="img/pintora-class-1.jpg"
+    mime-type="image/jpeg">
+sequenceDiagram
+  Frida-->>Georgia: Flowers are beautiful
+  @note over Frida,Georgia: Painters
+  @note right of Georgia: Right
+  @start_note left of Georgia
+  multiline
+  note
+  @end_note
+</diagrams-pintora>
+
 ## Using MermaidJS diagrams in PDF Document Maker
 
-Mermaid - [`https://mermaid.js.org/`](https://mermaid.js.org/) - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description o the diagram, pasting it into a Markdown document.
+Mermaid - [`https://mermaid.js.org/`](https://mermaid.js.org/) - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description of the diagram, pasting it into a Markdown document.
 
 Unlike with PlantUML we were unable to integrate Mermaid such that a code block with the `mermaid` class would be automatically rendered as an inline SVG.
 

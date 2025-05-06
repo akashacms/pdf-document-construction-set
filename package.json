@@ -29,7 +29,7 @@
     "dopublish": "npm publish --access public"
   },
   "dependencies": {
-    "@akashacms/diagrams-maker": "^0.9.x",
+    "@akashacms/diagrams-maker": "^0.9.1",
     "@akashacms/plugins-base": "^0.9.x",
     "@akashacms/renderers": "^0.9.x",
     "@akashacms/theme-bootstrap": "^0.9.x",

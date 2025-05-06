@@ -26,14 +26,14 @@
     "npm-run-all": "^4.1.5"
   },
   "dependencies": {
-    "@akashacms/diagrams-maker": "^0.9.x",
+    "@akashacms/diagrams-maker": "^0.9.1",
     "@akashacms/plugins-base": "^0.9.0",
     "@akashacms/plugins-blog-podcast": "github:akashacms/akashacms-blog-podcast#0.9",
     "@akashacms/plugins-booknav": "github:akashacms/akashacms-booknav#0.9",
     "@akashacms/plugins-breadcrumbs": "github:akashacms/akashacms-breadcrumbs",
     "@akashacms/theme-bootstrap": "^0.9.1",
     "@mermaid-js/mermaid-cli": "^11.4.2",
-    "akasharender": "akasharender@^0.9",
+    "akasharender": "^0.9.x",
     "bootstrap": "^4.6.x",
     "jquery": "^3.6.x",
     "nodemon": "^3.1.9",

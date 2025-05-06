@@ -1,0 +1,17 @@
+{
+  "name": "with-space",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "preview": "live-server out",
+    "build": "npx pdf-document-maker --layout-dir layouts-pdf --document-dir documents --lesscss style.css.less --pdf-output PDF --html-output out --title 'Testing directories with space' --format Letter TEST.md"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@compodoc/live-server": "^1.2.3",
+    "@akashacms/pdf-document-maker": "file:../../.."
+  }
+}

@@ -24,7 +24,7 @@ import { default as MarkdownItTexmath } from 'markdown-it-texmath';
 import katext from 'katex';
 import 'katex/contrib/mhchem';
 
-import { DiagramsPlugin } from '@akashacms/diagram-maker';
+import { DiagramsPlugin } from '@akashacms/diagrams-maker';
 
 const config = new akasha.Configuration();
 
