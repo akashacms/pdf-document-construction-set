@@ -8,6 +8,11 @@ import util from 'node:util';
 
 import packageConfig from './package.json' with { type: 'json' }; 
 
+import { Mime } from 'mime/lite';
+import standardTypes from 'mime/types/standard.js';
+import otherTypes from 'mime/types/other.js';
+const mime = new Mime(standardTypes, otherTypes);
+
 import akasha from 'akasharender';
 const mahabhuta = akasha.mahabhuta;
 import { parseFrontmatter } from '@akashacms/renderers';
@@ -30,6 +35,8 @@ import 'katex/contrib/mhchem';
 
 import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
+
+import { PDFDocument } from 'pdf-lib';
 
 import { DiagramsPlugin } from '@akashacms/diagrams-maker';
 
@@ -281,7 +288,122 @@ program
         await browser.close();
     });
 
+const loadPDFfromFile = async (inputFN) => {
+    const inpBytes = await fsp.readFile(inputFN);
+    const donor = await PDFDocument.load(inpBytes);
+    return donor;
+};
 
+const copyPageToPDF = async (pdfDoc, donor, pagenm) => {
+    const copied = await pdfDoc.copyPages(donor, [pagenm]);
+    await pdfDoc.addPage(copied[0]);
+};
+
+
+program.command('info')
+    .description('Show information about the PDF')
+    .argument('<inputFN>')
+    .action(async function(inputFN, options, command) {
+        // console.log(`page-count ${util.inspect(inputFN)}`);
+
+        console.log(`PDF Information for ${inputFN}`);
+        console.log(`MIME: ${mime.getType(inputFN)}`);
+        const donor = await loadPDFfromFile(inputFN);
+        console.log(`Title: ${donor.getTitle()}`);
+        console.log(`Subject: ${donor.getSubject()}`);
+        console.log(`Author: ${donor.getAuthor()}`);
+        console.log(`Keywords: ${donor.getKeywords()}`);
+        console.log(`Producer: ${donor.getProducer()}`);
+        console.log(`Creator: ${donor.getCreator()}`);
+        console.log(`Producer: ${donor.getProducer()}`);
+        console.log(`CreationDate: ${donor.getCreationDate()}`);
+        console.log(`ModDate: ${donor.getModificationDate()}`);
+        console.log(`PageCount: ${donor.getPageCount()}`);
+    });
+
+program.command('extract')
+    .description('Extract page numbers from input PDF to output. The pages are numbered from 0.')
+    .argument('<inputFN>')
+    .argument('<outputFN>')
+    .argument('<pages...>')
+    .action(async function(inputFN, outputFN, pages, options, command) {
+        // console.log(`extract ${util.inspect(inputFN)} ${util.inspect(outputFN)} ${util.inspect(pages)} `);
+
+        const pdfDoc = await PDFDocument.create();
+        const donor = await loadPDFfromFile(inputFN);
+
+        for (const pnum of pages) {
+            await copyPageToPDF(pdfDoc, donor, Number.parseInt(pnum));
+        }
+
+        const pdfBytes = await pdfDoc.save();
+
+        // console.log(`Write File ${outputFN}`);
+        await fsp.writeFile(outputFN, pdfBytes);
+    });
+
+program.command('merge')
+    .description('Merge multiple PDF, PNG, JPG, into one document')
+    .argument('<files...>')
+    .option('--output <outputFN>', 'File name for merged document')
+    .action(async function(files, options, command) {
+        // console.log(`merge ${util.inspect(files)} ${util.inspect(options.output)} `);
+        const pdfDoc = await PDFDocument.create();
+
+        for (const filenm of files) {
+
+            const inpMime = mime.getType(filenm);
+            
+            if (inpMime === 'application/pdf') {
+                console.log(`Reading input PDF ${filenm} ${inpMime}`);
+                const donor = await loadPDFfromFile(filenm);
+                const totalPages = donor.getPageCount();
+
+                for (let pn = 0; pn < totalPages; pn++) {
+                    // console.log(`... COPY ${pn}`);
+                    await copyPageToPDF(pdfDoc, donor, pn);
+                }
+            }
+            else if (inpMime === 'image/jpeg'
+             || inpMime === 'image/png'
+            ) {
+                console.log(`Reading input IMAGE ${filenm} ${inpMime}`);
+                const bytes = await fsp.readFile(filenm);
+                let img;
+                if (inpMime === 'image/jpeg') {
+                    img = await pdfDoc.embedJpg(bytes);
+                }
+                if (inpMime === 'image/png') {
+                    img = await pdfDoc.embedPng(bytes);
+                }
+                if (img) {
+                    const page = pdfDoc.addPage();
+
+                    const scaled = img.scaleToFit(
+                        page.getWidth(),
+                        page.getHeight()
+                    );
+                    page.drawImage(img, {
+                        x: page.getWidth() / 2 - scaled.width / 2,
+                        y: page.getHeight() / 2 - scaled.height / 2,
+                        width: scaled.width,
+                        height: scaled.height,
+                    });
+                    // pdfDoc.addPage(page);
+                }
+            }
+            else {
+                console.log(`UNKNOWN FILE TYPE ${filenm}`);
+            }
+
+        }
+
+        // console.log(`...SAVE`)
+        const pdfBytes = await pdfDoc.save();
+
+        console.log(`Write File ${options.output}`);
+        await fsp.writeFile(options.output, pdfBytes);
+    });
 
 program.parse();
 
