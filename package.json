@@ -50,11 +50,15 @@
     "markdown-it-table-captions": "^1.0.4",
     "markdown-it-texmath": "^1.0.0",
     "npm-run-all": "^4.1.x",
+    "pdf-lib": "^1.17.1",
     "popper.js": "^1.16.x",
     "puppeteer": "^23.10.3"
   },
   "overrides": {
     "rimraf@<4": "5.0.10",
     "glob@<9": "10.4.5"
+  },
+  "peerDependencies": {
+    "mime": "^4.0.7"
   }
 }
