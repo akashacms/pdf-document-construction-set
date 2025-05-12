@@ -289,6 +289,8 @@ program
     });
 
 const loadPDFfromFile = async (inputFN) => {
+
+    // console.log(`loadPDFfromFile ${inputFN}`);
     const inpBytes = await fsp.readFile(inputFN);
     const donor = await PDFDocument.load(inpBytes);
     return donor;
@@ -297,6 +299,13 @@ const loadPDFfromFile = async (inputFN) => {
 const copyPageToPDF = async (pdfDoc, donor, pagenm) => {
     const copied = await pdfDoc.copyPages(donor, [pagenm]);
     await pdfDoc.addPage(copied[0]);
+};
+
+const savePDFtoFile = async (pdfDoc, outputFN) => {
+
+    // console.log(`savePDFtoFile ${outputFN}`);
+    const pdfBytes = await pdfDoc.save();
+    await fsp.writeFile(outputFN, pdfBytes);
 };
 
 
@@ -321,11 +330,119 @@ program.command('info')
         console.log(`PageCount: ${donor.getPageCount()}`);
     });
 
+program.command('copy-metadata')
+    .description('Copy metadata values from one PDF to another')
+    .argument('<inputFN>', 'File name for PDF file which is to recieve metadata')
+    .argument('<donorFN>', 'File name for PDF file from which to copy metadata')
+    .argument('[outputFN]', 'File name for PDF file to save with modified metadata')
+    .action(async function(inputFN, donorFN, outputFN, options, command) {
+        const input = await loadPDFfromFile(inputFN);
+        const donor = await loadPDFfromFile(donorFN);
+
+        // For each metadata value
+        // Test donor metadata - if set, then set in input
+
+        const dotitle = donor.getTitle();
+        if (typeof dotitle === 'string') {
+            input.setTitle(dotitle);
+        }
+
+        const dosubject = donor.getSubject();
+        if (typeof dosubject === 'string') {
+            input.setSubject(dosubject);
+        }
+
+        const doauthor = donor.getAuthor();
+        if (typeof doauthor === 'string') {
+            input.setAuthor(doauthor);
+        }
+
+        const dokeywords = donor.getKeywords();
+        if (Array.isArray(dokeywords)) {
+            input.setKeywords(dokeywords);
+        }
+
+        const docreator = donor.getCreator();
+        if (typeof docreator === 'string') {
+            input.setCreator(docreator);
+        }
+
+        const docdate = donor.getCreationDate();
+        if (typeof docdate === 'object') {
+            input.setCreationDate(docdate);
+        }
+
+        const domdate = donor.getModificationDate();
+        if (typeof domdate === 'object') {
+            input.setModificationDate(domdate);
+        }
+
+        await savePDFtoFile(input,
+            typeof outputFN === 'string' ? outputFN : inputFN);
+    });
+
+program.command('set-metadata')
+    .description('Set metadata values in a PDF')
+    .argument('<pdfFN>', 'File name for PDF file')
+    .argument('[saveToFN]', 'File name to which to save modified PDF file')
+    .option('--title <title>', 'Document title')
+    .option('--subject <subject>', 'Subject')
+    .option('--author <author>', 'Author string')
+    .option('--keyword <keyword...>', 'One keyword, may be used multiple times for multiple keywords')
+    .option('--producer <producer>', 'Producor')
+    .option('--creator <creator>', 'Creator')
+    .option('--creation-date <date>', 'Date the document was created')
+    .option('--modification-date <date>', 'Date the document was modified')
+    .action(async function(pdfFN, saveToFN, options, command) {
+        // console.log(`set-metadata `, {
+        //     title: options.title,
+        //     subject: options.subject,
+        //     author: options.author,
+        //     keyword: options.keyword,
+        //     producer: options.producer,
+        //     creator: options.creator,
+        //     creationDate: options.creationDate,
+        //     modificationDate: options.modificationDate,
+        // });
+        const donor = await loadPDFfromFile(pdfFN);
+
+        if (typeof options.title === 'string') {
+            donor.setTitle(options.title);
+        }
+        if (typeof options.subject === 'string') {
+            donor.setSubject(options.subject);
+        }
+        if (typeof options.author === 'string') {
+            donor.setAuthor(options.author);
+        }
+        if (typeof options.keyword === 'string') {
+            donor.setKeywords([ options.keyword ]);
+        }
+        if (Array.isArray(options.keyword)) {
+            donor.setKeywords(options.keyword);
+        }
+        if (typeof options.producer === 'string') {
+            donor.setProducer(options.producer);
+        }
+        if (typeof options.creator === 'string') {
+            donor.setCreator(options.creator);
+        }
+        if (typeof options.creationDate === 'string') {
+            donor.setCreationDate(new Date(options.creationDate));
+        }
+        if (typeof options.modificationDate === 'string') {
+            donor.setModificationDate(new Date(options.modificationDate));
+        }
+        await savePDFtoFile(donor,
+            typeof saveToFN === 'string' ? saveToFN : pdfFN);
+    });
+
+
 program.command('extract')
     .description('Extract page numbers from input PDF to output. The pages are numbered from 0.')
-    .argument('<inputFN>')
-    .argument('<outputFN>')
-    .argument('<pages...>')
+    .argument('<inputFN>', 'PDF file name to extract from')
+    .argument('<outputFN>', 'PDF file name that receives the extracted images')
+    .argument('<pages...>', 'Page numbers to extract, in the order of extraction')
     .action(async function(inputFN, outputFN, pages, options, command) {
         // console.log(`extract ${util.inspect(inputFN)} ${util.inspect(outputFN)} ${util.inspect(pages)} `);
 
@@ -336,15 +453,14 @@ program.command('extract')
             await copyPageToPDF(pdfDoc, donor, Number.parseInt(pnum));
         }
 
-        const pdfBytes = await pdfDoc.save();
-
-        // console.log(`Write File ${outputFN}`);
-        await fsp.writeFile(outputFN, pdfBytes);
+        await savePDFtoFile(pdfDoc, outputFN);
     });
 
 program.command('merge')
     .description('Merge multiple PDF, PNG, JPG, into one document')
-    .argument('<files...>')
+    // TODO page layout
+    // TODO metadata
+    .argument('<files...>', 'Files to merge into the output file')
     .option('--output <outputFN>', 'File name for merged document')
     .action(async function(files, options, command) {
         // console.log(`merge ${util.inspect(files)} ${util.inspect(options.output)} `);
@@ -398,11 +514,7 @@ program.command('merge')
 
         }
 
-        // console.log(`...SAVE`)
-        const pdfBytes = await pdfDoc.save();
-
-        console.log(`Write File ${options.output}`);
-        await fsp.writeFile(options.output, pdfBytes);
+        await savePDFtoFile(pdfDoc, ptions.output);
     });
 
 program.parse();
