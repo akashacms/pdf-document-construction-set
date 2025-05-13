@@ -6,6 +6,7 @@ While the [User Guide](../guide/PDF/guide.pdf) is meant to be a complete guide t
 
 * [Extracting pages from a PDF into another PDF](./extract/README.md)
 * [Merging multiple PDF and Image files into a PDF](./merge/README.md)
+* [Changing the PDF format from one size to another](./reformat/README.md)
 * [Viewing, Editing, and Copying metadata in PDF files](./metadata/README.md)
 
 ## Testing/Demonstrating bugs

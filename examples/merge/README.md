@@ -9,14 +9,18 @@ For example we might need to submit or distribute a single PDF file consisting o
 USAGE:
 
 ```
-$ npx pdf-document-maker.mjs merge --help
 Usage: pdf-document-maker merge [options] <files...>
 
 Merge multiple PDF, PNG, JPG, into one document
 
+Arguments:
+  files                   Files to merge into the output file
+
 Options:
-  --output <outputFN>  File name for merged document
-  -h, --help           display help for command
+  --output <outputFN>     File name for merged document
+  --page-format <format>  Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"
+  -h, --help              display help for command
+
 ```
 
 The input files are listed on the command-line, and anything other than PDF, PNG, or JPEG files are ignored.  The output file is specified with the `--output` flag.

@@ -36,7 +36,7 @@ import 'katex/contrib/mhchem';
 import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
 
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, PageSizes } from 'pdf-lib';
 
 import { DiagramsPlugin } from '@akashacms/diagrams-maker';
 
@@ -296,9 +296,31 @@ const loadPDFfromFile = async (inputFN) => {
     return donor;
 };
 
-const copyPageToPDF = async (pdfDoc, donor, pagenm) => {
+const copyPageToPDF = async (pdfDoc, donor, pagenm, size) => {
     const copied = await pdfDoc.copyPages(donor, [pagenm]);
-    await pdfDoc.addPage(copied[0]);
+    // console.log(`copyPage ${pagenm} ${size}`);
+    // const pg = await pdfDoc.addPage(copied[0]);
+
+    // Handle resizing the page.  The `size` value is a string
+    // to be used for indexing PageSizes which then returns
+    // an array useful with page.setSize()
+    //
+    // Turns out that setSize only resizes the canvas, and to resize
+    // the content we must use scaleContent.
+
+    if (typeof size === 'string') {
+        const origsz = copied[0].getSize();
+        const sz = PageSizes[size];
+        // console.log(`orig ${util.inspect(origsz)} setSize ${size} ${util.inspect(sz)}`);
+        const toadd = copied[0];
+        toadd.setSize(sz[0], sz[1]);
+        toadd.scaleContent(sz[0] / origsz.width, sz[1] / origsz.height);
+        const pg = await pdfDoc.addPage(toadd);
+        // pg.setSize(sz[0], sz[1]);
+        // await pdfDoc.addPage(copied[0]).setSize(sz[0], sz[1]);
+    } else {
+        const pg = await pdfDoc.addPage(copied[0]);
+    }
 };
 
 const savePDFtoFile = async (pdfDoc, outputFN) => {
@@ -329,6 +351,15 @@ program.command('info')
         console.log(`ModDate: ${donor.getModificationDate()}`);
         console.log(`PageCount: ${donor.getPageCount()}`);
     });
+
+program.command('page-sizes')
+    .description('Show available page sizes')
+    .action(async function(options, command) {
+        for (const key in PageSizes) {
+            console.log(`${key}: ${util.inspect(PageSizes[key])}`);
+        }
+    });
+
 
 program.command('copy-metadata')
     .description('Copy metadata values from one PDF to another')
@@ -437,20 +468,51 @@ program.command('set-metadata')
             typeof saveToFN === 'string' ? saveToFN : pdfFN);
     });
 
+program.command('reformat')
+    .description('Change the document format (e.g. A4) to a new one (e.g. Letter')
+    .argument('<inputFN>', 'PDF file name of source document')
+    .argument('[outputFN]', 'PDF file name of resized document. If not given, inputFN will be replaced')
+    .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
+    .action(async function(inputFN, outputFN, options, command) {
+        const pdfDoc = await PDFDocument.create();
+        const donor = await loadPDFfromFile(inputFN);
+
+        const totalPages = donor.getPageCount();
+
+        for (let pn = 0; pn < totalPages; pn++) {
+            // console.log(`... COPY ${pn}`);
+            await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat);
+        }
+        await savePDFtoFile(donor,
+            typeof outputFN === 'string' ? outputFN : inputFN);
+    });
+
+
 
 program.command('extract')
     .description('Extract page numbers from input PDF to output. The pages are numbered from 0.')
     .argument('<inputFN>', 'PDF file name to extract from')
     .argument('<outputFN>', 'PDF file name that receives the extracted images')
     .argument('<pages...>', 'Page numbers to extract, in the order of extraction')
+    .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .action(async function(inputFN, outputFN, pages, options, command) {
         // console.log(`extract ${util.inspect(inputFN)} ${util.inspect(outputFN)} ${util.inspect(pages)} `);
 
         const pdfDoc = await PDFDocument.create();
         const donor = await loadPDFfromFile(inputFN);
 
+        // console.log(inputFN);
+        // console.log(outputFN);
+        // console.log(pages);
+        // console.log(options);
+        // console.log(options.pageFormat);
+
         for (const pnum of pages) {
-            await copyPageToPDF(pdfDoc, donor, Number.parseInt(pnum));
+            await copyPageToPDF(
+                    pdfDoc,
+                    donor,
+                    Number.parseInt(pnum),
+                    options.pageFormat);
         }
 
         await savePDFtoFile(pdfDoc, outputFN);
@@ -462,8 +524,12 @@ program.command('merge')
     // TODO metadata
     .argument('<files...>', 'Files to merge into the output file')
     .option('--output <outputFN>', 'File name for merged document')
+    .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .action(async function(files, options, command) {
         // console.log(`merge ${util.inspect(files)} ${util.inspect(options.output)} `);
+        console.log(options);
+        console.log(options.format);
+        console.log(options.pageFormat);
         const pdfDoc = await PDFDocument.create();
 
         for (const filenm of files) {
@@ -477,7 +543,7 @@ program.command('merge')
 
                 for (let pn = 0; pn < totalPages; pn++) {
                     // console.log(`... COPY ${pn}`);
-                    await copyPageToPDF(pdfDoc, donor, pn);
+                    await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat);
                 }
             }
             else if (inpMime === 'image/jpeg'
@@ -494,6 +560,10 @@ program.command('merge')
                 }
                 if (img) {
                     const page = pdfDoc.addPage();
+                    if (typeof options.pageFormat === 'string') {
+                        const sz = PageSizes[options.pageFormat];
+                        page.setSize(sz[0], sz[1]);
+                    }
 
                     const scaled = img.scaleToFit(
                         page.getWidth(),
@@ -514,7 +584,7 @@ program.command('merge')
 
         }
 
-        await savePDFtoFile(pdfDoc, ptions.output);
+        await savePDFtoFile(pdfDoc, options.output);
     });
 
 program.parse();

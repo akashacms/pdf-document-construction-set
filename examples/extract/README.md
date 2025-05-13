@@ -9,8 +9,15 @@ Usage: pdf-document-maker extract [options] <inputFN> <outputFN> <pages...>
 
 Extract page numbers from input PDF to output. The pages are numbered from 0.
 
+Arguments:
+  inputFN                 PDF file name to extract from
+  outputFN                PDF file name that receives the extracted images
+  pages                   Page numbers to extract, in the order of extraction
+
 Options:
-  -h, --help  display help for command
+  --page-format <format>  Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"
+  -h, --help              display help for command
+
 ```
 
 The pages will be extracted from the PDF named in `inputFN`.
