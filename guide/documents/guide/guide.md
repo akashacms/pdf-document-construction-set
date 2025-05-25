@@ -9,7 +9,7 @@ title: PDF Document Maker - User Guide
 </figure>
 :::
 
-Version: 1.0.1 {.text-center}
+Version: 1.0.3 {.text-center}
 
 Publication Date: January 27, 2025 {.text-center}
 
@@ -29,6 +29,7 @@ The features include
 * Both custom DOM processing and custom HTML elements, supporting custom design elements, and even bringing in external data
 * Built on top of AkashaCMS, a mature system that's designed for producing static HTML websites and E-Books.
 * HTML intermediary files are converted to PDF using Puppeteer
+* Several useful PDF manipulation tools allow merging multiple PDFs into one, extracting pages from a PDF, and resizing PDF pages.
 
 All this is bundled into one easy-to-use command-line application offering a lot of flexibility.
 

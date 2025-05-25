@@ -5,7 +5,7 @@
     "url": "http://davidherron.com"
   },
   "name": "@akashacms/pdf-document-maker",
-  "description": "Make good looking PDF Documents from Markdown or AsciiDoc files",
+  "description": "Create good looking PDF Documents from Markdown or AsciiDoc files, PDF document manipulations",
   "version": "1.0.2",
   "repository": {
     "type": "git",

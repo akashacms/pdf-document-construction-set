@@ -36,7 +36,7 @@ import 'katex/contrib/mhchem';
 import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
 
-import { PDFDocument, PageSizes } from 'pdf-lib';
+import { PDFDocument, PageSizes, degrees } from 'pdf-lib';
 
 import { DiagramsPlugin } from '@akashacms/diagrams-maker';
 
@@ -296,7 +296,7 @@ const loadPDFfromFile = async (inputFN) => {
     return donor;
 };
 
-const copyPageToPDF = async (pdfDoc, donor, pagenm, size) => {
+const copyPageToPDF = async (pdfDoc, donor, pagenm, size, rotation) => {
     const copied = await pdfDoc.copyPages(donor, [pagenm]);
     // console.log(`copyPage ${pagenm} ${size}`);
     // const pg = await pdfDoc.addPage(copied[0]);
@@ -308,19 +308,34 @@ const copyPageToPDF = async (pdfDoc, donor, pagenm, size) => {
     // Turns out that setSize only resizes the canvas, and to resize
     // the content we must use scaleContent.
 
+    const toadd = copied[0];
     if (typeof size === 'string') {
-        const origsz = copied[0].getSize();
+        const origsz = toadd.getSize();
+        if (!(size in PageSizes)) {
+            throw new Error(`Incorrect page size name ${util.inspect(size)}`);
+        }    
         const sz = PageSizes[size];
         // console.log(`orig ${util.inspect(origsz)} setSize ${size} ${util.inspect(sz)}`);
-        const toadd = copied[0];
         toadd.setSize(sz[0], sz[1]);
         toadd.scaleContent(sz[0] / origsz.width, sz[1] / origsz.height);
-        const pg = await pdfDoc.addPage(toadd);
         // pg.setSize(sz[0], sz[1]);
         // await pdfDoc.addPage(copied[0]).setSize(sz[0], sz[1]);
-    } else {
-        const pg = await pdfDoc.addPage(copied[0]);
     }
+    if (typeof rotation === 'string') {
+        if (rotation === '0') {
+            // no rotation
+        } else if (rotation === '90') {
+            await toadd.setRotation(degrees(90));
+        } else if (rotation === '180') {
+            await toadd.setRotation(degrees(180));
+        } else if (rotation === '270') {
+            await toadd.setRotation(degrees(270));
+        } else {
+            throw new Error(`Incorrect rotation ${util.inspect(rotation)}`);
+        }
+    }
+    // console.log(`Adding page ${util.inspect(toadd.getSize())} ${util.inspect(toadd.getRotation())}`);
+    const pg = await pdfDoc.addPage(toadd);
 };
 
 const savePDFtoFile = async (pdfDoc, outputFN) => {
@@ -473,6 +488,7 @@ program.command('reformat')
     .argument('<inputFN>', 'PDF file name of source document')
     .argument('[outputFN]', 'PDF file name of resized document. If not given, inputFN will be replaced')
     .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
+    .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
     .action(async function(inputFN, outputFN, options, command) {
         const pdfDoc = await PDFDocument.create();
         const donor = await loadPDFfromFile(inputFN);
@@ -481,9 +497,9 @@ program.command('reformat')
 
         for (let pn = 0; pn < totalPages; pn++) {
             // console.log(`... COPY ${pn}`);
-            await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat);
+            await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
         }
-        await savePDFtoFile(donor,
+        await savePDFtoFile(pdfDoc,
             typeof outputFN === 'string' ? outputFN : inputFN);
     });
 
@@ -495,6 +511,7 @@ program.command('extract')
     .argument('<outputFN>', 'PDF file name that receives the extracted images')
     .argument('<pages...>', 'Page numbers to extract, in the order of extraction')
     .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
+    .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
     .action(async function(inputFN, outputFN, pages, options, command) {
         // console.log(`extract ${util.inspect(inputFN)} ${util.inspect(outputFN)} ${util.inspect(pages)} `);
 
@@ -512,7 +529,8 @@ program.command('extract')
                     pdfDoc,
                     donor,
                     Number.parseInt(pnum),
-                    options.pageFormat);
+                    options.pageFormat,
+                    options.rotate);
         }
 
         await savePDFtoFile(pdfDoc, outputFN);
@@ -525,11 +543,12 @@ program.command('merge')
     .argument('<files...>', 'Files to merge into the output file')
     .option('--output <outputFN>', 'File name for merged document')
     .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
+    .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
     .action(async function(files, options, command) {
         // console.log(`merge ${util.inspect(files)} ${util.inspect(options.output)} `);
-        console.log(options);
-        console.log(options.format);
-        console.log(options.pageFormat);
+        // console.log(options);
+        // console.log(options.format);
+        // console.log(options.pageFormat);
         const pdfDoc = await PDFDocument.create();
 
         for (const filenm of files) {
@@ -543,7 +562,7 @@ program.command('merge')
 
                 for (let pn = 0; pn < totalPages; pn++) {
                     // console.log(`... COPY ${pn}`);
-                    await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat);
+                    await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
                 }
             }
             else if (inpMime === 'image/jpeg'
@@ -564,6 +583,7 @@ program.command('merge')
                         const sz = PageSizes[options.pageFormat];
                         page.setSize(sz[0], sz[1]);
                     }
+                    // TBD: Handle rotation
 
                     const scaled = img.scaleToFit(
                         page.getWidth(),

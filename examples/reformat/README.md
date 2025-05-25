@@ -15,19 +15,27 @@ Arguments:
 
 Options:
   --page-format <format>  Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"
+  --rotate [rotation]     Rotate by 90, 180, or 270 degrees
   -h, --help              display help for command
 ```
 
 The `reformat` command takes input and output file names.  If the latter is not given, then the reformatted file will be written to the input file.
 
-The output content is the same as the input content, but with the pages resized to match the format name, and the content scaled to match.
+The output content is the same as the input content, but with the pages resized to match the format name, and the content scaled to match.  If the `--rotate` option is specified, the pages are rotated by the number of degrees.
 
 The same behavior applies to the `extract` and `merge` commands.
+
+```shell
+$ npx pdf-document-maker reformat input.pdf reformatted.pdf \
+    --page-format A1 --rotate 90
+```
+
+This takes the file, `input.pdf`, scales the pages to the `A1` size, rotating the pages 90 degrees, then outputting to `reformatted.pdf`.
 
 To see the list of supported page formats, run:
 
 ```shell
-$ node pdf-document-maker.mjs page-sizes
+$ npx pdf-document-maker page-sizes
 4A0: [ 4767.87, 6740.79 ]
 2A0: [ 3370.39, 4767.87 ]
 A0: [ 2383.94, 3370.39 ]
