@@ -367,6 +367,32 @@ program.command('info')
         console.log(`PageCount: ${donor.getPageCount()}`);
     });
 
+program.command('pages-info')
+    .description('Show info for the pages of a PDF')
+    .argument('<inputFN>')
+    .action(async function(inputFN, options, command) {
+        console.log(`PDF page information for ${inputFN}`);
+        const pdfDoc = await loadPDFfromFile(inputFN);
+
+        const totalPages = pdfDoc.getPageCount();
+
+        for (let pn = 0; pn < totalPages; pn++) {
+            // console.log(`... COPY ${pn}`);
+            const copied = await pdfDoc.copyPages(pdfDoc, [pn]);
+            console.log({
+                pageNum: pn,
+                artBox: copied[0].getArtBox(),
+                bleedBox: copied[0].getBleedBox(),
+                cropBox: copied[0].getCropBox(),
+                mediaBox: copied[0].getMediaBox(),
+                trimBox: copied[0].getTrimBox(),
+                position: copied[0].getPosition(),
+                size: copied[0].getSize(),
+                rotation: copied[0].getRotation()
+            });
+        }
+    });
+
 program.command('page-sizes')
     .description('Show available page sizes')
     .action(async function(options, command) {
