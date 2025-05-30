@@ -21,11 +21,13 @@
     "Puppeteer"
   ],
   "type": "module",
-  "main": "pdf-document-maker.mjs",
+  "main": "./dist/pdf-document-maker.js",
   "bin": {
-    "pdf-document-maker": "pdf-document-maker.mjs"
+    "pdf-document-maker": "./dist/pdf-document-maker.js"
   },
   "scripts": {
+    "build": "npx tsc",
+    "watch": "npx tsc -w",
     "dopublish": "npm publish --access public"
   },
   "dependencies": {
@@ -60,5 +62,9 @@
   },
   "peerDependencies": {
     "mime": "^4.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "typescript": "^5.8.3"
   }
 }
