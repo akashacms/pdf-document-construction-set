@@ -27,7 +27,7 @@ const packageConfig = JSON.parse(
 import { Mime } from 'mime/lite';
 import standardTypes from 'mime/types/standard.js';
 import otherTypes from 'mime/types/other.js';
-const mime = new Mime(standardTypes, otherTypes);
+export const mime = new Mime(standardTypes, otherTypes);
 
 import akasha from 'akasharender';
 const mahabhuta = akasha.mahabhuta;
@@ -52,20 +52,26 @@ import 'katex/contrib/mhchem';
 import { ThemeBootstrapPlugin } from '@akashacms/theme-bootstrap';
 import { BasePlugin } from '@akashacms/plugins-base';
 
-import { PDFDocument, PageSizes, degrees } from 'pdf-lib';
+import { PDFDocument, PageSizes, degrees, mergeIntoTypedArray } from 'pdf-lib';
 
 import { DiagramsPlugin } from '@akashacms/diagrams-maker';
+
+import { isPaperFormat } from './utils.js';
 
 // import { default as config } from './config.mjs';
 import puppeteer from 'puppeteer';
 import { Command } from 'commander';
+import { copyPDFMetadata, exportPagesFromPDF, mergePDFsAndImages, reformatPDF, setPDFMetadata, showPDFinfo, showPageInformation, showPageSizes } from './manipulate.js';
 const program = new Command();
 
 program
     .name('pdf-document-maker')
     .description('CLI to build PDF files from Markdown/AsciiDoc documents')
     .version(packageConfig.version,
-        '-v, --version', 'output the current version')
+        '-v, --version', 'output the current version');
+
+program
+    .command('render')
     .option('--config <configFN>', 'AkashaCMS configuration file. If specified it disables auto-generated config file.')
     .argument('<docPaths>', 'VPath for document to render')
     .option('--title <title>', 'Document title, overwriting any title in the document metadata.')
@@ -304,117 +310,24 @@ program
         await browser.close();
     });
 
-const loadPDFfromFile = async (inputFN) => {
-
-    // console.log(`loadPDFfromFile ${inputFN}`);
-    const inpBytes = await fsp.readFile(inputFN);
-    const donor = await PDFDocument.load(inpBytes);
-    return donor;
-};
-
-const copyPageToPDF = async (pdfDoc, donor, pagenm, size, rotation) => {
-    const copied = await pdfDoc.copyPages(donor, [pagenm]);
-    // console.log(`copyPage ${pagenm} ${size}`);
-    // const pg = await pdfDoc.addPage(copied[0]);
-
-    // Handle resizing the page.  The `size` value is a string
-    // to be used for indexing PageSizes which then returns
-    // an array useful with page.setSize()
-    //
-    // Turns out that setSize only resizes the canvas, and to resize
-    // the content we must use scaleContent.
-
-    const toadd = copied[0];
-    if (typeof size === 'string') {
-        const origsz = toadd.getSize();
-        if (!(size in PageSizes)) {
-            throw new Error(`Incorrect page size name ${util.inspect(size)}`);
-        }    
-        const sz = PageSizes[size];
-        // console.log(`orig ${util.inspect(origsz)} setSize ${size} ${util.inspect(sz)}`);
-        toadd.setSize(sz[0], sz[1]);
-        toadd.scaleContent(sz[0] / origsz.width, sz[1] / origsz.height);
-        // pg.setSize(sz[0], sz[1]);
-        // await pdfDoc.addPage(copied[0]).setSize(sz[0], sz[1]);
-    }
-    if (typeof rotation === 'string') {
-        if (rotation === '0') {
-            // no rotation
-        } else if (rotation === '90') {
-            await toadd.setRotation(degrees(90));
-        } else if (rotation === '180') {
-            await toadd.setRotation(degrees(180));
-        } else if (rotation === '270') {
-            await toadd.setRotation(degrees(270));
-        } else {
-            throw new Error(`Incorrect rotation ${util.inspect(rotation)}`);
-        }
-    }
-    // console.log(`Adding page ${util.inspect(toadd.getSize())} ${util.inspect(toadd.getRotation())}`);
-    const pg = await pdfDoc.addPage(toadd);
-};
-
-const savePDFtoFile = async (pdfDoc, outputFN) => {
-
-    // console.log(`savePDFtoFile ${outputFN}`);
-    const pdfBytes = await pdfDoc.save();
-    await fsp.writeFile(outputFN, pdfBytes);
-};
-
-
 program.command('info')
     .description('Show information about the PDF')
     .argument('<inputFN>')
     .action(async function(inputFN, options, command) {
-        // console.log(`page-count ${util.inspect(inputFN)}`);
-
-        console.log(`PDF Information for ${inputFN}`);
-        console.log(`MIME: ${mime.getType(inputFN)}`);
-        const donor = await loadPDFfromFile(inputFN);
-        console.log(`Title: ${donor.getTitle()}`);
-        console.log(`Subject: ${donor.getSubject()}`);
-        console.log(`Author: ${donor.getAuthor()}`);
-        console.log(`Keywords: ${donor.getKeywords()}`);
-        console.log(`Producer: ${donor.getProducer()}`);
-        console.log(`Creator: ${donor.getCreator()}`);
-        console.log(`Producer: ${donor.getProducer()}`);
-        console.log(`CreationDate: ${donor.getCreationDate()}`);
-        console.log(`ModDate: ${donor.getModificationDate()}`);
-        console.log(`PageCount: ${donor.getPageCount()}`);
+        await showPDFinfo(inputFN);
     });
 
 program.command('pages-info')
     .description('Show info for the pages of a PDF')
     .argument('<inputFN>')
     .action(async function(inputFN, options, command) {
-        console.log(`PDF page information for ${inputFN}`);
-        const pdfDoc = await loadPDFfromFile(inputFN);
-
-        const totalPages = pdfDoc.getPageCount();
-
-        for (let pn = 0; pn < totalPages; pn++) {
-            // console.log(`... COPY ${pn}`);
-            const copied = await pdfDoc.copyPages(pdfDoc, [pn]);
-            console.log({
-                pageNum: pn,
-                artBox: copied[0].getArtBox(),
-                bleedBox: copied[0].getBleedBox(),
-                cropBox: copied[0].getCropBox(),
-                mediaBox: copied[0].getMediaBox(),
-                trimBox: copied[0].getTrimBox(),
-                position: copied[0].getPosition(),
-                size: copied[0].getSize(),
-                rotation: copied[0].getRotation()
-            });
-        }
+        await showPageInformation(inputFN);
     });
 
 program.command('page-sizes')
     .description('Show available page sizes')
     .action(async function(options, command) {
-        for (const key in PageSizes) {
-            console.log(`${key}: ${util.inspect(PageSizes[key])}`);
-        }
+        showPageSizes();
     });
 
 
@@ -424,49 +337,50 @@ program.command('copy-metadata')
     .argument('<donorFN>', 'File name for PDF file from which to copy metadata')
     .argument('[outputFN]', 'File name for PDF file to save with modified metadata')
     .action(async function(inputFN, donorFN, outputFN, options, command) {
-        const input = await loadPDFfromFile(inputFN);
-        const donor = await loadPDFfromFile(donorFN);
+        await copyPDFMetadata(inputFN, donorFN, outputFN);
+        // const input = await loadPDFfromFile(inputFN);
+        // const donor = await loadPDFfromFile(donorFN);
 
-        // For each metadata value
-        // Test donor metadata - if set, then set in input
+        // // For each metadata value
+        // // Test donor metadata - if set, then set in input
 
-        const dotitle = donor.getTitle();
-        if (typeof dotitle === 'string') {
-            input.setTitle(dotitle);
-        }
+        // const dotitle = donor.getTitle();
+        // if (typeof dotitle === 'string') {
+        //     input.setTitle(dotitle);
+        // }
 
-        const dosubject = donor.getSubject();
-        if (typeof dosubject === 'string') {
-            input.setSubject(dosubject);
-        }
+        // const dosubject = donor.getSubject();
+        // if (typeof dosubject === 'string') {
+        //     input.setSubject(dosubject);
+        // }
 
-        const doauthor = donor.getAuthor();
-        if (typeof doauthor === 'string') {
-            input.setAuthor(doauthor);
-        }
+        // const doauthor = donor.getAuthor();
+        // if (typeof doauthor === 'string') {
+        //     input.setAuthor(doauthor);
+        // }
 
-        const dokeywords = donor.getKeywords();
-        if (Array.isArray(dokeywords)) {
-            input.setKeywords(dokeywords);
-        }
+        // const dokeywords = donor.getKeywords();
+        // if (Array.isArray(dokeywords)) {
+        //     input.setKeywords(dokeywords);
+        // }
 
-        const docreator = donor.getCreator();
-        if (typeof docreator === 'string') {
-            input.setCreator(docreator);
-        }
+        // const docreator = donor.getCreator();
+        // if (typeof docreator === 'string') {
+        //     input.setCreator(docreator);
+        // }
 
-        const docdate = donor.getCreationDate();
-        if (typeof docdate === 'object') {
-            input.setCreationDate(docdate);
-        }
+        // const docdate = donor.getCreationDate();
+        // if (typeof docdate === 'object') {
+        //     input.setCreationDate(docdate);
+        // }
 
-        const domdate = donor.getModificationDate();
-        if (typeof domdate === 'object') {
-            input.setModificationDate(domdate);
-        }
+        // const domdate = donor.getModificationDate();
+        // if (typeof domdate === 'object') {
+        //     input.setModificationDate(domdate);
+        // }
 
-        await savePDFtoFile(input,
-            typeof outputFN === 'string' ? outputFN : inputFN);
+        // await savePDFtoFile(input,
+        //     typeof outputFN === 'string' ? outputFN : inputFN);
     });
 
 program.command('set-metadata')
@@ -492,37 +406,49 @@ program.command('set-metadata')
         //     creationDate: options.creationDate,
         //     modificationDate: options.modificationDate,
         // });
-        const donor = await loadPDFfromFile(pdfFN);
 
-        if (typeof options.title === 'string') {
-            donor.setTitle(options.title);
-        }
-        if (typeof options.subject === 'string') {
-            donor.setSubject(options.subject);
-        }
-        if (typeof options.author === 'string') {
-            donor.setAuthor(options.author);
-        }
-        if (typeof options.keyword === 'string') {
-            donor.setKeywords([ options.keyword ]);
-        }
-        if (Array.isArray(options.keyword)) {
-            donor.setKeywords(options.keyword);
-        }
-        if (typeof options.producer === 'string') {
-            donor.setProducer(options.producer);
-        }
-        if (typeof options.creator === 'string') {
-            donor.setCreator(options.creator);
-        }
-        if (typeof options.creationDate === 'string') {
-            donor.setCreationDate(new Date(options.creationDate));
-        }
-        if (typeof options.modificationDate === 'string') {
-            donor.setModificationDate(new Date(options.modificationDate));
-        }
-        await savePDFtoFile(donor,
-            typeof saveToFN === 'string' ? saveToFN : pdfFN);
+        await setPDFMetadata(pdfFN, saveToFN, {
+            title: options.title,
+            subject: options.subject,
+            author: options.author,
+            keyword: options.keyword,
+            producer: options.producer,
+            creator: options.creator,
+            creationDate: options.creationDate,
+            modificationDate: options.modificationDate
+        });
+
+        // const donor = await loadPDFfromFile(pdfFN);
+
+        // if (typeof options.title === 'string') {
+        //     donor.setTitle(options.title);
+        // }
+        // if (typeof options.subject === 'string') {
+        //     donor.setSubject(options.subject);
+        // }
+        // if (typeof options.author === 'string') {
+        //     donor.setAuthor(options.author);
+        // }
+        // if (typeof options.keyword === 'string') {
+        //     donor.setKeywords([ options.keyword ]);
+        // }
+        // if (Array.isArray(options.keyword)) {
+        //     donor.setKeywords(options.keyword);
+        // }
+        // if (typeof options.producer === 'string') {
+        //     donor.setProducer(options.producer);
+        // }
+        // if (typeof options.creator === 'string') {
+        //     donor.setCreator(options.creator);
+        // }
+        // if (typeof options.creationDate === 'string') {
+        //     donor.setCreationDate(new Date(options.creationDate));
+        // }
+        // if (typeof options.modificationDate === 'string') {
+        //     donor.setModificationDate(new Date(options.modificationDate));
+        // }
+        // await savePDFtoFile(donor,
+        //     typeof saveToFN === 'string' ? saveToFN : pdfFN);
     });
 
 program.command('reformat')
@@ -532,50 +458,60 @@ program.command('reformat')
     .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
     .action(async function(inputFN, outputFN, options, command) {
-        const pdfDoc = await PDFDocument.create();
-        const donor = await loadPDFfromFile(inputFN);
 
-        const totalPages = donor.getPageCount();
+        await reformatPDF(inputFN, outputFN, {
+            pageFormat: options.pageFormat,
+            rotate: options.rotate
+        });
+        // const pdfDoc = await PDFDocument.create();
+        // const donor = await loadPDFfromFile(inputFN);
 
-        for (let pn = 0; pn < totalPages; pn++) {
-            // console.log(`... COPY ${pn}`);
-            await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
-        }
-        await savePDFtoFile(pdfDoc,
-            typeof outputFN === 'string' ? outputFN : inputFN);
+        // const totalPages = donor.getPageCount();
+
+        // for (let pn = 0; pn < totalPages; pn++) {
+        //     // console.log(`... COPY ${pn}`);
+        //     await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
+        // }
+        // await savePDFtoFile(pdfDoc,
+        //     typeof outputFN === 'string' ? outputFN : inputFN);
     });
 
 
 
 program.command('extract')
-    .description('Extract page numbers from input PDF to output. The pages are numbered from 0.')
+    .description('Extract pages from input PDF to output. The pages are numbered from 0.')
     .argument('<inputFN>', 'PDF file name to extract from')
     .argument('<outputFN>', 'PDF file name that receives the extracted images')
-    .argument('<pages...>', 'Page numbers to extract, in the order of extraction')
+    .argument('[pages...]', 'Page numbers to extract, in the order of extraction')
     .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
     .action(async function(inputFN, outputFN, pages, options, command) {
         // console.log(`extract ${util.inspect(inputFN)} ${util.inspect(outputFN)} ${util.inspect(pages)} `);
 
-        const pdfDoc = await PDFDocument.create();
-        const donor = await loadPDFfromFile(inputFN);
+        await exportPagesFromPDF(inputFN, outputFN, pages, {
+            pageFormat: options.pageFormat,
+            rotate: options.rotate
+        });
 
-        // console.log(inputFN);
-        // console.log(outputFN);
-        // console.log(pages);
-        // console.log(options);
-        // console.log(options.pageFormat);
+        // const pdfDoc = await PDFDocument.create();
+        // const donor = await loadPDFfromFile(inputFN);
 
-        for (const pnum of pages) {
-            await copyPageToPDF(
-                    pdfDoc,
-                    donor,
-                    Number.parseInt(pnum),
-                    options.pageFormat,
-                    options.rotate);
-        }
+        // // console.log(inputFN);
+        // // console.log(outputFN);
+        // // console.log(pages);
+        // // console.log(options);
+        // // console.log(options.pageFormat);
 
-        await savePDFtoFile(pdfDoc, outputFN);
+        // for (const pnum of pages) {
+        //     await copyPageToPDF(
+        //             pdfDoc,
+        //             donor,
+        //             Number.parseInt(pnum),
+        //             options.pageFormat,
+        //             options.rotate);
+        // }
+
+        // await savePDFtoFile(pdfDoc, outputFN);
     });
 
 program.command('merge')
@@ -591,94 +527,72 @@ program.command('merge')
         // console.log(options);
         // console.log(options.format);
         // console.log(options.pageFormat);
-        const pdfDoc = await PDFDocument.create();
 
-        for (const filenm of files) {
+        await mergePDFsAndImages(files, {
+            pageFormat: options.pageFormat,
+            rotate: options.rotate,
+            output: options.output
+        });
 
-            const inpMime = mime.getType(filenm);
+        // const pdfDoc = await PDFDocument.create();
+
+        // for (const filenm of files) {
+
+        //     const inpMime = mime.getType(filenm);
             
-            if (inpMime === 'application/pdf') {
-                console.log(`Reading input PDF ${filenm} ${inpMime}`);
-                const donor = await loadPDFfromFile(filenm);
-                const totalPages = donor.getPageCount();
+        //     if (inpMime === 'application/pdf') {
+        //         console.log(`Reading input PDF ${filenm} ${inpMime}`);
+        //         const donor = await loadPDFfromFile(filenm);
+        //         const totalPages = donor.getPageCount();
 
-                for (let pn = 0; pn < totalPages; pn++) {
-                    // console.log(`... COPY ${pn}`);
-                    await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
-                }
-            }
-            else if (inpMime === 'image/jpeg'
-             || inpMime === 'image/png'
-            ) {
-                console.log(`Reading input IMAGE ${filenm} ${inpMime}`);
-                const bytes = await fsp.readFile(filenm);
-                let img;
-                if (inpMime === 'image/jpeg') {
-                    img = await pdfDoc.embedJpg(bytes);
-                }
-                if (inpMime === 'image/png') {
-                    img = await pdfDoc.embedPng(bytes);
-                }
-                if (img) {
-                    const page = pdfDoc.addPage();
-                    if (typeof options.pageFormat === 'string') {
-                        const sz = PageSizes[options.pageFormat];
-                        page.setSize(sz[0], sz[1]);
-                    }
-                    // TBD: Handle rotation
+        //         for (let pn = 0; pn < totalPages; pn++) {
+        //             // console.log(`... COPY ${pn}`);
+        //             await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
+        //         }
+        //     }
+        //     else if (inpMime === 'image/jpeg'
+        //      || inpMime === 'image/png'
+        //     ) {
+        //         console.log(`Reading input IMAGE ${filenm} ${inpMime}`);
+        //         const bytes = await fsp.readFile(filenm);
+        //         let img;
+        //         if (inpMime === 'image/jpeg') {
+        //             img = await pdfDoc.embedJpg(bytes);
+        //         }
+        //         if (inpMime === 'image/png') {
+        //             img = await pdfDoc.embedPng(bytes);
+        //         }
+        //         if (img) {
+        //             const page = pdfDoc.addPage();
+        //             if (typeof options.pageFormat === 'string') {
+        //                 const sz = PageSizes[options.pageFormat];
+        //                 page.setSize(sz[0], sz[1]);
+        //             }
+        //             // TBD: Handle rotation
 
-                    const scaled = img.scaleToFit(
-                        page.getWidth(),
-                        page.getHeight()
-                    );
-                    page.drawImage(img, {
-                        x: page.getWidth() / 2 - scaled.width / 2,
-                        y: page.getHeight() / 2 - scaled.height / 2,
-                        width: scaled.width,
-                        height: scaled.height,
-                    });
-                    // pdfDoc.addPage(page);
-                }
-            }
-            else {
-                console.log(`UNKNOWN FILE TYPE ${filenm}`);
-            }
+        //             const scaled = img.scaleToFit(
+        //                 page.getWidth(),
+        //                 page.getHeight()
+        //             );
+        //             page.drawImage(img, {
+        //                 x: page.getWidth() / 2 - scaled.width / 2,
+        //                 y: page.getHeight() / 2 - scaled.height / 2,
+        //                 width: scaled.width,
+        //                 height: scaled.height,
+        //             });
+        //             // pdfDoc.addPage(page);
+        //         }
+        //     }
+        //     else {
+        //         console.log(`UNKNOWN FILE TYPE ${filenm}`);
+        //     }
 
-        }
+        // }
 
-        await savePDFtoFile(pdfDoc, options.output);
+        // await savePDFtoFile(pdfDoc, options.output);
     });
 
-program.parse();
-
-// Paper formats from https://pptr.dev/api/puppeteer.paperformat
-// Letter: 8.5in x 11in
-// Legal: 8.5in x 14in
-// Tabloid: 11in x 17in
-// Ledger: 17in x 11in
-// A0: 33.1102in x 46.811in
-// A1: 23.3858in x 33.1102in
-// A2: 16.5354in x 23.3858in
-// A3: 11.6929in x 16.5354in
-// A4: 8.2677in x 11.6929in
-// A5: 5.8268in x 8.2677in
-// A6: 4.1339in x 5.8268in
-
-function isPaperFormat(format) {
-    return typeof format === 'string'
-     && ( 
-        format === 'Letter'
-        || format === 'Legal'
-        || format === 'Ledger'
-        || format === 'A0'
-        || format === 'A1'
-        || format === 'A2'
-        || format === 'A3'
-        || format === 'A4'
-        || format === 'A5'
-        || format === 'A6'
-     );
-}
+program.parseAsync();
 
 async function PDFOutputDir(pdfDir) {
     if (!(typeof pdfDir === 'string')) {
