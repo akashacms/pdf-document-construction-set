@@ -62,6 +62,7 @@ import { isPaperFormat } from './utils.js';
 import puppeteer from 'puppeteer';
 import { Command } from 'commander';
 import { copyPDFMetadata, exportPagesFromPDF, mergePDFsAndImages, reformatPDF, setPDFMetadata, showPDFinfo, showPageInformation, showPageSizes } from './manipulate.js';
+import { formatConfig, parseFormat, parseRotate, rotateConfig } from './options.js';
 const program = new Command();
 
 program
@@ -338,49 +339,6 @@ program.command('copy-metadata')
     .argument('[outputFN]', 'File name for PDF file to save with modified metadata')
     .action(async function(inputFN, donorFN, outputFN, options, command) {
         await copyPDFMetadata(inputFN, donorFN, outputFN);
-        // const input = await loadPDFfromFile(inputFN);
-        // const donor = await loadPDFfromFile(donorFN);
-
-        // // For each metadata value
-        // // Test donor metadata - if set, then set in input
-
-        // const dotitle = donor.getTitle();
-        // if (typeof dotitle === 'string') {
-        //     input.setTitle(dotitle);
-        // }
-
-        // const dosubject = donor.getSubject();
-        // if (typeof dosubject === 'string') {
-        //     input.setSubject(dosubject);
-        // }
-
-        // const doauthor = donor.getAuthor();
-        // if (typeof doauthor === 'string') {
-        //     input.setAuthor(doauthor);
-        // }
-
-        // const dokeywords = donor.getKeywords();
-        // if (Array.isArray(dokeywords)) {
-        //     input.setKeywords(dokeywords);
-        // }
-
-        // const docreator = donor.getCreator();
-        // if (typeof docreator === 'string') {
-        //     input.setCreator(docreator);
-        // }
-
-        // const docdate = donor.getCreationDate();
-        // if (typeof docdate === 'object') {
-        //     input.setCreationDate(docdate);
-        // }
-
-        // const domdate = donor.getModificationDate();
-        // if (typeof domdate === 'object') {
-        //     input.setModificationDate(domdate);
-        // }
-
-        // await savePDFtoFile(input,
-        //     typeof outputFN === 'string' ? outputFN : inputFN);
     });
 
 program.command('set-metadata')
@@ -417,101 +375,33 @@ program.command('set-metadata')
             creationDate: options.creationDate,
             modificationDate: options.modificationDate
         });
-
-        // const donor = await loadPDFfromFile(pdfFN);
-
-        // if (typeof options.title === 'string') {
-        //     donor.setTitle(options.title);
-        // }
-        // if (typeof options.subject === 'string') {
-        //     donor.setSubject(options.subject);
-        // }
-        // if (typeof options.author === 'string') {
-        //     donor.setAuthor(options.author);
-        // }
-        // if (typeof options.keyword === 'string') {
-        //     donor.setKeywords([ options.keyword ]);
-        // }
-        // if (Array.isArray(options.keyword)) {
-        //     donor.setKeywords(options.keyword);
-        // }
-        // if (typeof options.producer === 'string') {
-        //     donor.setProducer(options.producer);
-        // }
-        // if (typeof options.creator === 'string') {
-        //     donor.setCreator(options.creator);
-        // }
-        // if (typeof options.creationDate === 'string') {
-        //     donor.setCreationDate(new Date(options.creationDate));
-        // }
-        // if (typeof options.modificationDate === 'string') {
-        //     donor.setModificationDate(new Date(options.modificationDate));
-        // }
-        // await savePDFtoFile(donor,
-        //     typeof saveToFN === 'string' ? saveToFN : pdfFN);
     });
 
 program.command('reformat')
     .description('Change the document format (e.g. A4) to a new one (e.g. Letter')
     .argument('<inputFN>', 'PDF file name of source document')
     .argument('[outputFN]', 'PDF file name of resized document. If not given, inputFN will be replaced')
-    .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
+    .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
     .action(async function(inputFN, outputFN, options, command) {
 
-        await reformatPDF(inputFN, outputFN, {
-            pageFormat: options.pageFormat,
-            rotate: options.rotate
-        });
-        // const pdfDoc = await PDFDocument.create();
-        // const donor = await loadPDFfromFile(inputFN);
-
-        // const totalPages = donor.getPageCount();
-
-        // for (let pn = 0; pn < totalPages; pn++) {
-        //     // console.log(`... COPY ${pn}`);
-        //     await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
-        // }
-        // await savePDFtoFile(pdfDoc,
-        //     typeof outputFN === 'string' ? outputFN : inputFN);
+        let config: formatConfig & rotateConfig = parseFormat(options, <any>{});
+        config = parseRotate(options, config);
+        await reformatPDF(inputFN, outputFN, config);
     });
-
-
 
 program.command('extract')
     .description('Extract pages from input PDF to output. The pages are numbered from 0.')
     .argument('<inputFN>', 'PDF file name to extract from')
     .argument('<outputFN>', 'PDF file name that receives the extracted images')
     .argument('[pages...]', 'Page numbers to extract, in the order of extraction')
-    .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
+    .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
     .action(async function(inputFN, outputFN, pages, options, command) {
         // console.log(`extract ${util.inspect(inputFN)} ${util.inspect(outputFN)} ${util.inspect(pages)} `);
-
-        await exportPagesFromPDF(inputFN, outputFN, pages, {
-            pageFormat: options.pageFormat,
-            rotate: options.rotate
-        });
-
-        // const pdfDoc = await PDFDocument.create();
-        // const donor = await loadPDFfromFile(inputFN);
-
-        // // console.log(inputFN);
-        // // console.log(outputFN);
-        // // console.log(pages);
-        // // console.log(options);
-        // // console.log(options.pageFormat);
-
-        // for (const pnum of pages) {
-        //     await copyPageToPDF(
-        //             pdfDoc,
-        //             donor,
-        //             Number.parseInt(pnum),
-        //             options.pageFormat,
-        //             options.rotate);
-        // }
-
-        // await savePDFtoFile(pdfDoc, outputFN);
+        let config: formatConfig & rotateConfig = parseFormat(options, <any>{});
+        config = parseRotate(options, config);
+        await exportPagesFromPDF(inputFN, outputFN, pages, config);
     });
 
 program.command('merge')
@@ -520,7 +410,7 @@ program.command('merge')
     // TODO metadata
     .argument('<files...>', 'Files to merge into the output file')
     .option('--output <outputFN>', 'File name for merged document')
-    .option('--page-format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
+    .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
     .action(async function(files, options, command) {
         // console.log(`merge ${util.inspect(files)} ${util.inspect(options.output)} `);
@@ -528,68 +418,12 @@ program.command('merge')
         // console.log(options.format);
         // console.log(options.pageFormat);
 
-        await mergePDFsAndImages(files, {
-            pageFormat: options.pageFormat,
-            rotate: options.rotate,
-            output: options.output
-        });
-
-        // const pdfDoc = await PDFDocument.create();
-
-        // for (const filenm of files) {
-
-        //     const inpMime = mime.getType(filenm);
-            
-        //     if (inpMime === 'application/pdf') {
-        //         console.log(`Reading input PDF ${filenm} ${inpMime}`);
-        //         const donor = await loadPDFfromFile(filenm);
-        //         const totalPages = donor.getPageCount();
-
-        //         for (let pn = 0; pn < totalPages; pn++) {
-        //             // console.log(`... COPY ${pn}`);
-        //             await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
-        //         }
-        //     }
-        //     else if (inpMime === 'image/jpeg'
-        //      || inpMime === 'image/png'
-        //     ) {
-        //         console.log(`Reading input IMAGE ${filenm} ${inpMime}`);
-        //         const bytes = await fsp.readFile(filenm);
-        //         let img;
-        //         if (inpMime === 'image/jpeg') {
-        //             img = await pdfDoc.embedJpg(bytes);
-        //         }
-        //         if (inpMime === 'image/png') {
-        //             img = await pdfDoc.embedPng(bytes);
-        //         }
-        //         if (img) {
-        //             const page = pdfDoc.addPage();
-        //             if (typeof options.pageFormat === 'string') {
-        //                 const sz = PageSizes[options.pageFormat];
-        //                 page.setSize(sz[0], sz[1]);
-        //             }
-        //             // TBD: Handle rotation
-
-        //             const scaled = img.scaleToFit(
-        //                 page.getWidth(),
-        //                 page.getHeight()
-        //             );
-        //             page.drawImage(img, {
-        //                 x: page.getWidth() / 2 - scaled.width / 2,
-        //                 y: page.getHeight() / 2 - scaled.height / 2,
-        //                 width: scaled.width,
-        //                 height: scaled.height,
-        //             });
-        //             // pdfDoc.addPage(page);
-        //         }
-        //     }
-        //     else {
-        //         console.log(`UNKNOWN FILE TYPE ${filenm}`);
-        //     }
-
-        // }
-
-        // await savePDFtoFile(pdfDoc, options.output);
+        let config: formatConfig & rotateConfig & {
+            output?: string
+        } = parseFormat(options, <any>{});
+        config = parseRotate(options, config);
+        config.output = options.output;
+        await mergePDFsAndImages(files, config);
     });
 
 program.parseAsync();

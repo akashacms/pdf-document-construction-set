@@ -8,6 +8,7 @@ import util from 'node:util';
 import { mime } from './pdf-document-maker.js';
 
 import { PDFDocument, PageSizes, degrees } from 'pdf-lib';
+import { formatConfig, rotateConfig } from './options.js';
 
 const loadPDFfromFile = async (inputFN) => {
 
@@ -17,7 +18,7 @@ const loadPDFfromFile = async (inputFN) => {
     return donor;
 };
 
-const copyPageToPDF = async (pdfDoc, donor, pagenm, size, rotation) => {
+const copyPageToPDF = async (pdfDoc, donor, pagenm, options: formatConfig & rotateConfig) => {
     const copied = await pdfDoc.copyPages(donor, [pagenm]);
     // console.log(`copyPage ${pagenm} ${size}`);
     // const pg = await pdfDoc.addPage(copied[0]);
@@ -30,29 +31,31 @@ const copyPageToPDF = async (pdfDoc, donor, pagenm, size, rotation) => {
     // the content we must use scaleContent.
 
     const toadd = copied[0];
-    if (typeof size === 'string') {
-        const origsz = toadd.getSize();
-        if (!(size in PageSizes)) {
-            throw new Error(`Incorrect page size name ${util.inspect(size)}`);
-        }    
-        const sz = PageSizes[size];
-        // console.log(`orig ${util.inspect(origsz)} setSize ${size} ${util.inspect(sz)}`);
-        toadd.setSize(sz[0], sz[1]);
-        toadd.scaleContent(sz[0] / origsz.width, sz[1] / origsz.height);
-        // pg.setSize(sz[0], sz[1]);
-        // await pdfDoc.addPage(copied[0]).setSize(sz[0], sz[1]);
+    if (typeof options.format !== 'undefined') {
+        if (typeof options.format === 'string') {
+            const origsz = toadd.getSize();
+            if (!(options.format in PageSizes)) {
+                throw new Error(`Incorrect page size name ${util.inspect(options.format)}`);
+            }
+            const sz = PageSizes[options.format];
+            // console.log(`orig ${util.inspect(origsz)} setSize ${size} ${util.inspect(sz)}`);
+            toadd.setSize(sz[0], sz[1]);
+            toadd.scaleContent(sz[0] / origsz.width, sz[1] / origsz.height);
+            // pg.setSize(sz[0], sz[1]);
+            // await pdfDoc.addPage(copied[0]).setSize(sz[0], sz[1]);
+        }
     }
-    if (typeof rotation === 'string') {
-        if (rotation === '0') {
-            // no rotation
-        } else if (rotation === '90') {
-            await toadd.setRotation(degrees(90));
-        } else if (rotation === '180') {
-            await toadd.setRotation(degrees(180));
-        } else if (rotation === '270') {
-            await toadd.setRotation(degrees(270));
-        } else {
-            throw new Error(`Incorrect rotation ${util.inspect(rotation)}`);
+    if (typeof options.rotate !== 'undefined') {
+        if (typeof options.rotate === 'number') {
+            if (options.rotate === 90) {
+                await toadd.setRotation(degrees(90));
+            } else if (options.rotate === 180) {
+                await toadd.setRotation(degrees(180));
+            } else if (options.rotate === 270) {
+                await toadd.setRotation(degrees(270));
+            } else {
+                throw new Error(`Incorrect rotation in ${util.inspect(options.rotate)}`);
+            }
         }
     }
     // console.log(`Adding page ${util.inspect(toadd.getSize())} ${util.inspect(toadd.getRotation())}`);
@@ -213,10 +216,7 @@ export async function setPDFMetadata(
 export async function reformatPDF(
         inputFN: string,
         outputFN: string,
-        options: {
-            pageFormat?: string,
-            rotate?: string
-        }
+        options: formatConfig & rotateConfig
 ) {
     const pdfDoc = await PDFDocument.create();
     const donor = await loadPDFfromFile(inputFN);
@@ -225,7 +225,7 @@ export async function reformatPDF(
 
     for (let pn = 0; pn < totalPages; pn++) {
         // console.log(`... COPY ${pn}`);
-        await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
+        await copyPageToPDF(pdfDoc, donor, pn, options);
     }
     await savePDFtoFile(pdfDoc,
         typeof outputFN === 'string' ? outputFN : inputFN);
@@ -235,10 +235,7 @@ export async function exportPagesFromPDF(
     inputFN: string,
     outputFN: string,
     pages?: Array<string>,
-    options?: {
-        pageFormat?: string,
-        rotate?: string
-    },
+    options?: formatConfig & rotateConfig
 
 ) {
 
@@ -256,8 +253,7 @@ export async function exportPagesFromPDF(
                 pdfDoc,
                 donor,
                 Number.parseInt(pnum),
-                options.pageFormat,
-                options.rotate);
+                options);
     }
 
     await savePDFtoFile(pdfDoc, outputFN);
@@ -265,9 +261,7 @@ export async function exportPagesFromPDF(
 
 export async function mergePDFsAndImages(
     files: Array<string>,
-    options: {
-        pageFormat?: string,
-        rotate?: string,
+    options: formatConfig & rotateConfig & {
         output?: string
     }
 ) {
@@ -286,7 +280,7 @@ export async function mergePDFsAndImages(
 
             for (let pn = 0; pn < totalPages; pn++) {
                 // console.log(`... COPY ${pn}`);
-                await copyPageToPDF(pdfDoc, donor, pn, options.pageFormat, options.rotate);
+                await copyPageToPDF(pdfDoc, donor, pn, options);
             }
         }
         else if (inpMime === 'image/jpeg'
@@ -303,8 +297,8 @@ export async function mergePDFsAndImages(
             }
             if (img) {
                 const page = pdfDoc.addPage();
-                if (typeof options.pageFormat === 'string') {
-                    const sz = PageSizes[options.pageFormat];
+                if (typeof options.format === 'string') {
+                    const sz = PageSizes[options.format];
                     page.setSize(sz[0], sz[1]);
                 }
                 // TBD: Handle rotation
