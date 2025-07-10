@@ -1,0 +1,13 @@
+{
+  "name": "diagrams",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "render": "node ../../dist/pdf-document-maker.js render --document-dir . --pdf-output PDF --html-output out --title 'Demonstrating Diagrams' --format A4 README.md"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
