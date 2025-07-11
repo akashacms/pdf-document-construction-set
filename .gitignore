@@ -130,3 +130,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+guide/_mermaid
+examples/diagrams/tmp/
+examples/extract-images/upload/
+examples/diagrams/tmp/
+examples/diagrams/_mermaid/
