@@ -3,13 +3,13 @@
 <img src="https://raw.githubusercontent.com/akashacms/pdf-document-construction-set/refs/heads/main/guide/assets/logo-pdf-document-maker.png" class="ml-auto mr-auto" alt="PDF Document Maker"/>
 </figure>
 
-# PDF Document Maker - Tooling to generate high fidelity PDF documents from Markdown or AsciiDoc
+# PDF Document Maker - Generate high fidelity PDF documents from Markdown or AsciiDoc, PDF manipulation
 
-_PDF Document Maker_ supports creating richly formatted documents, in both HTML and PDF format, using file types (Markdown, CSS, etc) which are easily tracked in a source code repository, and which are easily edited with IDEs like Visual Studio Code.
+_PDF Document Maker_ supports creating richly formatted documents, in both HTML and PDF format, using file types (Markdown, CSS, etc) which are easily tracked in a source code repository, and which are easily edited with IDEs like Visual Studio Code.  It also supports many of the PDF manipulation functions used in PDF document creation.
 
 There are many tools for creating richly formatted documents, such as WYSIWYG word processors like Libre Office.  But, they're not easily tracked in Git or other source code repositories.  Many kinds of technical projects require the ability to track all assets, including documentation, in a source repository, but also need to produce good looking documentation.
 
-While Markdown is a flexible markup format, it produces plain looking output.  Generating a PDF with fidelity close to what we'd get from a WYSIWYG word processor like Libre Office requires significant ability to customize the Markdown-HTML conversion result.  PDF Document Maker gives you a head start on that, and also helps to precisely customize the HTML and CSS any way you like.
+While Markdown is a flexible markup format, it produces plain looking output.  Generating a PDF with fidelity close to what we'd get from a WYSIWYG word processor like Libre Office requires significant ability to customize the Markdown-HTML conversion result.  PDF Document Maker gives you a head start on that, and also supports precisely customizing the HTML and CSS any way you like.
 
 The features include:
 
@@ -27,6 +27,10 @@ The features include:
 * Generating figure/img/caption structures for images
 * Generating caption tag for tables
 * Optional support for MultiMarkdown tables
+* Merging multiple PDFs and images into a PDF
+* Extracting pages from a PDF
+* Resizing a PDF from one page size (e.g. A4) to another (e.g. US Letter)
+* Manipulate PDF metadata
 
 # Project setup and Installation
 
@@ -48,62 +52,65 @@ Once installed you can get help:
 ```shell
 $ npx pdf-document-maker --help
 
-Usage: pdf-document-maker [options] <docPaths...>
+Usage: pdf-document-maker [options] [command] <docPaths>
 
-CLI to build PDF files from Markdown/AkashaCMS documents
+CLI to build PDF files from Markdown/AsciiDoc documents
 
 Arguments:
-  docPaths                          VPaths for documents to render
+  docPaths                                           VPath for document to render
 
 Options:
-  -v, --version                     output the current version
-  --config <configFN>               AkashaCMS configuration file. If specified
-                                    it disables auto-generated config file.
-  --title <title>                   Document title, overwriting any title in
-                                    the document metadata.
-  --layout <layoutTemplate>         File name, in a layouts directory, for the
-                                    layout template. Overwrites any layout in
-                                    the document metadata.
-  --format <format>                 Page format, "A3", "A4", "A5", "Legal",
-                                    "Letter" or "Tabloid"
-  --pdf-output <pdfDir>             Output directory for PDF generation.
-                                    Default process.cwd()/PDF
-  --html-output <htmlDir>           Output directory for HTML generation
-  --template-header <tmplHeader     HTML template for page header
-  --height-header <height>          Height of header block. Valid units are
-                                    mm, cm, in and px.
-  --template-footer <tmplFooter     HTML template for page footer
-  --height-footer <height>          Height of footer block. Valid units are
-                                    mm, cm, in and px.
-  --style <cssFile>                 File name of CSS style sheet
-  --layout-dir <layoutDir...>       One or more directories for layout
-                                    templates
-  --partial-dir <partialDir...>     One or more directories for partial
-                                    templates
-  --asset-dir <assetsDir...>        One or more directories for assets
-  --document-dir <documentsDir...>  One or more directories for documents
-  --plantuml-url                    URL for a PlantUML server
-  --no-headless                     Turn off headless mode
-  --no-pdf                          Do not generate PDFs
-  --no-printcss                     Disable the print.css stylesheet
-  --no-md-anchor                    Disable the markdown-it-anchor extension
-  --no-md-footnote                  Disable the markdown-it-footnote extension
-  --no-md-attrs                     Disable the markdown-it-attrs extension
-  --no-md-div                       Disable the markdown-it-div extension
-  --no-md-header-sections           Disable the markdown-it-header-sections
-                                    extension
-  --no-md-highlightjs               Disable the markdown-it-highlightjs
-                                    extension
-  --no-md-image-figures             Disable the markdown-it-image-figures
-                                    extension
-  --no-md-multimd-table             Disable the markdown-it-multimd-table
-                                    extension
-  --no-md-table-captions            Disable the markdown-it-table-captions
-                                    extension
-  --no-md-plantuml                  Disable the markdown-it-plantuml extension
-  --funcs <funcsFN>                 Name a JS file containing Mahafuncs for
-                                    custom processing
-  -h, --help                        display help for command
+  -v, --version                                      output the current version
+  --config <configFN>                                AkashaCMS configuration file. If specified it disables
+                                                     auto-generated config file.
+  --title <title>                                    Document title, overwriting any title in the document metadata.
+  --layout <layoutTemplate>                          File name, in a layouts directory, for the layout template.
+                                                     Overwrites any layout in the document metadata.
+  --publication-date <publDate>                      String containing a Date to be used in the publicationDate metdata
+                                                     field.
+  --format <format>                                  Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"
+  --pdf-output <pdfDir>                              Output directory for PDF generation. Default process.cwd()/PDF
+  --html-output <htmlDir>                            Output directory for HTML generation
+  --template-header <tmplHeader>                     HTML template for page header
+  --height-header <height>                           Height of header block. Valid units are mm, cm, in and px.
+  --template-footer <tmplFooter>                     HTML template for page footer
+  --height-footer <height>                           Height of footer block. Valid units are mm, cm, in and px.
+  --style <cssFile...>                               File name of CSS style sheet
+  --lesscss <lesscssFile...>                         File name of LESS file to render to CSS
+  --layout-dir <layoutDir...>                        One or more directories for layout templates
+  --partial-dir <partialDir...>                      One or more directories for partial templates
+  --asset-dir <assetsDir...>                         One or more directories for assets
+  --document-dir <documentsDir...>                   One or more directories for documents
+  --no-headless                                      Turn off headless mode
+  --no-pdf                                           Do not generate PDFs
+  --no-printcss                                      Disable the print.css stylesheet
+  --no-md-anchor                                     Disable the markdown-it-anchor extension
+  --no-md-footnote                                   Disable the markdown-it-footnote extension
+  --no-md-attrs                                      Disable the markdown-it-attrs extension
+  --no-md-bracketed-spans                            Disable the markdown-it-bracketed-spans extension
+  --no-md-div                                        Disable the markdown-it-div extension
+  --no-md-header-sections                            Disable the markdown-it-header-sections extension
+  --no-md-highlightjs                                Disable the markdown-it-highlightjs extension
+  --no-md-image-figures                              Disable the markdown-it-image-figures extension
+  --no-md-multimd-table                              Disable the markdown-it-multimd-table extension
+  --no-md-table-captions                             Disable the markdown-it-table-captions extension
+  --no-md-katex                                      Disable the @vscode/markdown-it-katex extension
+  --no-md-plantuml                                   Disable the @akashacms/plugins-plantuml extension
+  --no-bootstrap                                     Disable Bootstrap v4 and related modules
+  --funcs <funcsFN>                                  Name a JS file containing Mahafuncs for custom processing
+  --verbose                                          Print extra information during execution
+  -h, --help                                         display help for command
+
+Commands:
+  info <inputFN>                                     Show information about the PDF
+  page-sizes                                         Show available page sizes
+  copy-metadata <inputFN> <donorFN> [outputFN]       Copy metadata values from one PDF to another
+  set-metadata [options] <pdfFN> [saveToFN]          Set metadata values in a PDF
+  reformat [options] <inputFN> [outputFN]            Change the document format (e.g. A4) to a new one (e.g. Letter
+  extract [options] <inputFN> <outputFN> <pages...>  Extract page numbers from input PDF to output. The pages are
+                                                     numbered from 0.
+  merge [options] <files...>                         Merge multiple PDF, PNG, JPG, into one document
+
 
 ```
 
@@ -137,6 +144,37 @@ The file name `TEST.md` is relative to the root directory of the documents direc
 If more than one directory is named with `--document-dir` then the directories are "stacked" with the later directories higher in the stack.  When a VPath is requested, the stacked directories are searched in order to find the actual file to use.
 
 The directories named with `--partial-dir`, `--asset-dir`, and `--layout-dir`, are treated the same way.  There can be multiple such directories, they are organized in a stack, and are searched from the top of the stack.
+
+## PDF Manipulation
+
+```shell
+$ npx pdf-document-maker.mjs extract \
+    ../../guide/PDF/guide.pdf \
+    extracted.pdf \
+    0 2 4 6 8
+```
+
+Extract the named pages from a PDF into an output PDF.
+
+```shell
+$ npx pdf-document-maker --output merged.pdf \
+     ../../guide/PDF/guide.pdf \
+     ./Screenshot-merge-example.png
+Reading input PDF ../../guide/PDF/guide.pdf application/pdf
+Reading input IMAGE ./Screenshot-merge-example.png image/png
+Write File merged.pdf
+```
+
+Merge multiple PDF files or images to create an output PDF.
+
+```shell
+$ npx pdf-document-maker page-sizes
+...
+$ npx pdf-document-maker reformat guide/PDF/guide.pdf reformatted.pdf \
+        --page-format Tabloid
+```
+
+Resize the PDF content to the named page size.  The `--page-format` option works for the `reformat`, `merge`, and `extract` commands.
 
 ## `@akashacms/pdf-document-maker` versus `pdf-document-maker`
 
