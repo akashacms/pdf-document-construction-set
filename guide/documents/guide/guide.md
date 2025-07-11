@@ -1429,6 +1429,45 @@ Which results in the following:
 
 If in the future you need to edit the diagram, simply load the PNG file back into `draw.io`.  When done editing the file make sure to save it using the same procedure.
 
+## Pre-rendering PlantUML, Mermaid or Pintora diagrams
+
+PDF Document Maker supports rendering these image types as part of rendering the Markdown/AsciiDoc document.  As we'll see in the subsequent sections, that makes it easy to edit a diagram, rerun PDF Document Maker, and instantly everything is rendered.
+
+But, it may be preferable to render the diagrams as a separate step.  For example, the diagrams might rarely change, and therefore you want to improve rendering time by rendering diagrams as a separate step.
+
+The `@akashacms/diagrams-maker` package supports command-line rendering of PlantUML and Pintora diagrams.
+
+```shell
+npx diagrams-maker plantuml \
+    --input-file documents/img/plantuml-example.puml \
+    --output-file documents/img/plantuml-example.png \
+    --tpng
+npx diagrams-maker pintora \
+    --input-file documents/img/pintora-example.pintora \
+    --output-file documents/img/pintora-example.png \
+    --tpng
+```
+
+For Mermaid files, one can use its command-line utility as so:
+
+```shell
+npx mmdc -i documents/img/mermaid-example.mmd \
+  -o documents/img/mermaid-example.svg \
+  --outputFormat svg
+```
+
+Then, as demonstrated in the previous section, you can do use one of these code snippets
+
+```html
+<!-- Using Markdown syntax -->
+![Using a pre-rendered image](./img/mermaid-example.svg)
+
+<!-- Using HTML syntax -->
+<img src='./img/mermaid-example.svg'/>
+```
+
+The following sections demonstrate how to, instead, use such documents inline with your document.
+
 ## Using PlantUML diagrams in PDF Document Maker
 
 PlantUML - [`https://plantuml.com/`](https://plantuml.com/) - is a versatile tool for creating a number of diagrams useful in software engineering and related fields.  As the name suggests it focuses mostly on UML diagrams.
@@ -1461,27 +1500,9 @@ stop
 :::
 :::
 
-<!-- THIS IS THE OLD METHOD
+Put that text into a file, in a Documents directory.  If you've used `--document-dir documents` on the command line, then `documents` is the documents directory, and you might store the PlantUML file as `documents/img/activity-1.puml`.
 
-Simply insert that text in the Markdown file.  The default delimiters are `@startuml` and `@enduml`, with everything in-between interpreted as the PlantUML diagram.
-
-@startuml
-
-start
-
-if (Graphviz installed?) then (yes)
-  :process all\ndiagrams;
-else (no)
-  :process only
-  __sequence__ and __activity__ diagrams;
-endif
-
-stop
-
-@enduml
--->
-
-In PDF Document Maker, we use the custom tag `<diagrams-plantuml>` to insert a PlantUML diagram.
+Next is to use the custom tag `<diagrams-plantuml>` to insert a PlantUML diagram.
 
 It looks like this:
 
@@ -1492,7 +1513,7 @@ It looks like this:
 ::: .card-body
 ```html
 <diagrams-plantuml input-file="img/activity-1.puml"
-    output-file="activity-1.png" tpng/>
+    output-file="img/activity-1.png" tpng/>
 ```
 :::
 :::
@@ -1502,11 +1523,13 @@ The above diagram, in this case, is saved in the file `activity-1.puml` in the `
 That renders as so:
 
 <diagrams-plantuml input-file="img/activity-1.puml"
-    output-file="activity-1.png" tpng/>
+    output-file="img/activity-1.png" tpng/>
 
 The rendered version is an `<img>` tag with a `src` attribute referencing the file named in the `output-file` attribute.
 
-To render it as SVG replace `tpng` with `tsvg`.
+The `input-file` pathname is interpreted relative to the documents directory, while the `output-file` pathname is interpreted relative to the directory named in the `--html-output out` option.  Effectively the input-file pathname is actually `documents/img/activity-1.puml` while the output-file pathname is actually `out/img/activity-1.png`.
+
+To render it as SVG replace `tpng` with `tsvg`, and change the file extension to `.svg`.
 
 ::: .card
 ::: .card-title
@@ -1526,6 +1549,8 @@ That renders as so:
     output-file="activity-1.svg" tsvg/>
 
 Both `tsvg` and `tpng` are properties, not attributes, and they should be used in this way without an attribute value.
+
+We can also place the PlantUML document inside the `diagrams-plantuml` tag, like so:
 
 ::: .card
 ::: .card-title
@@ -1600,7 +1625,9 @@ classDiagram
 :::
 :::
 
-In PDF Document Maker, we use the custom tag `<diagrams-pintora>` to insert a Pintora diagram.
+Place this text in a file in your Documents directory named `img/pintora-class-1.pint`.
+
+We use the custom tag `<diagrams-pintora>` to insert a Pintora diagram.
 
 It looks like this:
 
@@ -1655,7 +1682,7 @@ Unlike PlantUML, the Pintora driver does not support rendering SVG to inline cod
 ::: .card-body
 ```html
 <diagrams-pintora
-    output-file="img/pintora-class-1.svg"
+    output-file="img/pintora-sequence-1.svg"
     mime-type="image/jpeg">
 sequenceDiagram
   Frida-->>Georgia: Flowers are beautiful
@@ -1673,7 +1700,7 @@ sequenceDiagram
 It does allow rendering an inline Pintora diagram description, which looks like this:
 
 <diagrams-pintora
-    output-file="img/pintora-class-1.jpg"
+    output-file="img/pintora-sequence-1.jpg"
     mime-type="image/jpeg">
 sequenceDiagram
   Frida-->>Georgia: Flowers are beautiful
@@ -1687,64 +1714,51 @@ sequenceDiagram
 
 ## Using MermaidJS diagrams in PDF Document Maker
 
-Mermaid - [`https://mermaid.js.org/`](https://mermaid.js.org/) - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description of the diagram, pasting it into a Markdown document.
+Mermaid - [`https://mermaid.js.org/`](https://mermaid.js.org/) - is similar to PlantUML.  It supports a variety of diagrams, mostly in the UML bailiwick.  One creates a textual description of the diagram, pasting it into a Markdown document.  In this way, Mermaid is similar to PlantUML and Pintora.
 
-Unlike with PlantUML we were unable to integrate Mermaid such that a code block with the `mermaid` class would be automatically rendered as an inline SVG.
-
-The most convenient path is to install Mermaid-CLI - [`https://github.com/mermaid-js/mermaid-cli`](https://github.com/mermaid-js/mermaid-cli)
-
-In your project directory do this:
+This is a simple Mermaid document.
 
 ::: .card
 ::: .card-title
-**Figure 48. Installing the Mermaid CLI tool**
+**Figure 52. Rendering a Mermaid diagram inline in Markdown**
 :::
 ::: .card-body
-```shell
-$ npm install @mermaid-js/mermaid-cli --save
+```
+```mermaid Optional title for the win
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
 ```
 :::
 :::
 
-This installs a program you can run as so:
+The simplest way to use a Mermaid document is to simply put that text into the document.  This approach will only work in Markdown files.  It is compatible with the GitHub Docs support for using Mermaid diagrams on GitHub pages.
+
+The text after the `mermaid` language code is used as a caption underneath the diagram.
+
+Doing so looks like this:
 
 ::: .card
 ::: .card-title
-**Figure 49. The Mermaid CLI options**
+**Figure 53. Rendered Mermaid diagram**
 :::
 ::: .card-body
-```shell
-$ npx mmdc --help
-Usage: mmdc [options]
-
-Options:
-  -V, --version                                   output the version number
-  -t, --theme [theme]                             Theme of the chart (choices: "default", "forest", "dark", "neutral",
-                                                  default: "default")
-  -w, --width [width]                             Width of the page (default: 800)
-  -H, --height [height]                           Height of the page (default: 600)
-  -i, --input <input>                             Input mermaid file. Files ending in .md will be treated as Markdown
-                                                  and all charts (e.g. ```mermaid (...)``` or :::mermaid (...):::)
-                                                  will be extracted and generated. Use `-` to read from stdin.
-  -o, --output [output]                           Output file. It should be either md, svg, png, pdf or use `-` to
-                                                  output to stdout. Optional. Default: input + ".svg"
-  -e, --outputFormat [format]                     Output format for the generated image. (choices: "svg", "png",
-                                                  "pdf", default: Loaded from the output file extension)
-  -b, --backgroundColor [backgroundColor]         Background color for pngs/svgs (not pdfs). Example: transparent,
-                                                  red, '#F0F0F0'. (default: "white")
-  -c, --configFile [configFile]                   JSON configuration file for mermaid.
-  -C, --cssFile [cssFile]                         CSS file for the page.
-  -I, --svgId [svgId]                             The id attribute for the SVG element to be rendered.
-  -s, --scale [scale]                             Puppeteer scale factor (default: 1)
-  -f, --pdfFit                                    Scale PDF to fit chart
-  -q, --quiet                                     Suppress log output
-  -p --puppeteerConfigFile [puppeteerConfigFile]  JSON configuration file for puppeteer.
-  -h, --help                                      display help for command
+```mermaid Optional title for the win
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
 ```
 :::
 :::
 
-A sample Mermaid diagram is:
+There is also a custom tag, `<diagrams-mermaid>`, which is used similarly to the tags for PlantUML and Pintora.
+
+Consider a sample Mermaid diagram:
 
 <code-embed file-name="./img/simple-sample-1.mmd"/>
 
@@ -1752,129 +1766,39 @@ This must be saved as a separate file in the file-system.  For example, a subdir
 
 ::: .card
 ::: .card-title
-**Figure 50. Rendering a Mermaid diagram with the CLI**
-:::
-::: .card-body
-```shell
-npx mmdc -i documents/guide/img/simple-sample-1.mmd \
-  -o documents/guide/img/simple-sample-1.svg \
-  --outputFormat svg
-```
-:::
-:::
-
-The `-i` option specifies the input file, and `-o` the output file.  Hence, this converts to an output file in the same directory the SVG version of the diagram.
-
-The result looks like so:
-
-<figure>
-  <img width="300px" src="./img/simple-sample-1.svg"/>
-  <figcaption>Simple Sample 1</figcaption>
-</figure>
-
-<!-- These were attempts to rein in the size of that image -->
-
-<!-- img figure src="./img//simple-sample-1.svg"
-  caption="Simple Sample 1"
-  width="700px"/ -->
-
-<!-- ![Simple Sample 1](./img/simple-sample-1.svg) -->
-
-Let's talk a little about rendering SVG images in HTML.  SVG is a vector image format, meaning that an SVG file contains commands for drawing lines and circles and the like.  It also means SVG files do not have a defined width/height, unlike pixel image formats.  Therefore SVG files can scale to any amount with no pixelation.
-
-Initially, as a result, this image filled an entire page in the PDF file.
-
-One way to give an SVG file a size is by editing the SVG to set `width=`, `height=` and other parameters.  But the simplest way is to use HTML directly like so:
-
-::: .card
-::: .card-title
-**Figure 51. Using `<figure>/<img>` with an SVG file**
+**Figure 54. Usage of the `diagrams-mermaid` custom tag**
 :::
 ::: .card-body
 ```html
-<figure>
-  <img width="300px" src="./img/simple-sample-1.svg"/>
-  <figcaption>Simple Sample 1</figcaption>
-</figure>
+<diagrams-mermaid
+        id="${id}"
+        class="${class}"
+        alt="${alt}"
+        title="${title}"
+        caption="${caption}"
+        input-file='${mmdFileName}'
+        output-file='${svgFileName}'/>
+
+<!-- Putting the tag to use -->
+<diagrams-mermaid
+        input-file='./img/simple-sample-1.mmd'
+        output-file='./img/simple-sample-1.png'/>
 ```
 :::
 :::
 
-This `<img>` is displaying the SVG, and is defined with a `300 pixel` width.  The SVG then renders to that size.
-
-Next is to automate building the images before building the document.  Earlier we went over using the `scripts` tag in `package.json`.  Let's add to that workflow.
-
-First, add a command to build each Mermaid file:
+To use it, simply copy the tag into your Markdown or AsciiDoc
 
 ::: .card
 ::: .card-title
-**Figure 52. Mermaid build procedure**
+**Figure 55. Using the `diagrams-mermaid` custom tag**
 :::
 ::: .card-body
-```json
-"build:sample-1": "npx mmdc -i documents/guide/simple-sample-1.mmd -o documents/guide/simple-sample-1.svg --outputFormat svg",
-"build:guide": "npm-run-all build:sample-1 build:render",
-```
+<diagrams-mermaid
+        input-file='./img/simple-sample-1.mmd'
+        output-file='./img/simple-sample-1.png'/>
 :::
 :::
-
-We take the same command, and add it to the script.  The tag name format is `build:file-name`.
-
-The `build:guide` script contains the complete build procedure.
-
-The resulting SVG file can be referenced from Markdown using:
-
-::: .card
-::: .card-title
-**Figure 53. Using the SVG file in Markdown**
-:::
-::: .card-body
-```
-![Simple Sample 1](./img/simple-sample-1.svg)
-```
-:::
-:::
-
-This is a normal Markdown image tag which will contain the alt-text _Simple Sample 1_.
-
-But, if you have multiple files to render it's more efficient to use the Mermaid CLI API in a script like this:
-
-::: .card
-::: .card-title
-**Figure 54. JS Script to build several Mermaid diagrams**
-:::
-::: .card-body
-```js
-import { run } from "@mermaid-js/mermaid-cli"
-
-console.log(".../img/mahabhuta-workflow.mmd");
-await run(
-   "./documents/guide/img/mahabhuta-workflow.mmd",
-   "./documents/guide/img/mahabhuta-workflow.svg",
-);
-
-console.log(".../img/pdf-document-workflow.mmd");
-await run(
-    "./documents/guide/img/pdf-document-workflow.mmd",
-    "./documents/guide/img/pdf-document-workflow.svg",
-);
-
-console.log(".../img/simple-sample-1.mmd");
-await run(
-    "./documents/guide/img/simple-sample-1.mmd",
-    "./documents/guide/img/simple-sample-1.svg",
-);
-
-console.log(".../img/simple-sample-2.mmd");
-await run(
-    "./documents/guide/img/simple-sample-2.mmd",
-    "./documents/guide/img/simple-sample-2.svg",
-);
-```
-:::
-:::
-
-This should save the time required to initialize Puppeteer four times.
 
 ### Diagnosing a "_Failed to launch the browser_" failure with Mermaid
 
@@ -1901,6 +1825,40 @@ What does work is to chdir to `~/.cache/puppeteer/chrome/linux-<version>/chrome-
 
 Also, review the guidance for running Puppeteer in build systems like Travis CI, or in Docker.  In some cases PDF Document Maker will be used in an automated build system, which will require some environment preparation as outlined in that documentation.
 
+## Issues with rendering diagrams to SVG
+
+Let's talk a little about rendering SVG images in HTML.  SVG is a vector image format, meaning that an SVG file contains commands for drawing lines and circles and the like.  SVG is therefore more compact than a raster image, like PNG, and it can be customized with CSS declarations.
+
+The issue we face in PDF Document Maker is that SVG files do not have a defined width/height, unlike pixel image formats.  Therefore SVG files can scale to any amount with no pixelation.
+
+Some of the SVG images shown earlier filled an entire page in the PDF file.  Usually we don't want that.
+
+The simple workaround is rendering the diagram to PNG.  In practice, the diagram engines render a PNG diagram to a reasonable size. 
+
+Another workaround is editing the SVG file to set `width=`, `height=` and other parameters.
+
+Another simple solution is to use HTML directly like so:
+
+::: .card
+::: .card-title
+**Figure 56. Using `<figure>/<img>` with an SVG file**
+:::
+::: .card-body
+```html
+<figure>
+  <img width="300px" src="./img/simple-sample-1.svg"/>
+  <figcaption>Simple Sample 1</figcaption>
+</figure>
+```
+:::
+:::
+
+This `<img>` is displaying the SVG, and is defined with a `300 pixel` width.  The SVG then renders to that size.
+
+The custom tags described earlier can render a document to an SVG file. By default the same issue will occur, that the SVG will expand to fill the space.
+
+Each of the custom tags has `width` and `height` options.  Simply set the `width` appropriately for your diagram.
+
 ## High quality equation (mathematical and chemical) rendering with KaTeX
 
 KaTeX is a LaTeX/TeX-inspired format for rendering beautiful mathematical equations.  Like with PlantUML and Mermaid, the model is to describe math equations in a textual format, which is rendered by KaTeX into the equations written by real mathematicians.
@@ -1909,7 +1867,7 @@ For example, take this
 
 ::: .card
 ::: .card-title
-**Figure 55. A simple KaTeX expression**
+**Figure 57. A simple KaTeX expression**
 :::
 ::: .card-body
 ```
@@ -1924,7 +1882,7 @@ In a Markdown document, the KaTeX string is surrounded with dollar signs like so
 
 ::: .card
 ::: .card-title
-**Figure 56. Using a KaTeX expression in Markdown**
+**Figure 58. Using a KaTeX expression in Markdown**
 :::
 ::: .card-body
 ```
@@ -1945,7 +1903,7 @@ Here's some examples of taller equations displayed between paragraphs:
 
 ::: .card
 ::: .card-title
-**Figure 57. Block-style KaTeX expression examples**
+**Figure 59. Block-style KaTeX expression examples**
 :::
 ::: .card-body
 ```
@@ -1994,7 +1952,7 @@ This also supports the _mhchem_ extension for KaTeX which supports writing chemi
 
 ::: .card
 ::: .card-title
-**Figure 58. Example chemical expressions**
+**Figure 60. Example chemical expressions**
 :::
 ::: .card-body
 ```
