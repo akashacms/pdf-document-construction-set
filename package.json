@@ -6,7 +6,7 @@
   },
   "name": "@akashacms/pdf-document-maker",
   "description": "Create good looking PDF Documents from Markdown or AsciiDoc files, PDF document manipulations",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "repository": {
     "type": "git",
     "url": "git://github.com/akashacms/pdf-document-construction-set.git"
