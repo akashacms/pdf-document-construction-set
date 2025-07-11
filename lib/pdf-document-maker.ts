@@ -38,6 +38,7 @@ import { default as MarkdownITBracketedSpans } from 'markdown-it-bracketed-spans
 import { default as MarkdownItAttrs } from 'markdown-it-attrs';
 import { default as MarkdownItDiv } from 'markdown-it-div';
 import { default as MarkdownItAnchor } from 'markdown-it-anchor';
+import { default as MarkdownITTOC } from 'markdown-it-table-of-contents';
 import { default as MarkdownItFootnote } from 'markdown-it-footnote';
 import { default as MarkdownItSections } from 'markdown-it-header-sections';
 import { default as MarkdownItImageFigures } from 'markdown-it-image-figures';
@@ -54,14 +55,26 @@ import { BasePlugin } from '@akashacms/plugins-base';
 
 import { PDFDocument, PageSizes, degrees, mergeIntoTypedArray } from 'pdf-lib';
 
-import { DiagramsPlugin } from '@akashacms/diagrams-maker';
+import {
+    DiagramsPlugin,
+    MarkdownITMermaidPlugin
+} from '@akashacms/diagrams-maker';
 
 import { isPaperFormat } from './utils.js';
 
 // import { default as config } from './config.mjs';
 import puppeteer from 'puppeteer';
 import { Command } from 'commander';
-import { copyPDFMetadata, exportPagesFromPDF, mergePDFsAndImages, reformatPDF, setPDFMetadata, showPDFinfo, showPageInformation, showPageSizes } from './manipulate.js';
+import {
+    copyPDFMetadata,
+    exportPagesFromPDF,
+    mergePDFsAndImages,
+    reformatPDF,
+    setPDFMetadata,
+    showPDFinfo,
+    showPageInformation,
+    showPageSizes
+} from './manipulate.js';
 import { formatConfig, parseFormat, parseRotate, rotateConfig } from './options.js';
 const program = new Command();
 
@@ -74,6 +87,7 @@ program
 program
     .command('render')
     .option('--config <configFN>', 'AkashaCMS configuration file. If specified it disables auto-generated config file.')
+    .option('--base-dir <configDir>', 'Base directory of the project')
     .argument('<docPaths>', 'VPath for document to render')
     .option('--title <title>', 'Document title, overwriting any title in the document metadata.')
     .option('--layout <layoutTemplate>', 'File name, in a layouts directory, for the layout template. Overwrites any layout in the document metadata.')
@@ -99,6 +113,8 @@ program
     .option('--no-pdf', 'Do not generate PDFs')
     .option('--no-printcss', 'Disable the print.css stylesheet')
     .option('--no-md-anchor', 'Disable the markdown-it-anchor extension')
+    .option('--no-md-table-of-contents', 'Disable the markdown-it-table-of-contents extension')
+    .option('--md-toc-list-type <type>', 'Define \'ul\' or \'ol\' list type')
     .option('--no-md-footnote', 'Disable the markdown-it-footnote extension')
     .option('--no-md-attrs', 'Disable the markdown-it-attrs extension')
     .option('--no-md-bracketed-spans', 'Disable the markdown-it-bracketed-spans extension')
@@ -110,6 +126,7 @@ program
     .option('--no-md-table-captions', 'Disable the markdown-it-table-captions extension')
     .option('--no-md-katex', 'Disable the @vscode/markdown-it-katex extension')
     .option('--no-md-plantuml', 'Disable the @akashacms/plugins-plantuml extension')
+    .option('--no-md-mermaid', 'Enable markdown-it-mermaid')
     .option('--no-bootstrap', 'Disable Bootstrap v4 and related modules')
     // This turned out to not work.
     // .option('--use-mermaid', 'Enable MermaidJS rendering')
@@ -123,6 +140,12 @@ program
         // TODO -- highlight.js theme link
 
         let config;
+
+        // console.log(options);
+
+        if (typeof options.baseDir !== 'string') {
+            throw new Error(`--base-dir option is required.`)
+        }
         
         if (!isPaperFormat(options.format)) {
             throw new Error(`Paper format ${util.inspect(options.format)} incorrect`);
@@ -187,12 +210,6 @@ program
             for (const lDir of options.layoutDir) {
                 await isReadableDirectory(lDir);
             }
-        }
-
-        // If the user did not specify a layout directory,
-        // use the built-in directory
-        if (!options.layoutDir) {
-            options.layoutDir = [ path.join(__dirname, 'layouts') ]
         }
 
         if (options.assetDir) {
@@ -522,11 +539,50 @@ async function generateConfiguration(options) {
 
     config.rootURL("https://example.akashacms.com");
 
+    config.configDir = options.baseDir;
+
     // Configure MarkdownIT
     // Add MarkdownIT plugins
 
     if (typeof options.htmlOutput === 'string') {
         config.setRenderDestination(options.htmlOutput);
+    }
+
+    // Add directories for assets, plugins,
+    //     layout templates, and documents
+
+    if (options.assetDir) {
+        for (const aDir of options.assetDir) {
+            config.addAssetsDir(path.isAbsolute(aDir)
+                    ? aDir
+                    : path.join(process.cwd(), aDir));
+        }
+    }
+    // Make sure to include the built-in directory
+    config.addAssetsDir(path.join(__dirname, '..', 'assets'));
+    if (options.layoutDir) {
+        console.log(options.layoutDir);
+        for (const lDir of options.layoutDir) {
+            config.addLayoutsDir(path.isAbsolute(lDir)
+                    ? lDir
+                    : path.join(process.cwd(), lDir));
+        }
+    }
+    // Make sure to include the built-in directory
+    config.addLayoutsDir(path.join(__dirname, '..', 'layouts'));
+    if (options.partialDir) {
+        for (const pDir of options.partialDir) {
+            config.addPartialsDir(path.isAbsolute(pDir)
+                    ? pDir
+                    : path.join(process.cwd(), pDir));
+        }
+    }
+    if (options.documentDir) {
+        for (const dDir of options.documentDir) {
+            config.addDocumentsDir(path.isAbsolute(dDir)
+                    ? dDir
+                    : path.join(process.cwd(), dDir));
+        }
     }
 
     config.findRendererName('.html.md')
@@ -537,6 +593,30 @@ async function generateConfiguration(options) {
         linkify:      true,
         typographer:  false,
     });
+
+
+    if (options.mdMermaid) {
+
+        // The Markdown plugin takes the code within
+        // the mermaid document, and puts that into a file.
+        // Hence, it needs a directory into which to put
+        // the file.
+        // Hence, we make a directory
+        //   - we add that as a Document directory
+        //   - files made as /_mermaid/_mermaid/NNNNN.mermaid
+        // The plugin then generates a custom tag which
+        // will be handled by MermaidLocal and which does
+        // the Mermaid rendering.
+
+        const scratchDir = path.join(process.cwd(), '_mermaid');
+        await fsp.mkdir(scratchDir, { recursive: true });
+        config.addDocumentsDir(scratchDir);
+        config.findRendererName('.html.md')
+        .use(MarkdownITMermaidPlugin, {
+            fspath: scratchDir,
+            prefix: '/_mermaid'
+        });
+    }
 
     // if (options.mdPlantuml) {
     //     const PLoptions = {
@@ -588,6 +668,19 @@ async function generateConfiguration(options) {
         config.findRendererName('.html.md')
         .use(MarkdownItAnchor);
     }
+    if (options.mdTableOfContents) {
+        const opts = <any>{
+            includeLevel: [ 1, 2, 3 ],
+            omitTag: '<!-- omit from toc -->'
+        };
+        if (options.mdTocListType === 'ul') {
+            opts.listType = 'ul';
+        } else if (options.mdTocListType === 'ol') {
+            opts.listType = 'ol';
+        }
+        config.findRendererName('.html.md')
+        .use(MarkdownITTOC, opts);
+    }
     if (options.mdFootnote) {
         config.findRendererName('.html.md')
         .use(MarkdownItFootnote);
@@ -600,13 +693,6 @@ async function generateConfiguration(options) {
         );
 
     }
-    // if (options.mdTableOfContents) {
-    //     config.findRendererName('.html.md')
-    //     .use(MarkdownItTOC, {
-    //         placeholder: '[[toc]]',
-    //         containerId: 'table-of-contents',
-    //     });
-    // }
     if (options.mdHeaderSections) {
         config.findRendererName('.html.md')
         .use(MarkdownItSections);
@@ -642,7 +728,6 @@ async function generateConfiguration(options) {
             delimiters: 'dollars'
         });
         // .use(MarkdownItKaTeX.default, { "throwOnError": true });
-
 
         const uKTX = new URL(import.meta.resolve('katex'));
         // file:///home/david/Projects/akasharender/pdf-document-construction-set/guide/node_modules/katex/dist/katex.mjs
@@ -702,40 +787,6 @@ async function generateConfiguration(options) {
     //         dest: 'vendor/mermaid'
     //     });
     // }
-
-    // Add directories for assets, plugins,
-    //     layout templates, and documents
-
-    if (options.assetDir) {
-        for (const aDir of options.assetDir) {
-            config.addAssetsDir(path.isAbsolute(aDir)
-                    ? aDir
-                    : path.join(process.cwd(), aDir));
-        }
-    }
-    config.addAssetsDir(path.join(__dirname, '..', 'assets'));
-    if (options.layoutDir) {
-        for (const lDir of options.layoutDir) {
-            config.addLayoutsDir(path.isAbsolute(lDir)
-                    ? lDir
-                    : path.join(process.cwd(), lDir));
-        }
-    }
-    if (options.partialDir) {
-        for (const pDir of options.partialDir) {
-            config.addPartialsDir(path.isAbsolute(pDir)
-                    ? pDir
-                    : path.join(process.cwd(), pDir));
-        }
-    }
-    config.addLayoutsDir(path.join(__dirname, '..', 'layouts'));
-    if (options.documentDir) {
-        for (const dDir of options.documentDir) {
-            config.addDocumentsDir(path.isAbsolute(dDir)
-                    ? dDir
-                    : path.join(process.cwd(), dDir));
-        }
-    }
 
     // Add AkashaCMS plugins
 
@@ -1098,7 +1149,7 @@ async function renderDocToPDF(
     // }
     const page = await browser.newPage();
     const outFN = path.join(
-        process.cwd(),
+        // process.cwd(),
         config.renderDestination,
         renderedPath
     );

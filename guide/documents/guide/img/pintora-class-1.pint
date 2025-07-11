@@ -1,0 +1,9 @@
+classDiagram
+  class Fruit {
+    float sweetness
+
+    squeeze()
+  }
+
+  Fruit : getAge(): float
+  

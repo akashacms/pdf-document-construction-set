@@ -29,7 +29,7 @@ You then put on the command-line the page numbers to extract.  These are numbere
 Example:
 
 ```shell
-$ npx pdf-document-maker.mjs extract \
+$ npx pdf-document-maker extract \
     ../../guide/PDF/guide.pdf \
     extracted.pdf \
     0 2 4 6 8

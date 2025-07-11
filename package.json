@@ -31,10 +31,11 @@
     "dopublish": "npm publish --access public"
   },
   "dependencies": {
-    "@akashacms/diagrams-maker": "^0.9.1",
+    "@akashacms/diagrams-maker": "^0.9.x",
     "@akashacms/plugins-base": "^0.9.x",
     "@akashacms/renderers": "^0.9.x",
-    "@akashacms/theme-bootstrap": "^0.9.x",
+    "@akashacms/theme-bootstrap": "^4.6.x",
+    "@mermaid-js/mermaid-cli": "^11.6.0",
     "akasharender": "^0.9.x",
     "bootstrap": "^4.6.x",
     "commander": "^12.1.0",
@@ -50,6 +51,7 @@
     "markdown-it-image-figures": "^2.1.1",
     "markdown-it-multimd-table": "^4.2.3",
     "markdown-it-table-captions": "^1.0.4",
+    "markdown-it-table-of-contents": "^0.9.0",
     "markdown-it-texmath": "^1.0.0",
     "npm-run-all": "^4.1.x",
     "pdf-lib": "^1.17.1",
