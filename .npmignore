@@ -5,3 +5,13 @@ example
 examples
 package-lock.json
 out
+
+merged.pdf
+pdf-document-maker.mjs
+pdf-document-maker-rotation.mjs
+reformatted.pdfrotated.pdfsetmd.pdf
+copied.pdf
+rotated.pdf
+reformatted.pdf
+setmd.pdf
+
