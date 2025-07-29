@@ -68,6 +68,7 @@ import { Command } from 'commander';
 import {
     copyPDFMetadata,
     exportPagesFromPDF,
+    // getFromURL,
     mergePDFsAndImages,
     reformatPDF,
     setPDFMetadata,
@@ -396,7 +397,7 @@ program.command('set-metadata')
 
 program.command('reformat')
     .description('Change the document format (e.g. A4) to a new one (e.g. Letter')
-    .argument('<inputFN>', 'PDF file name of source document')
+    .argument('<inputFN>', 'PDF file name, or URL, of source document')
     .argument('[outputFN]', 'PDF file name of resized document. If not given, inputFN will be replaced')
     .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')
@@ -409,7 +410,7 @@ program.command('reformat')
 
 program.command('extract')
     .description('Extract pages from input PDF to output. The pages are numbered from 0.')
-    .argument('<inputFN>', 'PDF file name to extract from')
+    .argument('<inputFN>', 'PDF file name, or URL, to extract from')
     .argument('<outputFN>', 'PDF file name that receives the extracted images')
     .argument('[pages...]', 'Page numbers to extract, in the order of extraction')
     .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
@@ -421,11 +422,20 @@ program.command('extract')
         await exportPagesFromPDF(inputFN, outputFN, pages, config);
     });
 
+// For exercising the get command
+// program.command('get')
+//     .description('Fetch a file via URL')
+//     .argument('<url>', 'URL of file to fetch')
+//     .argument('<outputFN>', "File name to save file to")
+//     .action(async function(url, outputFN, options, command) {
+//         await getFromURL(url, outputFN);
+//     });
+
 program.command('merge')
     .description('Merge multiple PDF, PNG, JPG, into one document')
     // TODO page layout
     // TODO metadata
-    .argument('<files...>', 'Files to merge into the output file')
+    .argument('<files...>', 'File names, or URLs, to merge into the output file')
     .option('--output <outputFN>', 'File name for merged document')
     .option('--format <format>', 'Page format, "A3", "A4", "A5", "Legal", "Letter" or "Tabloid"')
     .option('--rotate [rotation]', 'Rotate by 90, 180, or 270 degrees')

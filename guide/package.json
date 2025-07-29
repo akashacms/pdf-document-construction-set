@@ -11,7 +11,7 @@
     "build:sample-2": "npx mmdc -i documents/guide/img/simple-sample-2.mmd -o documents/guide/img/simple-sample-2.svg --outputFormat svg",
     "build:workflow": "npx mmdc -i documents/guide/img/pdf-document-workflow.mmd -o documents/guide/img/pdf-document-workflow.svg --outputFormat svg",
     "build:mahabhuta": "npx mmdc -i documents/guide/img/mahabhuta-workflow.mmd -o documents/guide/img/mahabhuta-workflow.svg --outputFormat svg",
-    "build:render": "node ../dist/pdf-document-maker.js render --template-header template-header.html --height-header 20mm --template-footer template-footer.html --height-footer 20mm --partial-dir partials --layout-dir layouts-pdf --document-dir documents --lesscss style.css.less --pdf-output PDF --html-output out --title 'PDF Document Maker Guide' --format A4 --funcs ./mahafuncs.mjs guide/guide.md",
+    "build:render": "node ../dist/pdf-document-maker.js render --base-dir `pwd` --template-header template-header.html --height-header 20mm --template-footer template-footer.html --height-footer 20mm --partial-dir partials --layout-dir layouts-pdf --document-dir documents --lesscss style.css.less --pdf-output PDF --html-output out --title 'PDF Document Maker Guide' --format A4 --funcs ./mahafuncs.mjs guide/guide.md",
     "pdf2out": "cp PDF/guide.pdf out/guide/guide.pdf",
     "watch:site": "npx nodemon -e less,md,css,html,png,mmd --watch assets --watch documents --watch layouts --watch partials --exec npm run build:site",
     "watch:guide": "npx nodemon -e less,md,css,html,png,mmd --watch assets --watch documents --watch layouts-pdf --watch partials --exec npm run build:guide",

@@ -7,13 +7,76 @@ import util from 'node:util';
 
 import { mime } from './pdf-document-maker.js';
 
+import got, { Response } from 'got';
+
 import { PDFDocument, PageSizes, degrees } from 'pdf-lib';
 import { formatConfig, rotateConfig } from './options.js';
 
-const loadPDFfromFile = async (inputFN) => {
+const loadPDFfromFile = async (inputFN: string | URL) => {
+
+    // About using fsp.readFile with a URL.
+    //
+    // That works for file://`pwd`/guide/PDF/guide.pdf
+    // a.k.a. file:///home/david/Projects/akasharender/pdf-document-construction-set/guide/PDF/guide.pdf
+    //
+    // That fails for https://akashacms.github.io/pdf-document-construction-set/guide/guide.pdf
+    // Because the URL must have scheme file
+    //
+    // Hence - HTTP URLs must be retrieved with Got
 
     // console.log(`loadPDFfromFile ${inputFN}`);
-    const inpBytes = await fsp.readFile(inputFN);
+    let u : string | URL;
+    try {
+        if (inputFN instanceof URL) {
+            u = inputFN;
+        } else {
+            u = new URL(inputFN);
+        }
+    } catch (err) {
+        // console.log(`loadPDFFromFile loading ${inputFN} failed because ${err.message}`);
+        u = inputFN;
+    }
+    let inpBytes;
+    if (typeof u === 'string' ||
+        (u instanceof URL && u.protocol === 'file:')
+    ) {
+        // For a regular local file, just read it
+        inpBytes = await fsp.readFile(u);
+    } else if (u instanceof URL && (
+        u.protocol === 'http:' || u.protocol === 'https:'
+    )) {
+        // For a file retrieved by HTTP(S), retrieve
+        // it using Got
+
+        const promise = got.get(u, {
+            responseType: 'buffer',
+            followRedirect: true
+        });
+        const resp = await promise;
+        if (!(
+            resp.complete
+         && resp.statusCode === 200
+         && resp.statusMessage === 'OK'
+        )) {
+            throw new Error(`loadPDFFromFile FAIL ${resp.statusMessage} for ${u} ${util.inspect({   
+                ok: resp.ok,
+                complete: resp.complete,
+                statusCode: resp.statusCode,
+                // status: resp.status,
+                statusMessage: resp.statusMessage,
+                headers: resp.headers,
+                contentType: resp.headers['content-type'],
+                url: resp.url
+            })}`);
+        }
+
+        if (resp.headers['content-type'] !== 'application/pdf') {
+            throw new Error(`loadPDFFromFile ${u.toString()} did not correspond to a PDF, but ${resp.headers['content-type']}`);
+        }
+
+        inpBytes = (await promise.buffer()).buffer;
+
+    }
     const donor = await PDFDocument.load(inpBytes);
     return donor;
 };
@@ -259,6 +322,47 @@ export async function exportPagesFromPDF(
     await savePDFtoFile(pdfDoc, outputFN);
 }
 
+// This is test code
+//
+// export async function getFromURL(
+//     url: string,
+//     outputFN: string
+// ) {
+
+//     const u = new URL(url);
+
+//     let inpMime;
+//     let inpBytes;
+//     if (u instanceof URL) {
+//         if (u.protocol === 'file:') {
+//             inpMime = mime.getType(u.pathname);
+//             inpBytes = await fsp.readFile(u);
+//         } else if (u.protocol === 'http:'
+//             || u.protocol === 'https:'
+//         ) {
+
+//             const promise = got.get(u, {
+//                 responseType: 'buffer',
+//                 followRedirect: true
+//             });
+//             const resp = await promise;
+//             console.log(`${util.inspect({ 
+//                 ok: resp.ok,
+//                 complete: resp.complete,
+//                 statusCode: resp.statusCode,
+//                 statusMessage: resp.statusMessage,
+//                 headers: resp.headers,
+//                 contentType: resp.headers['content-type'],
+//                 url: resp.url
+//             })}`);
+//             inpBytes = Buffer.from((await promise.buffer()).buffer);
+//             console.log(util.inspect(inpBytes));
+//         }
+//     }
+
+//     await fsp.writeFile(outputFN, inpBytes);
+// }
+
 export async function mergePDFsAndImages(
     files: Array<string>,
     options: formatConfig & rotateConfig & {
@@ -266,35 +370,101 @@ export async function mergePDFsAndImages(
     }
 ) {
 
+    console.log(`mergePDFsAndImages ${util.inspect(files)} ${util.inspect(options)}`);
 
     const pdfDoc = await PDFDocument.create();
 
     for (const filenm of files) {
 
-        const inpMime = mime.getType(filenm);
-        
+        // test the filenm to see if it's file://
+        // or fails parsing as a URL.  In either case, it will
+        // perform this code here.
+        //
+        // If the filenm is a URL that is http:// or https://
+        // then it needs to be a different setup.
+
+        // if file: or bad URL
+        //    readFile into a Buffer
+        //    From the file name, determine MIME type
+        // else if http: or https:
+        //    use got to read the buffer
+        //    Does got provide a MIME type?  It should
+        //
+        // For application/pdf
+        //    get donor from the buffer
+        //    Proceed as below
+        // For image/jpeg or image/png
+        //    Proceed as below
+        //
+
+        let donor;
+        let inpBytes;
+        let inpMime;
+        let u;
+        try {
+            u = new URL(filenm);
+        } catch (err) {
+            u = filenm;
+        }
+
+        if (typeof u === 'string'
+            || (
+                u instanceof URL
+                && u.protocol === 'file:'
+            )
+        ) {
+
+            inpMime = mime.getType(typeof u === 'string'
+                ? u
+                : u.pathname
+            );
+            inpBytes = await fsp.readFile(typeof u === 'string'
+                ? u
+                : u.pathname
+            );
+        } else if (u instanceof URL
+            && (
+                u.protocol === 'http:' || u.protocol === 'https:'
+            )
+        ) {
+            const promise = got.get(u, {
+                responseType: 'buffer',
+                followRedirect: true
+            });
+            const resp = await promise;
+            console.log(`${util.inspect({ 
+                ok: resp.ok,
+                complete: resp.complete,
+                statusCode: resp.statusCode,
+                statusMessage: resp.statusMessage,
+                headers: resp.headers,
+                contentType: resp.headers['content-type'],
+                url: resp.url
+            })}`);
+            inpMime = resp.headers['content-type'];
+            inpBytes = Buffer.from((await promise.buffer()).buffer);
+        } else {
+            throw new Error(`mergePDFsAndImages ${filenm} not a valid input file.  Must be either local file, file:///, http://, or https://`);
+        }
+
         if (inpMime === 'application/pdf') {
-            console.log(`Reading input PDF ${filenm} ${inpMime}`);
-            const donor = await loadPDFfromFile(filenm);
+            donor = await PDFDocument.load(inpBytes);
             const totalPages = donor.getPageCount();
 
             for (let pn = 0; pn < totalPages; pn++) {
-                // console.log(`... COPY ${pn}`);
+                console.log(`... COPY ${pn}`);
                 await copyPageToPDF(pdfDoc, donor, pn, options);
             }
-        }
-        else if (inpMime === 'image/jpeg'
-         || inpMime === 'image/png'
-        ) {
-            console.log(`Reading input IMAGE ${filenm} ${inpMime}`);
-            const bytes = await fsp.readFile(filenm);
+        } else if (inpMime === 'image/jpeg' || inpMime === 'image/png') {
+
             let img;
             if (inpMime === 'image/jpeg') {
-                img = await pdfDoc.embedJpg(bytes);
+                img = await pdfDoc.embedJpg(inpBytes);
             }
             if (inpMime === 'image/png') {
-                img = await pdfDoc.embedPng(bytes);
+                img = await pdfDoc.embedPng(inpBytes);
             }
+
             if (img) {
                 const page = pdfDoc.addPage();
                 if (typeof options.format === 'string') {
@@ -315,12 +485,63 @@ export async function mergePDFsAndImages(
                 });
                 // pdfDoc.addPage(page);
             }
+        } else {
+            throw new Error(`mergePDFsAndImages invalid MIME type ${inpMime} for ${filenm}`);
         }
-        else {
-            console.log(`UNKNOWN FILE TYPE ${filenm}`);
-        }
+
+        // const inpMime = mime.getType(filenm);
+        // console.log(`input file name ${filenm} MIME ${inpMime}`);
+        
+        // if (inpMime === 'application/pdf') {
+        //     console.log(`
+        //     let img;Reading input PDF ${filenm} ${inpMime}`);
+        //     const donor = await loadPDFfromFile(filenm);
+        //     const totalPages = donor.getPageCount();
+
+        //     for (let pn = 0; pn < totalPages; pn++) {
+        //         console.log(`... COPY ${pn}`);
+        //         await copyPageToPDF(pdfDoc, donor, pn, options);
+        //     }
+        // }
+        // else if (inpMime === 'image/jpeg'
+        //  || inpMime === 'image/png'
+        // ) {
+        //     console.log(`Reading input IMAGE ${filenm} ${inpMime}`);
+        //     const bytes = await fsp.readFile(filenm);
+        //     let img;
+        //     if (inpMime === 'image/jpeg') {
+        //         img = await pdfDoc.embedJpg(bytes);
+        //     }
+        //     if (inpMime === 'image/png') {
+        //         img = await pdfDoc.embedPng(bytes);
+        //     }
+        //     if (img) {
+        //         const page = pdfDoc.addPage();
+        //         if (typeof options.format === 'string') {
+        //             const sz = PageSizes[options.format];
+        //             page.setSize(sz[0], sz[1]);
+        //         }
+        //         // TBD: Handle rotation
+
+        //         const scaled = img.scaleToFit(
+        //             page.getWidth(),
+        //             page.getHeight()
+        //         );
+        //         page.drawImage(img, {
+        //             x: page.getWidth() / 2 - scaled.width / 2,
+        //             y: page.getHeight() / 2 - scaled.height / 2,
+        //             width: scaled.width,
+        //             height: scaled.height,
+        //         });
+        //         // pdfDoc.addPage(page);
+        //     }
+        // }
+        // else {
+        //     console.log(`UNKNOWN FILE TYPE ${filenm}`);
+        // }
 
     }
 
+    console.log(`SAVING ...`);
     await savePDFtoFile(pdfDoc, options.output);
 }
