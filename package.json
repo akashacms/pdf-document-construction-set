@@ -67,6 +67,7 @@
     "mime": "^4.0.7"
   },
   "devDependencies": {
+    "@anthropic-ai/claude-code": "^1.0.62",
     "@types/node": "^22.15.29",
     "typescript": "^5.8.3"
   }
