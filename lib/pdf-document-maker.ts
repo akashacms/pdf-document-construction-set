@@ -76,7 +76,12 @@ import {
     showPageInformation,
     showPageSizes
 } from './manipulate.js';
-import { formatConfig, parseFormat, parseRotate, rotateConfig } from './options.js';
+import {
+    formatConfig,
+    parseFormat,
+    parseRotate,
+    rotateConfig
+} from './options.js';
 const program = new Command();
 
 program
