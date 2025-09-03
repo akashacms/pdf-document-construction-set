@@ -632,6 +632,24 @@ Both of these convert the list of style-sheet references into `<link>` tags refe
 
 The Markdown ecosystem includes a wide variety of extensions, adding additional features to the language.  PDF Document Maker uses the Node.js Markdown IT engine, and can in theory use any of the available plugins.  Several are already bundled into the application, with these effects.
 
+#### Auto-conversion of link-like text to a link
+
+Many Markdown processors autoconvert text that looks like a link into a link.
+
+You might do this on purpose, by adding https://example.com to your text and rely on the autoconversion to make it into a link.  
+
+You might do this accidentally by adding a filename, example.md, to your text and not realizing that `.md` is the top-level domain name for Republica Moldova.
+
+You might also do this accidentally by describing an object field like event.id, not realizing that `.id` is another top-level domain name.
+
+One way to avoid this conversion is using backticks to render text as code: `https://example.com`, `example.md`, or `event.id`.
+
+If you do not want to do this, and still not have link-like text autoconverted to a link, then use the `--no-linkify` option:
+
+```shell
+$ npx pdf-docoument-maker render ... --no-linkify ...
+```
+
 #### Auto-generating "anchor" text for header tags
 
 This extension causes an `id="anchor"` attribute to be added to the HTML header tag like so:

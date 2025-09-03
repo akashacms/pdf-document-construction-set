@@ -104,6 +104,11 @@ export type renderConfig = {
     htmlOutput: string,
 
     /**
+     * Enable/disable autoconversion of link-like text to a link.
+     */
+    linkify: boolean,
+
+    /**
      * File name, referenced to root of project directory, of
      * the template for the PDF header
      */

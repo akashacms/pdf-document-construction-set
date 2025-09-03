@@ -118,6 +118,7 @@ program
     // .option('--no-exit', 'Do not exit when rendering finished')
     .option('--no-pdf', 'Do not generate PDFs')
     .option('--no-printcss', 'Disable the print.css stylesheet')
+    .option('--no-linkify', 'Disable the conversion of link-like text into a link')
     .option('--no-md-anchor', 'Disable the markdown-it-anchor extension')
     .option('--no-md-table-of-contents', 'Disable the markdown-it-table-of-contents extension')
     .option('--md-toc-list-type <type>', 'Define \'ul\' or \'ol\' list type')
@@ -605,7 +606,7 @@ async function generateConfiguration(options) {
         html:         true,
         xhtmlOut:     false,
         breaks:       false,
-        linkify:      true,
+        linkify:      options.linkify,
         typographer:  false,
     });
 
