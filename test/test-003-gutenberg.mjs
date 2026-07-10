@@ -3,10 +3,13 @@ import { fileContains, fileNoContains } from './common.mjs';
 
 ////////////// Gutenberg CSS
 
+const pwd = $.sync`pwd`;
+
 $({
     verbose: true,
     sync: true
-})`node ../pdf-document-maker.mjs  \
+})`node ../dist/pdf-document-maker.js render \
+        --base-dir ${pwd} \
         --layout-dir layouts \
         --document-dir documents \
         --pdf-output PDF-003 \
@@ -18,7 +21,15 @@ $({
         markdown.md`;
 
 await fileContains('out-003/markdown.html', [
-    '<link rel="stylesheet" type="text/css" href="vendor/gutenberg/dist/gutenberg.css"><link rel="stylesheet" type="text/css" href="vendor/printcss/print.css">',
+    '<link rel="stylesheet" type="text/css" href="vendor/gutenberg/dist/gutenberg.css">',
+    'test page.njk',
+    '<p>AkashaCMS supports markdown.',
+    '<code class="hljs language-bash">',
+    'Markdown test document with Gutenberg'
+]);
+
+await fileContains('out-003/markdown.html', [
+    '<link rel="stylesheet" type="text/css" href="vendor/printcss/print.css">',
     'test page.njk',
     '<p>AkashaCMS supports markdown.',
     '<code class="hljs language-bash">',
@@ -29,7 +40,8 @@ await fileContains('out-003/markdown.html', [
 $({
     verbose: true,
     sync: true
-})`node ../pdf-document-maker.mjs  \
+})`node ../dist/pdf-document-maker.js render \
+        --base-dir ${pwd} \
         --layout-dir layouts \
         --document-dir documents \
         --pdf-output PDF-003 \

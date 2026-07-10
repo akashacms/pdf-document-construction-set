@@ -3,11 +3,14 @@ import { fileContains, fileNoContains } from './common.mjs';
 
 // First check that it catches a bad publication date
 
+const pwd = $.sync`pwd`;
+
 try {
     await $({
         verbose: true,
         sync: true
-    })`node ../pdf-document-maker.mjs  \
+    })`node ../dist/pdf-document-maker.js render \
+            --base-dir ${pwd} \
             --layout-dir layouts \
             --document-dir documents \
             --pdf-output PDF-005 \

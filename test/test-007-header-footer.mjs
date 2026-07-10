@@ -2,10 +2,13 @@
 
 import { fileContains } from './common.mjs';
 
+const pwd = $.sync`pwd`;
+
 $({
     verbose: true,
     sync: true
-})`node ../pdf-document-maker.mjs  \
+})`node ../dist/pdf-document-maker.js render \
+        --base-dir ${pwd} \
         --template-header test-007-header-template.html \
         --height-header 20mm \
         --template-footer test-007-footer-template.html \

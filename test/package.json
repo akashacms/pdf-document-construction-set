@@ -3,14 +3,24 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm-run-all test-001 test-002 test-003 test-004 test-005 test-006 test-007",
+    "test-001": "zx test-001.mjs",
+    "test-002": "zx test-002-override-template.mjs",
+    "test-003": "zx test-003-gutenberg.mjs",
+    "test-004": "zx test-004-gutenberg-multi-css.mjs",
+    "test-005": "zx test-005-no-fm.mjs",
+    "test-006": "zx test-006-publication-date.mjs",
+    "test-007": "zx test-007-header-footer.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "gutenberg-css": "^0.7.0",
-    "zx": "^8.3.0"
+    "gutenberg-css": "^0.7.0"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "zx": "^8.8.5"
   }
 }

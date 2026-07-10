@@ -4,10 +4,13 @@ import { fileContains, fileNoContains } from './common.mjs';
 // Use the no frontmatter file TEST.md
 // Do not override layout - should default to page.njk
 
+const pwd = $.sync`pwd`;
+
 $({
     verbose: true,
     sync: true
-})`node ../pdf-document-maker.mjs  \
+})`node ../dist/pdf-document-maker.js render \
+        --base-dir ${pwd} \
         --layout-dir layouts \
         --document-dir documents \
         --pdf-output PDF-005 \

@@ -4,10 +4,13 @@ import { fileContains, fileNoContains } from './common.mjs';
 const now = new Date().toISOString();
 console.log(now);
 
+const pwd = $.sync`pwd`;
+
 await $({
     verbose: true,
     sync: true
-})`node ../pdf-document-maker.mjs  \
+})`node ../dist/pdf-document-maker.js render \
+        --base-dir ${pwd} \
         --layout-dir layouts \
         --document-dir documents \
         --pdf-output PDF-006 \

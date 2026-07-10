@@ -5,10 +5,13 @@ import { fileContains, fileNoContains } from './common.mjs';
 // Disable printcss
 // Add several other CSS -- from assets - from documents - LESSCSS
 
+const pwd = $.sync`pwd`;
+
 $({
     verbose: true,
     sync: true
-})`node ../pdf-document-maker.mjs  \
+})`node ../dist/pdf-document-maker.js render \
+        --base-dir ${pwd} \
         --layout-dir layouts \
         --document-dir documents \
         --pdf-output PDF-004 \
