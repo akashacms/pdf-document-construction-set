@@ -3,11 +3,13 @@ layout: article.njk
 title: How to compress PDF files using open source tools
 ---
 
-We might create a beautiful looking PDF file with sharp crisp graphics on every page, only to run into a size limitation.  For example, one time I needed to submit a PDF to a website through a web form that limited the size to 5 megabytes.
+We might create a beautiful looking PDF file with sharp crisp graphics on every page, only to run into a size limitation.
 
-This goal of squeezing a PDF file runs the risk of ruining those crisp graphics.  Just as I had to compress the PDF to accomplish the task, you may also find yourself needing to compress your PDF creation.
+For example, I once needed to submit a PDF to a website through a web form that limited the size to 5 megabytes.  But, my PDF was over 10 MB in size.
 
-_PDF Document Maker_ does not yet implement this feature.  However, there are plenty of other tools which do.
+That meant compressing the PDF which in turn made those nice crisp graphics look grainy.  But, I was able to submit the file, satisfying the task for which I needed the document.
+
+_PDF Document Maker_ does not yet implement PDF compression.  However, there are plenty of other tools which do.
 
 ## Why compress PDF files?
 
@@ -94,6 +96,8 @@ These command examples work by changing the resolution from the default 300dpi t
 LibreOffice can open PDF files and re-export them with different compression settings.
 
 You must have first installed Libre Office on your computer.  It is available via the libreoffice.org website, or through most package management systems.
+
+This is the most straight-forward method since you're clicking on menu items and dialog boxes.
 
 ### GUI Method
 1. Open LibreOffice Draw

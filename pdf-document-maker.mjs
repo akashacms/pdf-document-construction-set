@@ -6,7 +6,7 @@ import { promises as fsp, constants } from 'node:fs';
 import path, { parse } from 'node:path';
 import util from 'node:util';
 
-import packageConfig from './package.json' with { type: 'json' }; 
+// import packageConfig from './package.json' with { type: 'json' }; 
 
 import { Mime } from 'mime/lite';
 import standardTypes from 'mime/types/standard.js';

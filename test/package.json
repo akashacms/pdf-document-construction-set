@@ -10,6 +10,7 @@
     "test-004": "zx test-004-gutenberg-multi-css.mjs",
     "test-005": "zx test-005-no-fm.mjs",
     "test-006": "zx test-006-publication-date.mjs",
+    "test-006-fail": "zx test-006-FAIL-publication-date.mjs",
     "test-007": "zx test-007-header-footer.mjs"
   },
   "keywords": [],

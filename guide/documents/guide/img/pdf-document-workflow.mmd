@@ -28,7 +28,7 @@ end
 
 Renderer->>Puppeteer: Launch browser
 Renderer->>Puppeteer: Load HTML output file into browser
-Puppeteer<<->>HTML Directory: Loads HTML and all CSS or JS files into page
+Puppeteer<<-HTML Directory: Loads HTML and all CSS or JS files into page
 Puppeteer->>Renderer: Notifies that page is loaded
 Renderer->>Puppeteer: Commands Print-to-PDF
 Puppeteer->>PDF Directory: Renders page to PDF, writes to PDF output
