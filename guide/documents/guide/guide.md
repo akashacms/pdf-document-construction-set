@@ -1800,7 +1800,7 @@ This must be saved as a separate file in the file-system.  For example, a subdir
 <!-- Putting the tag to use -->
 <diagrams-mermaid
         input-file='./img/simple-sample-1.mmd'
-        output-file='./img/simple-sample-1.png'/>
+        output-file='./img/simple-sample-1.svg'/>
 ```
 :::
 :::
@@ -1814,7 +1814,7 @@ To use it, simply copy the tag into your Markdown or AsciiDoc
 ::: .card-body
 <diagrams-mermaid
         input-file='./img/simple-sample-1.mmd'
-        output-file='./img/simple-sample-1.png'/>
+        output-file='./img/simple-sample-1.svg'/>
 :::
 :::
 
