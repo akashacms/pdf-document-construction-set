@@ -24,7 +24,11 @@ import { default as MarkdownItTexmath } from 'markdown-it-texmath';
 import katext from 'katex';
 import 'katex/contrib/mhchem';
 
-import { DiagramsPlugin } from '@akashacms/diagrams-maker';
+import {
+    DiagramsPlugin,
+    MarkdownITMermaidPlugin,
+    MarkdownITPlantUMLPlugin
+ } from '@akashacms/diagram-makers';
 
 const config = new akasha.Configuration();
 
@@ -83,6 +87,13 @@ config
     .use(DiagramsPlugin);
     
 config.findRendererName('.html.md')
+    .use(MarkdownITMermaidPlugin, {
+        // All options are optional
+        // themePreset: 'forest',
+        // configJSON: await fsp.readFile('mermaid-config.json', 'utf-8'),
+        // fontFNs: [ '/path/to/Roboto.ttf' ]
+    })
+    .use(MarkdownITPlantUMLPlugin)
     .use(MarkdownITBracketedSpans)
     .use(MarkdownItAttrs, {
         allowedAttributes: [ 'id', 'class', 'caption', 'data' ]
