@@ -27,14 +27,15 @@
     "qrcode": "^1.5.4"
   },
   "dependencies": {
-    "@akashacms/diagrams-maker": "^0.9.1",
-    "@akashacms/plugins-base": "^0.9.0",
-    "@akashacms/plugins-blog-podcast": "github:akashacms/akashacms-blog-podcast#0.9",
-    "@akashacms/plugins-booknav": "github:akashacms/akashacms-booknav#0.9",
-    "@akashacms/plugins-breadcrumbs": "github:akashacms/akashacms-breadcrumbs",
-    "@akashacms/theme-bootstrap": "^0.9.1",
+    "@akashacms/diagram-makers": "akashacms/plugins-diagrams#0.10",
+    "@akashacms/plugins-base": "akashacms/akashacms-base#0.10",
+
+    "@akashacms/plugins-blog-podcast": "github:akashacms/akashacms-blog-podcast#0.10",
+    "@akashacms/plugins-booknav": "github:akashacms/akashacms-booknav#0.10",
+    "@akashacms/plugins-breadcrumbs": "github:akashacms/akashacms-breadcrumbs#0.10",
+    "@akashacms/theme-bootstrap": "akashacms/akashacms-theme-bootstrap#4.6.0",
     "@mermaid-js/mermaid-cli": "^11.4.2",
-    "akasharender": "^0.9.x",
+    "akasharender": "akashacms/akasharender#0.10",
     "bootstrap": "^4.6.x",
     "jquery": "^3.6.x",
     "nodemon": "^3.1.9",
@@ -43,6 +44,8 @@
   "overrides": {
     "rimraf@<4": "5.0.10",
     "glob@<9": "10.4.5",
-    "globby@<14": "14.1.0"
+    "globby@<14": "14.1.0",
+    "uuid@<11": "latest",
+    "sitemap@<9": "latest"
   }
 }
